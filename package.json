@@ -1,0 +1,24 @@
+{
+  "name": "rest_twitch",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node .",
+    "dev": "nodemon ."
+  },
+  "author": "Alexander Véliz",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "node-cache": "^5.1.2",
+    "node-fetch": "^2.6.8",
+    "node-storage": "^0.0.9",
+    "perf_hooks": "^0.0.1",
+    "prompt-sync": "^4.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
