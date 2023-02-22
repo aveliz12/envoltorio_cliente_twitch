@@ -5,6 +5,7 @@ import {
   casoPrueba4,
   casoPrueba5,
 } from "../Rest/TestCases.js";
+
 import "colors";
 import { inquirerMenu } from "../Menu/inquirerMenu.js";
 import Storage from "node-storage";
@@ -21,14 +22,14 @@ export const casoPrueba = async () => {
   } else {
     console.log(`Su token generado es: ${token}`);
     let opt = " ";
-
+    let first = 20;
     do {
       opt = await inquirerMenu();
 
       switch (opt) {
         case "1":
           try {
-            const caso1 = await casoPrueba1();
+            const caso1 = await casoPrueba1(first);
           } catch (error) {
             console.log(error);
           }

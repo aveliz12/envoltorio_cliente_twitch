@@ -3,6 +3,8 @@ import * as dotenv from "dotenv";
 dotenv.config();
 import Storage from "node-storage";
 const store = new Storage("./store");
+import PromptSync from "prompt-sync";
+const prompt = PromptSync();
 
 //Variables
 const url = "https://api.twitch.tv/helix/";
@@ -28,20 +30,35 @@ export const getToken = async () => {
 };
 
 //Funcion obtener LiveStreams
-export const getLiveStreams = async () => {
+export const getLiveStreams = async (first) => {
   try {
+    let cursor = null;
+    let dataStreams = [];
     const token = store.get("token");
-    const response = await fetch(`${url}streams`, {
-      method: "GET",
-      headers: {
-        Authorization: "Bearer " + token,
-        "Client-Id": process.env.CLIENTID,
-      },
-    });
-    
-    const dataLiveStreams = await response.json();
-    return dataLiveStreams.data;
-    
+    first = parseInt(
+      prompt("Ingrese la cantidad de datos que desea obtener: ")
+    );
+
+    while (first > 0) {
+      const response = await fetch(
+        `${url}streams?first=${first > 100 ? 100 : first}${
+          cursor === null ? "" : `&after=${cursor}`
+        }`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: "Bearer " + token,
+            "Client-Id": process.env.CLIENTID,
+          },
+        }
+      );
+      const dataLiveStreams = await response.json();
+
+      first = first - dataLiveStreams.data.length;
+      dataStreams = [...dataStreams, ...dataLiveStreams.data];
+      cursor = dataLiveStreams.pagination.cursor;
+    }
+    return dataStreams;
   } catch (error) {
     console.log(error);
   }

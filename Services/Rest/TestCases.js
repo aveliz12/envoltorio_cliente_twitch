@@ -7,9 +7,10 @@ import {
 } from "./ApiRest.js";
 import { performance } from "perf_hooks";
 
-export const casoPrueba1 = async () => {
+export const casoPrueba1 = async (first) => {
+  
   let t1 = performance.now();
-  const data = await getLiveStreams();
+  const data = await getLiveStreams(first);
   let t2 = performance.now();
   let segundos = ((t2 - t1) / 1000).toFixed(2);
   console.log("NIVEL 1");
