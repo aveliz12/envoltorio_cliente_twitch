@@ -4,7 +4,8 @@ import {
   casoPrueba3Cache,
   casoPrueba4Cache,
   casoPrueba5Cache,
-} from "./ApiRestCache.js";
+  casoPruebaCache,
+} from "./GraphQLCache.js";
 import Storage from "node-storage";
 const store = new Storage("./store");
 //import { getToken } from "../Services/ApiRest.js";
@@ -14,7 +15,7 @@ import { inquirerMenu } from "../Menu/inquirerMenu.js";
 const token = store.get("token");
 const id = "";
 
-export const casoPruebaCache = async () => {
+export const casoPruebaGraphQLCache = async () => {
   console.log("**********API-REST TWITCH-CACHE**********".magenta);
 
   if (token === "") {
@@ -30,24 +31,23 @@ export const casoPruebaCache = async () => {
       switch (opt) {
         case "1":
           try {
-            const caso1 = await casoPrueba1Cache();
-            console.log(caso1);
+            await casoPrueba1Cache();
           } catch (error) {
             console.log(error);
           }
           break;
         case "2":
-          const caso2 = await casoPrueba2Cache(id);
-          console.log(caso2);
+          await casoPrueba2Cache();
+          break;
         case "3":
-          const caso3 = await casoPrueba3Cache(id);
-          console.log(caso3);
+          await casoPrueba3Cache();
+          break;
         case "4":
-          const caso4 = await casoPrueba4Cache(id);
-          console.log(caso4);
+          await casoPrueba4Cache();
+          break;
         case "5":
-          const caso5 = await casoPrueba5Cache(id);
-          console.log(caso5);
+          await casoPrueba5Cache();
+          break;
         default:
           break;
       }

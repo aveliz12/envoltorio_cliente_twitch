@@ -29,7 +29,7 @@ const menuOptions = [
       },
       {
         value: "0",
-        name: "Salir",
+        name: "Regresar",
       },
     ],
   },

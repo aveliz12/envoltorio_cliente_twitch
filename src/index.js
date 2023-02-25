@@ -1,19 +1,57 @@
 import { casoPrueba } from "../Services/Rest/indexRest.js";
-import { casoPruebaCache } from "../Services/Cache/indexCache.js";
-import { inquirerMenuCache } from "../Services/Menu/inquirerMenuCache.js";
+import { casoPruebaGraphQLCache } from "../Services/Cache/indexGraphCache.js";
+import {
+  inquirerMenuPrimary,
+  inquireMenuToken,
+} from "../Services/Menu/inquirerMenuPrimary.js";
+import Storage from "node-storage";
+const store = new Storage("./store");
+import { getToken } from "../Services/Rest/ApiRest.js";
 
-const twtich = async () => {
+const token = store.get("token");
+
+const consumoTwtich = async () => {
   let opt = "";
 
   do {
-    opt = await inquirerMenuCache();
-
-    if (opt === "1") {
-      await casoPruebaCache();
-    } else {
-      await casoPrueba();
+    opt = await inquirerMenuPrimary();
+    switch (opt) {
+      case "1":
+        await casoPruebaGraphQLCache();
+        break;
+      case "2":
+        await casoPrueba();
+        break;
+      default:
+        break;
     }
   } while (opt !== "0");
 };
 
-twtich();
+const main = async () => {
+  let opt = "";
+
+  try {
+    console.log(`Su token generado es: ${token}`);
+    console.log("Desea generar un nuevo token? ");
+    do {
+      opt = await inquireMenuToken();
+
+      switch (opt) {
+        case "1":
+          await getToken();
+          await consumoTwtich();
+          break;
+        case "2":
+          await consumoTwtich();
+          break;
+        default:
+          break;
+      }
+    } while (opt !== "0");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+main();
