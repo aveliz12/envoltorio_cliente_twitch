@@ -19,7 +19,7 @@ const consumoTwtich = async () => {
       case "1":
         await casoPruebaGraphQLCache();
         break;
-      case "2":
+      case "3":
         await casoPrueba();
         break;
       default:
@@ -32,7 +32,7 @@ const main = async () => {
   let opt = "";
 
   try {
-    console.log(`Su token generado es: ${token}`);
+    console.log(`Su token generado anteriormente es: ${token}`);
     console.log("Desea generar un nuevo token? ");
     do {
       opt = await inquireMenuToken();
@@ -40,6 +40,8 @@ const main = async () => {
       switch (opt) {
         case "1":
           await getToken();
+          console.log(`Su nuevo token generado es: ${token}`);
+
           await consumoTwtich();
           break;
         case "2":
