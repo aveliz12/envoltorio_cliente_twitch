@@ -1,28 +1,23 @@
-import {
+const {
   getLiveStreamsCache,
   getVideosByGameCache,
   getClipsByUserCache,
   getChannelInformationCache,
   getGameInformationCache,
-} from "./restCacheApollo.js";
-import { performance } from "perf_hooks";
+} = require("./restCacheApollo.cjs");
+const { performance }= require("perf_hooks");
 
-export const getCasoPrueba1RestCache = async () => {
+const getCasoPrueba1RestCache = async () => {
   const t1 = performance.now();
   const data = await getLiveStreamsCache();
   const t2 = performance.now();
   let milisegundos = (t2 - t1).toFixed(2);
   console.log("NIVEL 1 CACHE");
-  console.log(
-    `La consulta desde cache en REST tardó: ${milisegundos} milisegundos`
-  );
-  return {
-    data,
-    time: milisegundos,
-  };
+  console.log(`La consulta desde cache en REST tardó: ${milisegundos} ms`);
+  return data;
 };
 
-export const getCasoPrueba2RestCache = async () => {
+const getCasoPrueba2RestCache = async () => {
   const t1 = performance.now();
 
   const { liveS: dataLiveStreams } = await getCasoPrueba1RestCache();
@@ -37,16 +32,14 @@ export const getCasoPrueba2RestCache = async () => {
   const t2 = performance.now();
   let milisegundos = (t2 - t1).toFixed(2);
   console.log("NIVEL 2 CACHE");
-  console.log(
-    `La consulta desde cache en REST tardó: ${milisegundos} milisegundos`
-  );
+  console.log(`La consulta desde cache en REST tardó: ${milisegundos} ms`);
   return {
     data,
     time: milisegundos,
   };
 };
 
-export const getCasoPrueba3RestCache = async () => {
+const getCasoPrueba3RestCache = async () => {
   const t1 = performance.now();
 
   const { videoG: datavideosGame } = await getCasoPrueba2RestCache();
@@ -69,11 +62,15 @@ export const getCasoPrueba3RestCache = async () => {
   const t2 = performance.now();
   let milisegundos = (t2 - t1).toFixed(2);
   console.log("NIVEL 2 CACHE");
-  console.log(
-    `La consulta desde cache en REST tardó: ${milisegundos} milisegundos`
-  );
+  console.log(`La consulta desde cache en REST tardó: ${milisegundos} ms`);
   return {
     data,
     time: milisegundos,
   };
+};
+
+module.exports = {
+  getCasoPrueba1RestCache,
+  getCasoPrueba2RestCache,
+  getCasoPrueba3RestCache,
 };

@@ -9,15 +9,15 @@ const menuOptions = [
     choices: [
       {
         value: "1",
-        name: "Consultar datos de GraphQL desde caché",
+        name: "Consultar datos de API-REST",
       },
       {
-        value:"2",
-        name:"Consultar datos de API-REST desde caché"
+        value: "2",
+        name: "Consultar datos de API-REST desde caché",
       },
       {
         value: "3",
-        name: "Consultar datos de API-REST",
+        name: "Consultar datos de GraphQL desde caché",
       },
       {
         value: "0",

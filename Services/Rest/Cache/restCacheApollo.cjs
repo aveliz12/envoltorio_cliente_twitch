@@ -1,59 +1,57 @@
-import { ApolloClient, InMemoryCache, gql } from "@apollo/client/core/core.cjs";
-import { RestLink } from "apollo-link-rest";
-import Storage from "node-storage";
+const { ApolloClient, InMemoryCache, gql } = require("@apollo/client/core");
+const { RestLink } = require("apollo-link-rest");
+const Storage = require("node-storage");
 const store = new Storage("./store");
-import * as dotenv from "dotenv";
-dotenv.config();
+require("dotenv").config();
+const fetch = require("node-fetch");
+global.Headers=fetch.Headers;
 
 const token = store.get("token");
-
-const restLink = new RestLink({
-  uri: "https://api.twitch.tv/helix/",
-  headers: {
-    Authorization: "Bearer " + token,
-    "Client-Id": process.env.CLIENTID,
-  },
-});
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-export const getLiveStreamsCache = async () => {
+const getLiveStreamsCache = async () => {
   try {
-    client.setLink(restLink);
+    client.setLink(
+      new RestLink({
+        uri: "https://api.twitch.tv/helix/",
+        customFetch: fetch,
+        headers: {
+          Authorization: "Bearer nwmi7budqmthy1wfuox5onr7z6wyv7",
+          "Client-Id": "a2bf4j1rhkytvzoc4ortzn7m4yxg33",
+        },
+      })
+    );
     const query = gql`
       query getLiveStreams {
         liveStreams @rest(type: "liveStreams", path: "streams") {
-          id
-          user_id
-          user_login
-          user_name
-          game_id
-          game_name
-          type
-          title
-          viewer_count
-          started_at
-          language
-          thumbnail_url
-          tag_ids
-          tags
-          is_mature
+          data
         }
       }
     `;
 
     const response = await client.query({ query });
-    return response.data.liveStreams;
+    console.log(response.data.liveStreams.data);
+    return response.data.liveStreams.data;
   } catch (error) {
+    console.log("TRISTEEEEEEEEEE");
     console.log(error);
   }
 };
 
-export const getVideosByGameCache = async (id) => {
+const getVideosByGameCache = async (id) => {
   try {
-    client.setLink(restLink);
+    client.setLink(
+      new RestLink({
+        uri: "https://api.twitch.tv/helix/",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Client-Id": process.env.CLIENTID,
+        },
+      })
+    );
     const query = gql`
       query getVideosByGame {
         videosByGame @rest(type: "videosByGame", path: "videos?game_id=${id}") {
@@ -85,9 +83,17 @@ export const getVideosByGameCache = async (id) => {
   }
 };
 
-export const getClipsByUserCache = async (id) => {
+const getClipsByUserCache = async (id) => {
   try {
-    client.setLink(restLink);
+    client.setLink(
+      new RestLink({
+        uri: "https://api.twitch.tv/helix/",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Client-Id": process.env.CLIENTID,
+        },
+      })
+    );
     const query = gql`
         query getClipsByUser {
           clipsUser @rest(type: "clipsUser", path: "clips?broadcaster_id=${id}") {
@@ -118,9 +124,17 @@ export const getClipsByUserCache = async (id) => {
   }
 };
 
-export const getChannelInformationCache = async (id) => {
+const getChannelInformationCache = async (id) => {
   try {
-    client.setLink(restLink);
+    client.setLink(
+      new RestLink({
+        uri: "https://api.twitch.tv/helix/",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Client-Id": process.env.CLIENTID,
+        },
+      })
+    );
     const query = gql`
         query getChannelInformation {
           channelInfo @rest(type: "channelInfo", path: "channels?broadcaster_id=${id}") {
@@ -144,9 +158,17 @@ export const getChannelInformationCache = async (id) => {
   }
 };
 
-export const getGameInformationCache = async (id) => {
+const getGameInformationCache = async (id) => {
   try {
-    client.setLink(restLink);
+    client.setLink(
+      new RestLink({
+        uri: "https://api.twitch.tv/helix/",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Client-Id": process.env.CLIENTID,
+        },
+      })
+    );
     const query = gql`
           query getGameInformation {
             gameInfo @rest(type: "gameInfo", path: "games?id=${id}") {
@@ -163,4 +185,12 @@ export const getGameInformationCache = async (id) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+module.exports = {
+  getLiveStreamsCache,
+  getVideosByGameCache,
+  getClipsByUserCache,
+  getChannelInformationCache,
+  getGameInformationCache,
 };

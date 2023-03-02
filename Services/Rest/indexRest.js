@@ -7,7 +7,8 @@ import {
 } from "../Rest/TestCases.js";
 
 import "colors";
-import { inquirerMenu } from "../Menu/inquirerMenu.js";
+import pkg from "../Menu/inquirerMenu.cjs";
+const { inquirerMenu } = pkg;
 import Storage from "node-storage";
 const store = new Storage("./store");
 
@@ -17,7 +18,7 @@ const id = "";
 export const casoPrueba = async () => {
   console.log("**********API-REST TWITCH**********".magenta);
   if (token === "") {
-    console.log("Genere un token porfavor");
+    console.log("Genere un token por favor.");
     return;
   } else {
     console.log(`Su token generado es: ${token}`);

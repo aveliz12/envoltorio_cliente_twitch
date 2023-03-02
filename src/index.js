@@ -1,5 +1,7 @@
 import { casoPrueba } from "../Services/Rest/indexRest.js";
 import { casoPruebaGraphQLCache } from "../Services/Cache/indexGraphCache.js";
+import pkg from "../Services/Rest/Cache/indexRestCache.cjs";
+const { casoPruebaCacheRest } = pkg;
 import {
   inquirerMenuPrimary,
   inquireMenuToken,
@@ -17,10 +19,13 @@ const consumoTwtich = async () => {
     opt = await inquirerMenuPrimary();
     switch (opt) {
       case "1":
-        await casoPruebaGraphQLCache();
+        await casoPrueba();
+        break;
+      case "2":
+        await casoPruebaCacheRest();
         break;
       case "3":
-        await casoPrueba();
+        await casoPruebaGraphQLCache();
         break;
       default:
         break;
@@ -40,11 +45,13 @@ const main = async () => {
       switch (opt) {
         case "1":
           await getToken();
-          console.log(`Su nuevo token generado es: ${token}`);
+          console.log(`Su nuevo token es: ${token}`);
 
           await consumoTwtich();
           break;
         case "2":
+          console.log(`Su token es: ${token}`);
+
           await consumoTwtich();
           break;
         default:

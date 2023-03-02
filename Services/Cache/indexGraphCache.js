@@ -10,13 +10,14 @@ import Storage from "node-storage";
 const store = new Storage("./store");
 //import { getToken } from "../Services/ApiRest.js";
 //import promptSync from "prompt-sync";
-import { inquirerMenu } from "../Menu/inquirerMenu.js";
+import pkg from "../Menu/inquirerMenu.cjs";
+const { inquirerMenu } = pkg;
 
 const token = store.get("token");
 const id = "";
 
 export const casoPruebaGraphQLCache = async () => {
-  console.log("**********API-REST TWITCH-CACHE**********".magenta);
+  console.log("**********API-REST TWITCH-GRAPHQL-CACHE**********".magenta);
 
   if (token === "") {
     console.log("Genere un token porfavor");

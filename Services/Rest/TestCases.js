@@ -7,8 +7,8 @@ import {
 } from "./ApiRest.js";
 import { performance } from "perf_hooks";
 
+//CASO DE PRUEBA 1: LIVE STREAMS
 export const casoPrueba1 = async (first) => {
-  
   let t1 = performance.now();
   const data = await getLiveStreams(first);
   let t2 = performance.now();
@@ -19,6 +19,7 @@ export const casoPrueba1 = async (first) => {
   return data;
 };
 
+//CASO DE PRUEBA 2: VIDEOS BY GAME
 export const casoPrueba2 = async () => {
   let t1 = performance.now();
   const dataLiveStreams = await casoPrueba1();
@@ -38,43 +39,20 @@ export const casoPrueba2 = async () => {
   return allDataVideosByGame;
 };
 
+//CASO DE PRUEBA 3: CLIPS BY USER
 export const casoPrueba3 = async () => {
   let t1 = performance.now();
 
-  const dataVideosByGame = await casoPrueba2();
+  const dataChannelInformation = await casoPrueba2();
 
-  const idUser = [];
-  dataVideosByGame.forEach((id) => {
-    id.map((resp) => idUser.push(resp.user_id));
-  });
-
-  const dataInformationChannel = idUser.map(async (_id) => {
-    return await getInformationChannel(_id);
-  });
-  let t2 = performance.now();
-  let segundos = ((t2 - t1) / 1000).toFixed(2);
-
-  const allDataInformationChannel = await Promise.all(dataInformationChannel);
-  console.log("NIVEL 3");
-  console.log(allDataInformationChannel.length);
-  console.log("La consulta tardó: ", segundos, "segundos");
-
-  return allDataInformationChannel;
-};
-
-export const casoPrueba4 = async () => {
-  let t1 = performance.now();
-
-  const dataChannelInformation = await casoPrueba3();
-
-  const broadcasterId = [];
+  const user_id = [];
 
   dataChannelInformation.forEach((id) => {
     const data = [].concat(id.data);
-    data.map((resp) => broadcasterId.push(resp?.broadcaster_id));
+    data.map((resp) => user_id.push(resp?.user_id));
   });
 
-  const dataClipsByUser = broadcasterId.map(async (_id) => {
+  const dataClipsByUser = user_id.map(async (_id) => {
     return await getClipsByUser(_id);
   });
 
@@ -89,6 +67,32 @@ export const casoPrueba4 = async () => {
   return allDataClipsByUser;
 };
 
+//CASO DE PRUEBA 4: INFORMATION CHANNEL
+export const casoPrueba4 = async () => {
+  let t1 = performance.now();
+
+  const dataVideosByGame = await casoPrueba3();
+
+  const broadcaster_id = [];
+  dataVideosByGame.forEach((id) => {
+    id.map((resp) => broadcaster_id.push(resp.broadcaster_id));
+  });
+
+  const dataInformationChannel = broadcaster_id.map(async (_id) => {
+    return await getInformationChannel(_id);
+  });
+  let t2 = performance.now();
+  let segundos = ((t2 - t1) / 1000).toFixed(2);
+
+  const allDataInformationChannel = await Promise.all(dataInformationChannel);
+  console.log("NIVEL 3");
+  console.log(allDataInformationChannel.length);
+  console.log("La consulta tardó: ", segundos, "segundos");
+
+  return allDataInformationChannel;
+};
+
+//CASO DE PRUEBA 5: INFORMATION GAME
 export const casoPrueba5 = async () => {
   let t1 = performance.now();
 

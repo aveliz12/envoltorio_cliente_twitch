@@ -1,5 +1,4 @@
-import inquirer from "inquirer";
-import "colors";
+const inquirer = require("inquirer");
 
 const menuOptions = [
   {
@@ -17,11 +16,11 @@ const menuOptions = [
       },
       {
         value: "3",
-        name: "3° Nivel: Información del canal",
+        name: "3° Nivel: Clips por usuario",
       },
       {
         value: "4",
-        name: "4° Nivel: Clips por usuario",
+        name: "4° Nivel: Información del canal",
       },
       {
         value: "5",
@@ -35,7 +34,7 @@ const menuOptions = [
   },
 ];
 
-export const inquirerMenu = async () => {
+const inquirerMenu = async () => {
   console.log("=================================".magenta);
   console.log("Seleccione una opcion: ".magenta);
   console.log("=================================".magenta);
@@ -43,4 +42,8 @@ export const inquirerMenu = async () => {
   const { opcion } = await inquirer.prompt(menuOptions);
 
   return opcion;
+};
+
+module.exports = {
+  inquirerMenu,
 };

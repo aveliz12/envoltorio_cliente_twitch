@@ -83,26 +83,6 @@ export const getVideosByGame = async (id) => {
   }
 };
 
-//Funcion para extraer Informacion del canal
-export const getInformationChannel = async (id) => {
-  try {
-    const token = store.get("token");
-    const response = await fetch(`${url}channels?broadcaster_id=${id}`, {
-      method: "GET",
-      headers: {
-        Authorization: "Bearer " + token,
-        "Client-Id": process.env.CLIENTID,
-        "accept-language": "",
-      },
-    });
-
-    const dataInformationChannel = await response.json();
-    return dataInformationChannel;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 //Funcion para extraer clips por usuario
 export const getClipsByUser = async (id) => {
   try {
@@ -118,6 +98,26 @@ export const getClipsByUser = async (id) => {
 
     const dataClipsByUser = await response.json();
     return dataClipsByUser;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//Funcion para extraer Informacion del canal
+export const getInformationChannel = async (id) => {
+  try {
+    const token = store.get("token");
+    const response = await fetch(`${url}channels?broadcaster_id=${id}`, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Client-Id": process.env.CLIENTID,
+        "accept-language": "",
+      },
+    });
+
+    const dataInformationChannel = await response.json();
+    return dataInformationChannel;
   } catch (error) {
     console.log(error);
   }
