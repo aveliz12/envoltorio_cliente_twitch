@@ -14,7 +14,7 @@ export const casoPrueba1 = async (first) => {
   let t2 = performance.now();
   let segundos = ((t2 - t1) / 1000).toFixed(2);
   console.log("NIVEL 1");
-  console.log(data.length);
+  console.log((data || undefined).length);
   console.log("La consulta tardó: ", segundos, "segundos");
   return data;
 };
@@ -24,9 +24,11 @@ export const casoPrueba2 = async () => {
   let t1 = performance.now();
   const dataLiveStreams = await casoPrueba1();
   const idGame = dataLiveStreams.map((resp) => resp.game_id);
+
   const dataVideosByGame = idGame.map(async (game_id) => {
     return await getVideosByGame(game_id);
   });
+
   let t2 = performance.now();
   let segundos = ((t2 - t1) / 1000).toFixed(2);
 
@@ -43,11 +45,11 @@ export const casoPrueba2 = async () => {
 export const casoPrueba3 = async () => {
   let t1 = performance.now();
 
-  const dataChannelInformation = await casoPrueba2();
+  const dataVideosByGame = await casoPrueba2();
 
   const user_id = [];
 
-  dataChannelInformation.forEach((id) => {
+  dataVideosByGame.forEach((id) => {
     const data = [].concat(id.data);
     data.map((resp) => user_id.push(resp?.user_id));
   });
@@ -59,7 +61,7 @@ export const casoPrueba3 = async () => {
   let t2 = performance.now();
   let segundos = ((t2 - t1) / 1000).toFixed(2);
   const allDataClipsByUser = await Promise.all(dataClipsByUser);
-  console.log("NIVEL 4");
+  console.log("NIVEL 3");
 
   console.log(allDataClipsByUser.length);
   console.log("La consulta tardó: ", segundos, "segundos");
@@ -71,11 +73,11 @@ export const casoPrueba3 = async () => {
 export const casoPrueba4 = async () => {
   let t1 = performance.now();
 
-  const dataVideosByGame = await casoPrueba3();
+  const dataClipsByUser = await casoPrueba3();
 
   const broadcaster_id = [];
-  dataVideosByGame.forEach((id) => {
-    id.map((resp) => broadcaster_id.push(resp.broadcaster_id));
+  dataClipsByUser.forEach((id) => {
+    id.data.map((resp) => broadcaster_id.push(resp.broadcaster_id));
   });
 
   const dataInformationChannel = broadcaster_id.map(async (_id) => {
@@ -85,7 +87,7 @@ export const casoPrueba4 = async () => {
   let segundos = ((t2 - t1) / 1000).toFixed(2);
 
   const allDataInformationChannel = await Promise.all(dataInformationChannel);
-  console.log("NIVEL 3");
+  console.log("NIVEL 4");
   console.log(allDataInformationChannel.length);
   console.log("La consulta tardó: ", segundos, "segundos");
 
@@ -96,11 +98,11 @@ export const casoPrueba4 = async () => {
 export const casoPrueba5 = async () => {
   let t1 = performance.now();
 
-  const dataClipsByUser = await casoPrueba4();
+  const dataInformationChannel = await casoPrueba4();
 
   const dataGame = [];
 
-  dataClipsByUser.forEach((id) => {
+  dataInformationChannel.forEach((id) => {
     const data = [].concat(id.data);
     data.map((resp) => dataGame.push(resp?.game_id));
   });

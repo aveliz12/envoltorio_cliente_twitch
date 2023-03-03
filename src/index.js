@@ -10,8 +10,7 @@ import Storage from "node-storage";
 const store = new Storage("./store");
 import { getToken } from "../Services/Rest/ApiRest.js";
 
-const token = store.get("token");
-
+let token = "";
 const consumoTwtich = async () => {
   let opt = "";
 
@@ -37,7 +36,6 @@ const main = async () => {
   let opt = "";
 
   try {
-    console.log(`Su token generado anteriormente es: ${token}`);
     console.log("Desea generar un nuevo token? ");
     do {
       opt = await inquireMenuToken();
@@ -45,11 +43,14 @@ const main = async () => {
       switch (opt) {
         case "1":
           await getToken();
+          token = store.get("token");
+
           console.log(`Su nuevo token es: ${token}`);
 
           await consumoTwtich();
           break;
         case "2":
+          token = store.get("token");
           console.log(`Su token es: ${token}`);
 
           await consumoTwtich();

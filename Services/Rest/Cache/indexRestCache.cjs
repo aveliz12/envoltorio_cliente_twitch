@@ -2,6 +2,8 @@ const {
   getCasoPrueba1RestCache,
   getCasoPrueba2RestCache,
   getCasoPrueba3RestCache,
+  getCasoPrueba4RestCache,
+  getCasoPrueba5RestCache,
 } = require("./casoPruebaRestCache.cjs");
 
 const { inquirerMenu } = require("../../Menu/inquirerMenu.cjs");
@@ -37,8 +39,10 @@ const casoPruebaCacheRest = async () => {
           await getCasoPrueba3RestCache(id);
           break;
         case "4":
+          await getCasoPrueba4RestCache(id);
           break;
         case "5":
+          await getCasoPrueba5RestCache(id);
           break;
         default:
           break;
