@@ -13,10 +13,9 @@ import Storage from "node-storage";
 const store = new Storage("./store");
 
 const token = store.get("token");
-const id = "";
 
 export const casoPrueba = async () => {
-  console.log("**********API-REST TWITCH**********".magenta);
+  console.log("********************API-REST TWITCH****************".magenta);
   if (token === "") {
     console.log("Genere un token por favor.");
     return;
@@ -30,22 +29,22 @@ export const casoPrueba = async () => {
       switch (opt) {
         case "1":
           try {
-            const caso1 = await casoPrueba1(first);
+            await casoPrueba1(first);
           } catch (error) {
             console.log(error);
           }
           break;
         case "2":
-          const caso2 = await casoPrueba2(id);
+          await casoPrueba2(first);
           break;
         case "3":
-          const caso3 = await casoPrueba3(id);
+          await casoPrueba3(first);
           break;
         case "4":
-          const caso4 = await casoPrueba4(id);
+          await casoPrueba4(first);
           break;
         case "5":
-          const caso5 = await casoPrueba5(id);
+          await casoPrueba5(first);
           break;
         default:
           break;

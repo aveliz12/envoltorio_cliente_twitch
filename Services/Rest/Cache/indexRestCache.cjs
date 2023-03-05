@@ -11,10 +11,9 @@ const Storage = require("node-storage");
 const store = new Storage("../../../store");
 
 const token = store.get("token");
-const id = "";
 
 const casoPruebaCacheRest = async () => {
-  console.log("**********API-REST TWITCH CACHE**********".magenta);
+  console.log("*****************API-REST TWITCH CACHE*****************".magenta);
   if (token === "") {
     console.log("Generar un token por favor.");
     return;
@@ -33,16 +32,16 @@ const casoPruebaCacheRest = async () => {
           }
           break;
         case "2":
-          await getCasoPrueba2RestCache(id);
+          await getCasoPrueba2RestCache();
           break;
         case "3":
-          await getCasoPrueba3RestCache(id);
+          await getCasoPrueba3RestCache();
           break;
         case "4":
-          await getCasoPrueba4RestCache(id);
+          await getCasoPrueba4RestCache();
           break;
         case "5":
-          await getCasoPrueba5RestCache(id);
+          await getCasoPrueba5RestCache();
           break;
         default:
           break;

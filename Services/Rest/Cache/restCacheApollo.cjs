@@ -33,8 +33,7 @@ const getLiveStreamsCache = async () => {
     `;
 
     const response = await client.query({ query });
-    console.log("NIVEL 1 CACHE");
-    console.log(response.data.liveStreams.data.length, " datos");
+    //console.log(response.data.liveStreams.data.length, " datos");
     return response.data.liveStreams.data;
   } catch (error) {
     console.log(error);
@@ -62,9 +61,8 @@ const getVideosByGameCache = async (id) => {
     `;
 
     const response = await client.query({ query });
-    console.log("NIVEL 2 CACHE");
 
-    console.log(response.data.videosByGame.data.length, " datos");
+    //console.log(response.data.videosByGame.data.length, " datos");
     return response.data.videosByGame.data;
   } catch (error) {
     console.log(error);
@@ -92,9 +90,8 @@ const getClipsByUserCache = async (id) => {
       `;
 
     const response = await client.query({ query });
-    console.log("NIVEL 3 CACHE");
 
-    console.log(response.data.clipsUser.data.length, " datos");
+    //console.log(response.data.clipsUser.data.length, " datos");
     return response.data.clipsUser.data;
   } catch (error) {
     console.log(error);
@@ -122,8 +119,7 @@ const getChannelInformationCache = async (id) => {
       `;
 
     const response = await client.query({ query });
-    console.log("NIVEL 4 CACHE");
-    console.log(response.data.channelInfo.data.length, " datos");
+    //console.log(response.data.channelInfo.data.length, " datos");
     return response.data.channelInfo.data;
   } catch (error) {
     console.log(error);
@@ -151,9 +147,8 @@ const getGameInformationCache = async (id) => {
         `;
 
     const response = await client.query({ query });
-    console.log("NIVEL 5 CACHE");
 
-    console.log(response.data.gameInfo.data.length, " datos");
+    //console.log(response.data.gameInfo.data.length, " datos");
     return response.data.gameInfo.data;
   } catch (error) {
     console.log(error);

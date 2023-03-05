@@ -14,6 +14,9 @@ const getCasoPrueba1RestCache = async () => {
   const data = await getLiveStreamsCache();
   const t2 = performance.now();
   let milisegundos = ((t2 - t1) / 1000).toFixed(2);
+
+  console.log("<=================NIVEL 1 CACHE=================>");
+  console.log(data.length, " datos");
   console.log(`La consulta desde cache en REST tardó: ${milisegundos} s`);
   return data;
 };
@@ -32,6 +35,9 @@ const getCasoPrueba2RestCache = async () => {
   //TIEMPO
   const t2 = performance.now();
   let milisegundos = ((t2 - t1) / 1000).toFixed(2);
+
+  console.log("<=================NIVEL 2 CACHE=================>");
+  console.log(data.length, " datos");
   console.log(`La consulta desde cache en REST tardó: ${milisegundos} s`);
   return data;
 };
@@ -57,6 +63,10 @@ const getCasoPrueba3RestCache = async () => {
   //TIEMPO
   const t2 = performance.now();
   let milisegundos = ((t2 - t1) / 1000).toFixed(2);
+
+  console.log("<=================NIVEL 3 CACHE=================>");
+  console.log(data.length, " datos");
+
   console.log(`La consulta desde cache en REST tardó: ${milisegundos} s`);
   return data;
 };
@@ -82,6 +92,10 @@ const getCasoPrueba4RestCache = async () => {
   //TIEMPO
   const t2 = performance.now();
   let milisegundos = ((t2 - t1) / 1000).toFixed(2);
+
+  console.log("<=================NIVEL 4 CACHE=================>");
+  console.log(data.length, " datos");
+
   console.log(`La consulta desde cache en REST tardó: ${milisegundos} s`);
   return data;
 };
@@ -107,6 +121,10 @@ const getCasoPrueba5RestCache = async () => {
   //TIEMPO
   const t2 = performance.now();
   let milisegundos = ((t2 - t1) / 1000).toFixed(2);
+
+  console.log("<=================NIVEL 5 CACHE=================>");
+  console.log(data.length, " datos");
+
   console.log(`La consulta desde cache en REST tardó: ${milisegundos} s`);
   return data;
 };

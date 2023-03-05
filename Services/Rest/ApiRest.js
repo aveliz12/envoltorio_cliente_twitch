@@ -97,7 +97,7 @@ export const getClipsByUser = async (id) => {
     });
 
     const dataClipsByUser = await response.json();
-    return dataClipsByUser;
+    return dataClipsByUser.data;
   } catch (error) {
     console.log(error);
   }
@@ -117,7 +117,7 @@ export const getInformationChannel = async (id) => {
     });
 
     const dataInformationChannel = await response.json();
-    return dataInformationChannel;
+    return dataInformationChannel.data;
   } catch (error) {
     console.log(error);
   }
@@ -137,7 +137,7 @@ export const getInformationGame = async (id) => {
     });
 
     const dataInformationGame = await response.json();
-    return dataInformationGame;
+    return dataInformationGame.data;
   } catch (error) {
     console.log(error);
   }
