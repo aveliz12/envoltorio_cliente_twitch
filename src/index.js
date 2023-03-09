@@ -1,5 +1,5 @@
 import { casoPrueba } from "../Services/Rest/indexRest.js";
-import { casoPruebaGraphQLCache } from "../Services/Cache/indexGraphCache.js";
+import { casoPruebaGraphQLCache } from "../Services/GraphQL/Cache/indexGraphCache.js";
 import pkg from "../Services/Rest/Cache/indexRestCache.cjs";
 const { casoPruebaCacheRest } = pkg;
 import {
