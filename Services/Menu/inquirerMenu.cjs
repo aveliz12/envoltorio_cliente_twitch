@@ -35,9 +35,9 @@ const menuOptions = [
 ];
 
 const inquirerMenu = async () => {
-  console.log("=================================".magenta);
+  console.log("==================================================".magenta);
   console.log("Seleccione una opcion: ".magenta);
-  console.log("=================================".magenta);
+  console.log("==================================================".magenta);
 
   const { opcion } = await inquirer.prompt(menuOptions);
 

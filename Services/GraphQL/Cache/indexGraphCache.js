@@ -4,20 +4,19 @@ import {
   casoPrueba3Cache,
   casoPrueba4Cache,
   casoPrueba5Cache,
-  casoPruebaCache,
 } from "./GraphQLCache.js";
 import Storage from "node-storage";
 const store = new Storage("./store");
 //import { getToken } from "../Services/ApiRest.js";
 //import promptSync from "prompt-sync";
-import pkg from "../Menu/inquirerMenu.cjs";
+import pkg from "../../Menu/inquirerMenu.cjs";
 const { inquirerMenu } = pkg;
 
 const token = store.get("token");
 const id = "";
 
 export const casoPruebaGraphQLCache = async () => {
-  console.log("**********API-REST TWITCH-GRAPHQL-CACHE**********".magenta);
+  console.log("*******************API-REST TWITCH-GRAPHQL CON CACHE*******************".magenta);
 
   if (token === "") {
     console.log("Genere un token porfavor");

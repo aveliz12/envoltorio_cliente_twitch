@@ -1,7 +1,9 @@
 import { casoPrueba } from "../Services/Rest/indexRest.js";
 import { casoPruebaGraphQLCache } from "../Services/GraphQL/Cache/indexGraphCache.js";
+import { casoPruebaGraphQL } from "../Services/GraphQL/indexGraphQL.js";
 import pkg from "../Services/Rest/Cache/indexRestCache.cjs";
 const { casoPruebaCacheRest } = pkg;
+
 import {
   inquirerMenuPrimary,
   inquireMenuToken,
@@ -24,6 +26,9 @@ const consumoTwtich = async () => {
         await casoPruebaCacheRest();
         break;
       case "3":
+        await casoPruebaGraphQL();
+        break;
+      case "4":
         await casoPruebaGraphQLCache();
         break;
       default:

@@ -13,7 +13,7 @@ const store = new Storage("../../../store");
 const token = store.get("token");
 
 const casoPruebaCacheRest = async () => {
-  console.log("*****************API-REST TWITCH CACHE*****************".magenta);
+  console.log("********************API-REST TWITCH CON CACHE********************".magenta);
   if (token === "") {
     console.log("Generar un token por favor.");
     return;
