@@ -16,8 +16,8 @@ const menuOptions = [
         name: "Consultar datos de API-REST desde caché",
       },
       {
-        value:"3",
-        name:"Consultar datos desde GraphQL"
+        value: "3",
+        name: "Consultar datos desde GraphQL",
       },
       {
         value: "4",
@@ -54,9 +54,9 @@ const menuOptionsToken = [
 ];
 
 export const inquirerMenuPrimary = async () => {
-  console.log("==================================================".red);
-  console.log("Seleccione una opcion: ".red);
-  console.log("==================================================".red);
+  console.log("==================================================".magenta);
+  console.log("Seleccione una opcion: ".magenta);
+  console.log("==================================================".magenta);
 
   const { opcion } = await inquirer.prompt(menuOptions);
 

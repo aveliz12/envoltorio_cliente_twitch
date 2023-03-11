@@ -13,18 +13,15 @@ const getCasoPrueba1RestCache = async () => {
   const t1 = performance.now();
   const data = await getLiveStreamsCache();
   const t2 = performance.now();
-  let milisegundos = ((t2 - t1) / 1000).toFixed(2);
+  let segundos = ((t2 - t1) / 1000).toFixed(2);
 
-  console.log("<=================NIVEL 1 CACHE=================>");
-  console.log(data.length, " datos");
-  console.log(`La consulta desde cache en REST tardó: ${milisegundos} s`);
-  return data;
+  return { data: data, time: segundos };
 };
 
 const getCasoPrueba2RestCache = async () => {
   const t1 = performance.now();
 
-  const dataLiveStreams = await getCasoPrueba1RestCache();
+  const dataLiveStreams = (await getCasoPrueba1RestCache()).data;
   const gameId = dataLiveStreams.map((resp) => resp.game_id);
 
   const dataPromiseVideosByGame = gameId.map(async (id) => {
@@ -34,18 +31,15 @@ const getCasoPrueba2RestCache = async () => {
   const data = await Promise.all(dataPromiseVideosByGame);
   //TIEMPO
   const t2 = performance.now();
-  let milisegundos = ((t2 - t1) / 1000).toFixed(2);
+  let segundos = ((t2 - t1) / 1000).toFixed(2);
 
-  console.log("<=================NIVEL 2 CACHE=================>");
-  console.log(data.length, " datos");
-  console.log(`La consulta desde cache en REST tardó: ${milisegundos} s`);
-  return data;
+  return { data: data, time: segundos };
 };
 
 const getCasoPrueba3RestCache = async () => {
   const t1 = performance.now();
 
-  const datavideosGame = await getCasoPrueba2RestCache();
+  const datavideosGame = (await getCasoPrueba2RestCache()).data;
 
   const userId = [];
 
@@ -62,19 +56,15 @@ const getCasoPrueba3RestCache = async () => {
   const data = await Promise.all(dataPromiseClipsByUser);
   //TIEMPO
   const t2 = performance.now();
-  let milisegundos = ((t2 - t1) / 1000).toFixed(2);
+  let segundos = ((t2 - t1) / 1000).toFixed(2);
 
-  console.log("<=================NIVEL 3 CACHE=================>");
-  console.log(data.length, " datos");
-
-  console.log(`La consulta desde cache en REST tardó: ${milisegundos} s`);
-  return data;
+  return { data: data, time: segundos };
 };
 
 const getCasoPrueba4RestCache = async () => {
   const t1 = performance.now();
 
-  const clipsByUser = await getCasoPrueba3RestCache();
+  const clipsByUser = (await getCasoPrueba3RestCache()).data;
 
   const broadcasterId = [];
 
@@ -91,19 +81,15 @@ const getCasoPrueba4RestCache = async () => {
   const data = await Promise.all(dataPromiseInformationChannel);
   //TIEMPO
   const t2 = performance.now();
-  let milisegundos = ((t2 - t1) / 1000).toFixed(2);
+  let segundos = ((t2 - t1) / 1000).toFixed(2);
 
-  console.log("<=================NIVEL 4 CACHE=================>");
-  console.log(data.length, " datos");
-
-  console.log(`La consulta desde cache en REST tardó: ${milisegundos} s`);
-  return data;
+  return { data: data, time: segundos };
 };
 
 const getCasoPrueba5RestCache = async () => {
   const t1 = performance.now();
 
-  const channelInformation = await getCasoPrueba4RestCache();
+  const channelInformation = (await getCasoPrueba4RestCache()).data;
 
   const gameId = [];
 
@@ -120,13 +106,9 @@ const getCasoPrueba5RestCache = async () => {
   const data = await Promise.all(dataPromiseInformationGame);
   //TIEMPO
   const t2 = performance.now();
-  let milisegundos = ((t2 - t1) / 1000).toFixed(2);
+  let segundos = ((t2 - t1) / 1000).toFixed(2);
 
-  console.log("<=================NIVEL 5 CACHE=================>");
-  console.log(data.length, " datos");
-
-  console.log(`La consulta desde cache en REST tardó: ${milisegundos} s`);
-  return data;
+  return { data: data, time: segundos };
 };
 
 module.exports = {

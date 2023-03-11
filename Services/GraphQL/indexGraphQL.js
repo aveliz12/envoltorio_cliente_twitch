@@ -16,12 +16,12 @@ const store = new Storage("./store");
 const token = store.get("token");
 
 export const casoPruebaGraphQL = async () => {
-  console.log("***********************GRAPHQL TWITCH*******************".magenta);
+  console.log("***********************ENVOLTORIO GRAPHQL TWITCH*******************".bgMagenta.bold);
   if (token === "") {
     console.log("Genere un token por favor.");
     return;
   } else {
-    console.log(`Su token generado es: ${token}`);
+    console.log(`Su token generado es: ${token}`.bold);
     let opt = " ";
     let first = 20;
     do {

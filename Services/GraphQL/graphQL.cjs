@@ -46,9 +46,9 @@ const casoPrueba1GraphQL = async () => {
 
   const t2 = performance.now();
   let segundos = ((t2 - t1) / 1000).toFixed(2);
-  console.log("<=================NIVEL 1 GRAPHQL=================>");
-  console.log(response.data.length);
-  console.log(`La consulta graphql tardó: ${segundos} segundos`);
+  console.log("<=================NIVEL 1 GRAPHQL=================>".red.bold);
+  //console.log(response.data.getCasosPruebasLiveStreams.length, " datos.");
+  console.log(`La consulta graphql tardó: ${segundos} segundos`.red);
 };
 
 //VIDEOS BY GAME
@@ -60,11 +60,19 @@ const casoPrueba2GraphQL = async () => {
     query: DATA_CASOPRUEBA2,
   });
 
+  //Agregar datos de videos por juego a un arreglo
+  // const data = response.data.getCasosPruebasLiveStreams;
+  // const videos = data.map((resp) => {
+  //   return resp.videosByGame;
+  // });
+
+  // const allDataVideos = [].concat.apply([], videos);
+
   const t2 = performance.now();
   let segundos = ((t2 - t1) / 1000).toFixed(2);
-  console.log("<=================NIVEL 2 GRAPHQL=================>");
-  console.log(response.data.length);
-  console.log(`La consulta graphql tardó: ${segundos} segundos`);
+  console.log("<=================NIVEL 2 GRAPHQL=================>".red.bold);
+  //console.log(allDataVideos.length, " datos.");
+  console.log(`La consulta graphql tardó: ${segundos} segundos`.red);
 };
 
 //CLIPS BY USER
@@ -76,12 +84,23 @@ const casoPrueba3GraphQL = async () => {
     query: DATA_CASOPRUEBA3,
   });
 
-  console.log(response.data.length);
+  //Agregar a un arreglo todos los clips
+  // const data = response.data.getCasosPruebasLiveStreams;
+
+  // const allDataClips = [];
+  // data.forEach((resp) => {
+  //   resp.videosByGame.forEach((videos) => {
+  //     videos.clipsByUser.forEach((clips) => {
+  //       allDataClips.push(clips);
+  //     });
+  //   });
+  // });
 
   const t2 = performance.now();
   let segundos = ((t2 - t1) / 1000).toFixed(2);
-  console.log("<=================NIVEL 3 GRAPHQL=================>");
-  console.log(`La consulta graphql tardó: ${segundos} segundos`);
+  console.log("<=================NIVEL 3 GRAPHQL=================>".red.bold);
+  //console.log(allDataClips.length);
+  console.log(`La consulta graphql tardó: ${segundos} segundos`.red);
 };
 
 //INFORMATION CHANNEL
@@ -93,11 +112,26 @@ const casoPrueba4GraphQL = async () => {
     query: DATA_CASOPRUEBA4,
   });
 
+  //Agregar a un arreglo todos los datos de informacion de canal
+  // const data = response.data.getCasosPruebasLiveStreams;
+
+  // const allDataInformationChannel = [];
+
+  // data.forEach((resp) => {
+  //   resp.videosByGame.forEach((videos) => {
+  //     videos.clipsByUser.forEach((clips) => {
+  //       clips.channelInformation.forEach((channel) => {
+  //         allDataInformationChannel.push(channel);
+  //       });
+  //     });
+  //   });
+  // });
+
   const t2 = performance.now();
   let segundos = ((t2 - t1) / 1000).toFixed(2);
-  console.log("<=================NIVEL 4 GRAPHQL=================>");
-  console.log(response.data.length);
-  console.log(`La consulta graphql tardó: ${segundos} segundos`);
+  console.log("<=================NIVEL 4 GRAPHQL=================>".red);
+  //console.log(allDataInformationChannel.length);
+  console.log(`La consulta graphql tardó: ${segundos} segundos`.red);
 };
 
 //INFORMATION GAME
@@ -109,11 +143,28 @@ const casoPrueba5GraphQL = async () => {
     query: DATA_CASOPRUEBA5,
   });
 
+  //Agregar a un arreglo todos los datos de informacion de juego
+  //const data = response.data.getCasosPruebasLiveStreams;
+
+  // const allDataInformationGame = [];
+
+  // data.forEach((resp) => {
+  //   resp.videosByGame.forEach((videos) => {
+  //     videos.clipsByUser.forEach((clips) => {
+  //       clips.channelInformation.forEach((channel) => {
+  //         channel.informationGame.forEach((game) => {
+  //           allDataInformationGame.push(game);
+  //         });
+  //       });
+  //     });
+  //   });
+  // });
+
   const t2 = performance.now();
   let segundos = ((t2 - t1) / 1000).toFixed(2);
-  console.log("<=================NIVEL 5 GRAPHQL=================>");
-  console.log(response.data.length);
-  console.log(`La consulta graphql tardó: ${segundos} segundos`);
+  console.log("<=================NIVEL 5 GRAPHQL=================>".red.bold);
+  //console.log(allDataInformationGame.length);
+  console.log(`La consulta graphql tardó: ${segundos} segundos`.red);
 };
 
 module.exports = {

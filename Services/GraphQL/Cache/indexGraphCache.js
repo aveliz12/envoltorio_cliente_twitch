@@ -7,8 +7,7 @@ import {
 } from "./GraphQLCache.js";
 import Storage from "node-storage";
 const store = new Storage("./store");
-//import { getToken } from "../Services/ApiRest.js";
-//import promptSync from "prompt-sync";
+
 import pkg from "../../Menu/inquirerMenu.cjs";
 const { inquirerMenu } = pkg;
 
@@ -16,14 +15,14 @@ const token = store.get("token");
 const id = "";
 
 export const casoPruebaGraphQLCache = async () => {
-  console.log("*******************API-REST TWITCH-GRAPHQL CON CACHE*******************".magenta);
+  console.log("*******************ENVOLTORIO GRAPHQL TWITCH CON CACHE*******************".bgMagenta.bold);
 
   if (token === "") {
     console.log("Genere un token porfavor");
     return;
   } else {
     let opt = "";
-    console.log(`Su token generado es: ${token}`);
+    console.log(`Su token generado es: ${token}`.bold);
 
     do {
       opt = await inquirerMenu();

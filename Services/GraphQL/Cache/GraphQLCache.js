@@ -28,10 +28,9 @@ export const casoPrueba1Cache = async () => {
   });
   const t2 = performance.now();
   let segundos = ((t2 - t1) / 1000).toFixed(2);
-  console.log("<=================NIVEL 1=================>");
-  console.log(`La consulta desde cache de graphql tardó: ${segundos} segundos`);
+  console.log("<=================NIVEL 1 GRAPHQL-CACHE=================>".red.bold);
+  console.log(`La consulta desde cache de graphql tardó: ${segundos} segundos`.red);
 
-  //console.log("Datos de Live Streams desde caché".red, response.data);
 };
 
 export const casoPrueba2Cache = async () => {
@@ -39,16 +38,12 @@ export const casoPrueba2Cache = async () => {
 
   const response = await client.query({
     query: DATA_CASOPRUEBA2,
-    variables: {
-      id: "32982",
-    },
   });
   const t2 = performance.now();
   let segundos = ((t2 - t1) / 1000).toFixed(2);
-  console.log("<=================NIVEL 2=================>");
-  console.log(`La consulta desde cache de graphql tardó: ${segundos} segundos`);
+  console.log("<=================NIVEL 2 GRAPHQL-CACHE=================>".red.bold);
+  console.log(`La consulta desde cache de graphql tardó: ${segundos} segundos`.red);
 
-  //console.log("Datos de Videos por juego desde caché".red, response.data);
 };
 
 export const casoPrueba3Cache = async () => {
@@ -56,15 +51,11 @@ export const casoPrueba3Cache = async () => {
 
   const response = await client.query({
     query: DATA_CASOPRUEBA3,
-    variables: {
-      id: "719332376",
-    },
   });
   const t2 = performance.now();
   let segundos = ((t2 - t1) / 1000).toFixed(2);
-  console.log("<=================NIVEL 3=================>");
-  console.log(`La consulta desde cache de graphql tardó: ${segundos} segundos`);
-  //console.log("Datos de clips por usuario desde caché".red, response.data);
+  console.log("<=================NIVEL 3 GRAPHQL-CACHE=================>".red.bold);
+  console.log(`La consulta desde cache de graphql tardó: ${segundos} segundos`.red);
 };
 
 export const casoPrueba4Cache = async () => {
@@ -72,15 +63,11 @@ export const casoPrueba4Cache = async () => {
 
   const response = await client.query({
     query: DATA_CASOPRUEBA4,
-    variables: {
-      id: "719332376",
-    },
   });
   const t2 = performance.now();
   let segundos = ((t2 - t1) / 1000).toFixed(2);
-  console.log("<=================NIVEL 4=================>");
-  console.log(`La consulta desde cache de graphql tardó: ${segundos} segundos`);
-  //console.log("Datos de Informacion del canal desde cache".red, response.data);
+  console.log("<=================NIVEL 4 GRAPHQL-CACHE=================>".red.bold);
+  console.log(`La consulta desde cache de graphql tardó: ${segundos} segundos`.red);
 };
 
 export const casoPrueba5Cache = async () => {
@@ -88,13 +75,9 @@ export const casoPrueba5Cache = async () => {
 
   const response = await client.query({
     query: DATA_CASOPRUEBA5,
-    variables: {
-      id: "32982",
-    },
   });
   const t2 = performance.now();
   let segundos = ((t2 - t1) / 1000).toFixed(2);
-  console.log("<=================NIVEL 5=================>");
-  console.log(`La consulta desde cache de graphql tardó: ${segundos} segundos`);
-  //console.log("Datos de Informacion de juego desde caché".red, response.data);
+  console.log("<=================NIVEL 5 GRAPHQL-CACHE=================>".red.bold);
+  console.log(`La consulta desde cache de graphql tardó: ${segundos} segundos`.red);
 };

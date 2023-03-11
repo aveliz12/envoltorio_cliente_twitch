@@ -15,13 +15,17 @@ const store = new Storage("./store");
 const token = store.get("token");
 
 export const casoPrueba = async () => {
-  console.log("*************************API-REST TWITCH********************".magenta);
+  console.log(
+    "*************************API-REST TWITCH*************************"
+      .bgMagenta.bold
+  );
   if (token === "") {
     console.log("Genere un token por favor.");
     return;
   } else {
-    console.log(`Su token generado es: ${token}`);
+    console.log(`Su token generado es: ${token}`.bold);
     let opt = " ";
+    let time;
     let first = 20;
     do {
       opt = await inquirerMenu();
@@ -29,26 +33,47 @@ export const casoPrueba = async () => {
       switch (opt) {
         case "1":
           try {
-            await casoPrueba1(first);
+            console.log(
+              "<=================NIVEL 1 REST=================>".red.bold
+            );
+            time = (await casoPrueba1(first)).time;
           } catch (error) {
             console.log(error);
           }
           break;
         case "2":
-          await casoPrueba2(first);
+          console.log(
+            "<=================NIVEL 2 REST=================>".red.bold
+          );
+
+          time = (await casoPrueba2(first)).time;
           break;
         case "3":
-          await casoPrueba3(first);
+          console.log(
+            "<=================NIVEL 3 REST=================>".red.bold
+          );
+
+          time = (await casoPrueba3(first)).time;
           break;
         case "4":
-          await casoPrueba4(first);
+          console.log(
+            "<=================NIVEL 4 REST=================>".red.bold
+          );
+
+          time = (await casoPrueba4(first)).time;
           break;
         case "5":
-          await casoPrueba5(first);
+          console.log(
+            "<=================NIVEL 5 REST=================>".red.bold
+          );
+
+          time = (await casoPrueba5(first)).time;
           break;
         default:
           break;
       }
+
+      console.log(`La consulta en REST tardó: ${time} segundos.`.red);
     } while (opt !== "0");
   }
 };
