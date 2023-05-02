@@ -2,8 +2,8 @@ import fetch from "node-fetch";
 import * as dotenv from "dotenv";
 dotenv.config();
 import Storage from "node-storage";
-const store = new Storage("./store");
 import PromptSync from "prompt-sync";
+const store = new Storage("./store");
 const prompt = PromptSync();
 
 //Variables
@@ -35,9 +35,6 @@ export const getLiveStreams = async (first) => {
     let cursor = null;
     let dataStreams = [];
     const token = store.get("token");
-    first = parseInt(
-      prompt("Ingrese la cantidad de datos que desea obtener: ")
-    );
 
     while (first > 0) {
       const response = await fetch(
@@ -58,6 +55,8 @@ export const getLiveStreams = async (first) => {
       dataStreams = [...dataStreams, ...dataLiveStreams.data];
       cursor = dataLiveStreams.pagination.cursor;
     }
+    console.log(`La cantidad de datos es: ${dataStreams.length}.`);
+
     return dataStreams;
   } catch (error) {
     console.log(error);

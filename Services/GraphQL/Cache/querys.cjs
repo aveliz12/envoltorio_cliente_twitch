@@ -11,8 +11,8 @@ const GET_TOKEN = gql`
 `;
 
 const DATA_CASOPRUEBA1 = gql`
-  query getDataCasoPrueba1 {
-    getCasosPruebasLiveStreams {
+  query getDataCasoPrueba1($first: Int) {
+    getCasosPruebasLiveStreams(first: $first) {
       id
       user_id
       user_login

@@ -12,8 +12,9 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-const getLiveStreamsCache = async () => {
+const getLiveStreamsCache = async (first) => {
   try {
+
     client.setLink(
       new RestLink({
         uri: "https://api.twitch.tv/helix/",
@@ -26,13 +27,16 @@ const getLiveStreamsCache = async () => {
     );
     const query = gql`
       query getLiveStreams {
-        liveStreams @rest(type: "liveStreams", path: "streams") {
+        liveStreams @rest(type: "liveStreams", path: "streams?first=${first}") {
           data
         }
       }
     `;
 
     const response = await client.query({ query });
+    console.log(
+      `La cantidad de datos es: ${response.data.liveStreams.data.length}`
+    );
     return response.data.liveStreams.data;
   } catch (error) {
     console.log(error);

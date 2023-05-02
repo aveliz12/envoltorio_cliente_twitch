@@ -1,6 +1,8 @@
 import pkg from "../Menu/inquirerMenu.cjs";
 import pkgGraphQL from "./graphQL.cjs";
-
+import pkgDistribucion from "../Menu/distribucion.cjs";
+import Storage from "node-storage";
+const { distribucionDatos } = pkgDistribucion;
 const { inquirerMenu } = pkg;
 const {
   casoPrueba1GraphQL,
@@ -10,42 +12,62 @@ const {
   casoPrueba5GraphQL,
 } = pkgGraphQL;
 
-import Storage from "node-storage";
 const store = new Storage("./store");
 
 const token = store.get("token");
 
 export const casoPruebaGraphQL = async () => {
-  console.log("***********************ENVOLTORIO GRAPHQL TWITCH*******************".bgMagenta.bold);
+  console.log(
+    "***********************ENVOLTORIO GRAPHQL TWITCH*******************"
+      .bgMagenta.bold
+  );
+
   if (token === "") {
     console.log("Genere un token por favor.");
     return;
   } else {
     console.log(`Su token generado es: ${token}`.bold);
+    let first = 0;
     let opt = " ";
-    let first = 20;
     do {
       opt = await inquirerMenu();
 
       switch (opt) {
         case "1":
           try {
-            await casoPrueba1GraphQL();
+            first = await distribucionDatos();
+            await casoPrueba1GraphQL(first);
           } catch (error) {
             console.log(error);
           }
           break;
         case "2":
-          await casoPrueba2GraphQL();
+          try {
+            await casoPrueba2GraphQL();
+          } catch (error) {
+            console.log(error);
+          }
           break;
         case "3":
-          await casoPrueba3GraphQL();
+          try {
+            await casoPrueba3GraphQL();
+          } catch (error) {
+            console.log(error);
+          }
           break;
         case "4":
-          await casoPrueba4GraphQL();
+          try {
+            await casoPrueba4GraphQL();
+          } catch (error) {
+            console.log(error);
+          }
           break;
         case "5":
-          await casoPrueba5GraphQL();
+          try {
+            await casoPrueba5GraphQL();
+          } catch (error) {
+            console.log(error);
+          }
           break;
         default:
           break;

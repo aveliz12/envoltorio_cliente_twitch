@@ -9,8 +9,8 @@ const {
 const { inquirerMenu } = require("../../Menu/inquirerMenu.cjs");
 const Storage = require("node-storage");
 const store = new Storage("../../../store");
-
 const token = store.get("token");
+const { distribucionDatos } = require("../../Menu/distribucion.cjs");
 
 const casoPruebaCacheRest = async () => {
   console.log(
@@ -23,6 +23,7 @@ const casoPruebaCacheRest = async () => {
   } else {
     console.log(`Su token generado es: ${token}`.bold);
     let opt = "";
+    let first = 0;
     let time;
     do {
       opt = await inquirerMenu();
@@ -33,7 +34,8 @@ const casoPruebaCacheRest = async () => {
             console.log(
               "<=================NIVEL 1 REST-CACHE=================>".red.bold
             );
-            time = (await getCasoPrueba1RestCache()).time;
+            first = await distribucionDatos();
+            time = (await getCasoPrueba1RestCache(first)).time;
           } catch (error) {
             console.log(error);
           }

@@ -36,19 +36,21 @@ const client = new ApolloClient({
 });
 
 //LIVE STREAMS
-const casoPrueba1GraphQL = async () => {
+const casoPrueba1GraphQL = async (dataLength) => {
   const t1 = performance.now();
 
   //CONSUMO
   const response = await client.query({
     query: DATA_CASOPRUEBA1,
+    variables: {
+      "first": dataLength,
+    },
   });
-
   const t2 = performance.now();
   let segundos = ((t2 - t1) / 1000).toFixed(2);
   console.log("<=================NIVEL 1 GRAPHQL=================>".red.bold);
-  //console.log(response.data.getCasosPruebasLiveStreams.length, " datos.");
-  console.log(`La consulta graphql tardó: ${segundos} segundos`.red);
+  console.log(`La cantidad de datos es: ${response.data.getCasosPruebasLiveStreams.length}.`);
+  console.log(`La consulta graphql tardó: ${segundos} segundos.`.red);
 };
 
 //VIDEOS BY GAME

@@ -6,21 +6,25 @@ import {
   casoPrueba5Cache,
 } from "./GraphQLCache.js";
 import Storage from "node-storage";
-const store = new Storage("./store");
-
 import pkg from "../../Menu/inquirerMenu.cjs";
+import pkgDistribucion from "../../Menu/distribucion.cjs";
+const { distribucionDatos } = pkgDistribucion;
+const store = new Storage("./store");
 const { inquirerMenu } = pkg;
-
 const token = store.get("token");
 const id = "";
 
 export const casoPruebaGraphQLCache = async () => {
-  console.log("*******************ENVOLTORIO GRAPHQL TWITCH CON CACHE*******************".bgMagenta.bold);
+  console.log(
+    "*******************ENVOLTORIO GRAPHQL TWITCH CON CACHE*******************"
+      .bgMagenta.bold
+  );
 
   if (token === "") {
     console.log("Genere un token porfavor");
     return;
   } else {
+    let first = 0;
     let opt = "";
     console.log(`Su token generado es: ${token}`.bold);
 
@@ -30,7 +34,8 @@ export const casoPruebaGraphQLCache = async () => {
       switch (opt) {
         case "1":
           try {
-            await casoPrueba1Cache();
+            first = await distribucionDatos();
+            await casoPrueba1Cache(first);
           } catch (error) {
             console.log(error);
           }

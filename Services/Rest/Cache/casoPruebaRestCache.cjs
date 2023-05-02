@@ -9,9 +9,9 @@ const { performance } = require("perf_hooks");
 const fetch = require("node-fetch");
 globalThis.fetch = fetch;
 
-const getCasoPrueba1RestCache = async () => {
+const getCasoPrueba1RestCache = async (first) => {
   const t1 = performance.now();
-  const data = await getLiveStreamsCache();
+  const data = await getLiveStreamsCache(first);
   const t2 = performance.now();
   let segundos = ((t2 - t1) / 1000).toFixed(2);
 

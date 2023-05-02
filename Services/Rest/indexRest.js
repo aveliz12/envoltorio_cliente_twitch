@@ -7,9 +7,11 @@ import {
 } from "../Rest/TestCases.js";
 
 import "colors";
-import pkg from "../Menu/inquirerMenu.cjs";
-const { inquirerMenu } = pkg;
 import Storage from "node-storage";
+import pkgDistribucion from "../Menu/distribucion.cjs";
+import pkg from "../Menu/inquirerMenu.cjs";
+const { distribucionDatos } = pkgDistribucion;
+const { inquirerMenu } = pkg;
 const store = new Storage("./store");
 
 const token = store.get("token");
@@ -26,7 +28,7 @@ export const casoPrueba = async () => {
     console.log(`Su token generado es: ${token}`.bold);
     let opt = " ";
     let time;
-    let first = 20;
+    let first = 0;
     do {
       opt = await inquirerMenu();
 
@@ -36,6 +38,7 @@ export const casoPrueba = async () => {
             console.log(
               "<=================NIVEL 1 REST=================>".red.bold
             );
+            first = await distribucionDatos();
             time = (await casoPrueba1(first)).time;
           } catch (error) {
             console.log(error);
@@ -72,7 +75,6 @@ export const casoPrueba = async () => {
         default:
           break;
       }
-
       console.log(`La consulta en REST tardó: ${time} segundos.`.red);
     } while (opt !== "0");
   }
