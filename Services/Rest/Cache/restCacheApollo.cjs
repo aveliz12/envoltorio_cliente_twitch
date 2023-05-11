@@ -135,8 +135,10 @@ const getClipsByUserCache = async (id, first) => {
   }
 };
 
-const getChannelInformationCache = async (id) => {
+const getChannelInformationCache = async (id, first) => {
   try {
+    let numPeticiones = 0;
+    let dataChannel = [];
     client.setLink(
       new RestLink({
         uri: "https://api.twitch.tv/helix/",
@@ -147,23 +149,32 @@ const getChannelInformationCache = async (id) => {
         },
       })
     );
-    const query = gql`
+    while (first > 0) {
+      const query = gql`
         query getChannelInformation {
-          channelInfo @rest(type: "channelInfo", path: "channels?broadcaster_id=${id}") {
+          channelInfo @rest(type: "channelInfo", path: "channels?broadcaster_id=${id}&first=${
+        first > 50 ? 50 : first
+      }") {
             data
           }
         }
       `;
+      numPeticiones++;
+      const response = await client.query({ query });
 
-    const response = await client.query({ query });
-    return response.data.channelInfo.data;
+      first = first - response.data.channelInfo.data.length;
+      dataChannel = [...dataChannel, ...response.data.channelInfo.data];
+    }
+    return { data: dataChannel, requests: numPeticiones };
   } catch (error) {
     console.log(error);
   }
 };
 
-const getGameInformationCache = async (id) => {
+const getGameInformationCache = async (id, first) => {
   try {
+    let numPeticiones = 0;
+    let dataGames = [];
     client.setLink(
       new RestLink({
         uri: "https://api.twitch.tv/helix/",
@@ -174,17 +185,24 @@ const getGameInformationCache = async (id) => {
         },
       })
     );
-    const query = gql`
+
+    while (first > 0) {
+      const query = gql`
           query getGameInformation {
-            gameInfo @rest(type: "gameInfo", path: "games?id=${id}") {
+            gameInfo @rest(type: "gameInfo", path: "games?id=${id}&first=${
+        first > 50 ? 50 : first
+      }") {
                 data
             }
           }
         `;
+      numPeticiones++;
+      const response = await client.query({ query });
 
-    const response = await client.query({ query });
-
-    return response.data.gameInfo.data;
+      first = first - response.data.gameInfo.data.length;
+      dataGames = [...dataGames, ...response.data.gameInfo.data];
+    }
+    return { dataGames: dataGames, requestsGames: numPeticiones };
   } catch (error) {
     console.log(error);
   }

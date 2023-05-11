@@ -161,7 +161,7 @@ export const casoPrueba5 = async (first, first2, first3, first4, first5) => {
 
   let t2 = performance.now();
   const tiempo = getTime(t1, t2);
-  console.log(`Datos del nivel 4: ${allDataInformationGame.length}.`.underline);
+  console.log(`Datos del nivel 5: ${allData.length}.`.underline);
 
   return {
     data: allData,

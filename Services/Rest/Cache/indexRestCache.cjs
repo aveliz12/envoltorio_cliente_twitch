@@ -35,7 +35,7 @@ const casoPruebaCacheRest = async () => {
     console.log("Generar un token por favor.");
     return;
   } else {
-    console.log(`Su token generado es: ${token}`.bold);
+    //console.log(`Su token generado es: ${token}`.bold);
     let opt = "";
     let first = 0,
       first2 = 0,
@@ -52,6 +52,7 @@ const casoPruebaCacheRest = async () => {
               "<=================NIVEL 1 REST-CACHE=================>".red.bold
             );
             first = await distribucionDatosCaso1();
+            console.log("Cantidad de datos por nivel: ", first);
 
             const { time, requests1 } = await getCasoPrueba1RestCache(first);
             imprimirDatos(time, requests1);
@@ -66,6 +67,7 @@ const casoPruebaCacheRest = async () => {
           await distribucionDatosCaso2().then((resp) => {
             first = resp.first;
             first2 = resp.firts2;
+            console.log("Cantidad de datos por nivel: ", resp);
           });
 
           const { time2, requests2 } = await getCasoPrueba2RestCache(
@@ -82,6 +84,7 @@ const casoPruebaCacheRest = async () => {
             first = resp.first;
             first2 = resp.firts2;
             first3 = resp.firts3;
+            console.log("Cantidad de datos por nivel: ", resp);
           });
 
           const { time3, requests3 } = await getCasoPrueba3RestCache(
@@ -100,9 +103,10 @@ const casoPruebaCacheRest = async () => {
             first2 = resp.firts2;
             first3 = resp.firts3;
             first4 = resp.firts4;
+            console.log("Cantidad de datos por nivel: ", resp);
           });
 
-          const { time4, requests4 } = await casoPrueba4(
+          const { time4, requests4 } = await getCasoPrueba4RestCache(
             first,
             first2,
             first3,
@@ -120,9 +124,10 @@ const casoPruebaCacheRest = async () => {
             first3 = resp.firts3;
             first4 = resp.firts4;
             first5 = resp.firts5;
+            console.log("Cantidad de datos por nivel: ", resp);
           });
 
-          const { time5, requests5 } = await casoPrueba5(
+          const { time5, requests5 } = await getCasoPrueba5RestCache(
             first,
             first2,
             first3,
