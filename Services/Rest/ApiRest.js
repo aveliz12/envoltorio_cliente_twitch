@@ -4,7 +4,6 @@ dotenv.config();
 import Storage from "node-storage";
 import PromptSync from "prompt-sync";
 const store = new Storage("./store");
-const prompt = PromptSync();
 
 //Variables
 const url = "https://api.twitch.tv/helix/";
@@ -96,7 +95,6 @@ export const getVideosByGame = async (id, first) => {
       cursor = dataVideosByGame.pagination.cursor;
     }
 
-    //console.log(`Datos del nivel 2: ${dataVideos.length}.`.underline);
     return { data: dataVideos, requests: numPeticiones };
   } catch (error) {
     console.log(error);
@@ -121,18 +119,18 @@ export const getClipsByUser = async (id, first) => {
           headers: {
             Authorization: "Bearer " + token,
             "Client-Id": process.env.CLIENTID,
+            "accept-language": "",
           },
         }
       );
       numPeticiones++;
-
       const dataClipsByUser = await response.json();
-      console.log(dataClipsByUser)
-      // first = first - dataClipsByUser.data.length;
-      // dataClips = [...dataClips, ...dataClipsByUser.data];
-      // cursor = dataClipsByUser.pagination.cursor;
+      
+      first = first - dataClipsByUser.data.length;
+      dataClips = [...dataClips, ...dataClipsByUser.data];
+      cursor = dataClipsByUser.pagination.cursor;
     }
-    //return { data: dataClips, requests: numPeticiones };
+    return { data: dataClips, requests: numPeticiones };
   } catch (error) {
     console.log(error);
   }
@@ -164,9 +162,6 @@ export const getInformationChannel = async (id, first) => {
       dataChannel = [...dataChannel, ...dataInformationChannel.data];
       // cursor = dataInformationChannel.pagination.cursor;
     }
-    console.log(
-      "PETICIONES CUARTO NIVEL:", numPeticiones
-    );
     return { data: dataChannel, requests: numPeticiones };
   } catch (error) {
     console.log(error);

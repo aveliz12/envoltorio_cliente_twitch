@@ -23,11 +23,11 @@ const getTime = (t1, t2) => {
 //CASO DE PRUEBA 1: LIVE STREAMS
 export const casoPrueba1 = async (first) => {
   let t1 = performance.now();
-  const data = (await getLiveStreams(first)).data;
+  const { data, request } = await getLiveStreams(first);
   let t2 = performance.now();
   const tiempo = getTime(t1, t2);
 
-  const numPeticiones = (await getLiveStreams(first)).requests;
+  const numPeticiones = request;
   console.log(`Datos del nivel 1: ${data.length}.`.underline);
 
   return { data: data, time: tiempo, requests: numPeticiones };
@@ -36,142 +36,136 @@ export const casoPrueba1 = async (first) => {
 //CASO DE PRUEBA 2: VIDEOS BY GAME
 export const casoPrueba2 = async (first, first2) => {
   let t1 = performance.now();
-  const dataLiveStreams = (await casoPrueba1(first)).data;
+  let numPeticiones = 0;
+  let objetos = [];
+  const { data, requests } = await casoPrueba1(first);
+  const dataLiveStreams = data;
   const idGame = dataLiveStreams.map((resp) => resp.game_id);
-  let numPeticiones;
 
-  const dataVideosByGame = idGame.map(async (game_id) => {
-    numPeticiones = (await getVideosByGame(game_id, first2)).requests;
-
-    return (await getVideosByGame(game_id, first2)).data;
-  });
-
-  //Promise all sirve para sacar los datos almacenados
-  const allDataVideosByGame = await Promise.all(dataVideosByGame);
-
-  var objetos = [];
-
-  for (var i = 0; i < allDataVideosByGame.length; i++) {
-    for (var j = 0; j < allDataVideosByGame[i].length; j++) {
-      objetos.push(allDataVideosByGame[i][j]);
-    }
+  for (const game_id of idGame) {
+    const { data, requests } = await getVideosByGame(game_id, first2);
+    numPeticiones += requests;
+    objetos = [...objetos, ...data];
   }
-  const totalPeticiones = (await casoPrueba1(first)).requests + numPeticiones;
 
+  const totalPeticiones = requests + numPeticiones;
   let t2 = performance.now();
   const tiempo = getTime(t1, t2);
 
   console.log(`Datos del nivel 2: ${objetos.length}.`.underline);
 
-  return { data: objetos, time: tiempo, requests: totalPeticiones };
+  return { data: objetos, time2: tiempo, requests2: totalPeticiones };
 };
 
 //CASO DE PRUEBA 3: CLIPS BY USER
 export const casoPrueba3 = async (first, first2, first3) => {
   let t1 = performance.now();
-
-  const dataVideosByGame = (await casoPrueba2(first, first2)).data;
+  let allData = [];
+  let numPeticiones = 0;
+  const { data, requests2 } = await casoPrueba2(first, first2);
+  const dataVideosByGame = data;
   const idUserVideos = dataVideosByGame.map((resp) => resp.user_id);
-  let numPeticiones;
-  const dataClipsByUser = idUserVideos.map(async (_id) => {
-    numPeticiones = (await getClipsByUser(_id, first3)).requests;
 
-    return (await getClipsByUser(_id, first3)).data;
-  });
+  for (const _id of idUserVideos) {
+    const { data, requests } = await getClipsByUser(_id, first3);
+    allData = [...allData, ...data];
+    numPeticiones += requests;
+  }
 
-  const allDataClipsByUser = await Promise.all(dataClipsByUser);
-
-  var allData = [].concat.apply(
-    [],
-    allDataClipsByUser.map((arr) => {
-      return arr;
-    })
-  );
-
-  const totalPeticiones =
-    (await casoPrueba2(first, first2)).requests + numPeticiones;
+  const totalPeticiones = requests2 + numPeticiones;
 
   let t2 = performance.now();
   const tiempo = getTime(t1, t2);
 
   console.log(`Datos del nivel 3: ${allData.length}.`.underline);
 
-  return { data: allData, time: tiempo, requests: totalPeticiones };
+  return { data: allData, time3: tiempo, requests3: totalPeticiones };
 };
 
 //CASO DE PRUEBA 4: INFORMATION CHANNEL
 export const casoPrueba4 = async (first, first2, first3, first4) => {
   let t1 = performance.now();
-  let numPeticiones;
-  const dataClipsByUser = (await casoPrueba3(first, first2, first3)).data;
+  let numPeticiones = 0;
+  let allData = [];
+  const { data, requests3 } = await casoPrueba3(first, first2, first3);
+  const dataClipsByUser = data;
 
   const broadcaster_id = [];
   dataClipsByUser.forEach((id) => {
     broadcaster_id.push(id.broadcaster_id);
   });
 
-  const dataInformationChannel = broadcaster_id.map(async (_id) => {
-    numPeticiones = (await getInformationChannel(_id, first4)).requests;
+  for (const _id of broadcaster_id) {
+    const { data, requests } = await getInformationChannel(_id, first4);
+    allData = [...allData, ...data];
+    numPeticiones += requests;
+  }
 
-    return (await getInformationChannel(_id, first4)).data;
-  });
+  // const dataInformationChannel = broadcaster_id.map(async (_id) => {
+  //   return (await getInformationChannel(_id, first4)).data;
+  // });
 
-  const allDataInformationChannel = await Promise.all(dataInformationChannel);
+  // const allDataInformationChannel = await Promise.all(dataInformationChannel);
 
-  var allData = [].concat.apply(
-    [],
-    allDataInformationChannel.map((arr) => {
-      return arr;
-    })
-  );
+  // var allData = [].concat.apply(
+  //   [],
+  //   allDataInformationChannel.map((arr) => {
+  //     return arr;
+  //   })
+  // );
 
-  const totalPeticiones =
-    (await casoPrueba3(first, first2, first3)).requests + numPeticiones;
+  const totalPeticiones = requests3 + numPeticiones;
 
   let t2 = performance.now();
   const tiempo = getTime(t1, t2);
   console.log(`Datos del nivel 4: ${allData.length}.`.underline);
 
-  return { data: allData, time: tiempo, requests: totalPeticiones };
+  return { data: allData, time4: tiempo, requests4: totalPeticiones };
 };
 
 //CASO DE PRUEBA 5: INFORMATION GAME
 export const casoPrueba5 = async (first, first2, first3, first4, first5) => {
   let t1 = performance.now();
-  let numPeticiones;
-  const dataInformationChannel = (
-    await casoPrueba4(first, first2, first3, first4)
-  ).data;
+  let numPeticiones = 0;
+  let allData = [];
+  const { data, requests4 } = await casoPrueba4(first, first2, first3, first4);
+  const dataInformationChannel = data;
 
   const dataGame = [];
+
   dataInformationChannel.forEach((id) => {
     dataGame.push(id.game_id);
   });
 
-  const dataInformationGame = dataGame.map(async (_id) => {
-    numPeticiones = (await getInformationGame(_id, first5)).requests;
-    return (await getInformationGame(_id, first5)).data;
-  });
+  for (const _id of dataGame) {
+    const { data, requests } = await getInformationGame(_id, first5);
+    allData = [...allData, ...data];
+    numPeticiones += requests;
+  }
 
-  const allData = await Promise.all(dataInformationGame);
+  // const dataInformationGame = dataGame.map(async (_id) => {
+  //   numPeticiones = (await getInformationGame(_id, first5)).requests;
+  //   return (await getInformationGame(_id, first5)).data;
+  // });
 
-  var allDataInformationGame = [].concat.apply(
-    [],
-    allData.map((arr) => {
-      return arr;
-    })
-  );
+  // const allData = await Promise.all(dataInformationGame);
 
-  const totalPeticiones =
-    (await casoPrueba4(first, first2, first3, first4)).requests + numPeticiones;
+  // var allDataInformationGame = [].concat.apply(
+  //   [],
+  //   allData.map((arr) => {
+  //     return arr;
+  //   })
+  // );
+
+  const totalPeticiones = requests4 + numPeticiones;
 
   let t2 = performance.now();
   const tiempo = getTime(t1, t2);
   console.log(`Datos del nivel 4: ${allDataInformationGame.length}.`.underline);
 
   return {
-    data: allDataInformationGame,
-    time: tiempo,
-    requests: totalPeticiones,
+    data: allData,
+    time5: tiempo,
+    requests5: totalPeticiones,
   };
 };

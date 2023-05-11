@@ -22,6 +22,13 @@ const store = new Storage("./store");
 
 const token = store.get("token");
 
+const imprimirDatos = (time, requests) => {
+  console.log(`Tiempo: ${time.milisegundos} milisegundos.`.underline);
+  console.log(`Tiempo: ${time.segundos} segundos.`.underline);
+  console.log(`Tiempo: ${time.minutos} minutos.`.underline);
+
+  console.log(`Peticiones: ${requests}.`.underline);
+};
 export const casoPrueba = async () => {
   console.log(
     "*************************API-REST TWITCH*************************"
@@ -33,8 +40,6 @@ export const casoPrueba = async () => {
   } else {
     console.log(`Su token generado es: ${token}`.bold);
     let opt = " ";
-    let numPeticiones = 0;
-    let timeSeg, timeMil, timeMin;
     let first = 0,
       first2 = 0,
       first3 = 0,
@@ -51,11 +56,8 @@ export const casoPrueba = async () => {
             );
             first = await distribucionDatosCaso1();
 
-            timeMil = (await casoPrueba1(first)).time.milisegundos;
-            timeSeg = (await casoPrueba1(first)).time.segundos;
-            timeMin = (await casoPrueba1(first)).time.minutos;
-
-            numPeticiones = (await casoPrueba1(first)).requests;
+            const { time, requests } = await casoPrueba1(first);
+            imprimirDatos(time, requests);
           } catch (error) {
             console.log(error);
           }
@@ -69,11 +71,8 @@ export const casoPrueba = async () => {
             first2 = resp.firts2;
           });
 
-          timeSeg = (await casoPrueba2(first, first2)).time.segundos;
-          timeMil = (await casoPrueba2(first, first2)).time.milisegundos;
-          timeMin = (await casoPrueba2(first, first2)).time.minutos;
-          numPeticiones = (await casoPrueba2(first, first2)).requests;
-
+          const { time2, requests2 } = await casoPrueba2(first, first2);
+          imprimirDatos(time2, requests2);
           break;
         case "3":
           console.log(
@@ -85,12 +84,8 @@ export const casoPrueba = async () => {
             first3 = resp.firts3;
           });
 
-          timeSeg = (await casoPrueba3(first, first2, first3)).time.segundos;
-          timeMil = (await casoPrueba3(first, first2, first3)).time
-            .milisegundos;
-          timeMin = (await casoPrueba3(first, first2, first3)).time.minutos;
-          numPeticiones = (await casoPrueba3(first, first2, first3)).requests;
-
+          const { time3, requests3 } = await casoPrueba3(first, first2, first3);
+          imprimirDatos(time3, requests3);
           break;
         case "4":
           console.log(
@@ -104,20 +99,19 @@ export const casoPrueba = async () => {
             first4 = resp.firts4;
           });
 
-          timeSeg = (await casoPrueba4(first, first2, first3, first4)).time
-            .segundos;
-          timeMil = (await casoPrueba4(first, first2, first3, first4)).time
-            .milisegundos;
-          timeMin = (await casoPrueba4(first, first2, first3, first4)).time
-            .minutos;
-          numPeticiones = (await casoPrueba4(first, first2, first3, first4))
-            .requests;
+          const { time4, requests4 } = await casoPrueba4(
+            first,
+            first2,
+            first3,
+            first4
+          );
+          imprimirDatos(time4, requests4);
           break;
         case "5":
           console.log(
             "<=================NIVEL 5 REST=================>".red.bold
           );
-          await distribucionDatosCaso4().then((resp) => {
+          await distribucionDatosCaso5().then((resp) => {
             first = resp.first;
             first2 = resp.firts2;
             first3 = resp.firts3;
@@ -125,25 +119,18 @@ export const casoPrueba = async () => {
             first5 = resp.firts5;
           });
 
-          timeSeg = (await casoPrueba4(first, first2, first3, first4, first5))
-            .time.segundos;
-          timeMil = (await casoPrueba4(first, first2, first3, first4, first5))
-            .time.milisegundos;
-          timeMin = (await casoPrueba4(first, first2, first3, first4, first5))
-            .time.minutos;
-          numPeticiones = (
-            await casoPrueba4(first, first2, first3, first4, first5)
-          ).requests;
+          const { time5, requests5 } = await casoPrueba5(
+            first,
+            first2,
+            first3,
+            first4,
+            first5
+          );
+          imprimirDatos(time5, requests5);
           break;
         default:
           break;
       }
-
-      console.log(`Tiempo: ${timeMil} milisegundos.`.underline);
-      console.log(`Tiempo: ${timeSeg} segundos.`.underline);
-      console.log(`Tiempo: ${timeMin} minutos.`.underline);
-
-      console.log(`Peticiones: ${numPeticiones}.`.underline);
     } while (opt !== "0");
   }
 };

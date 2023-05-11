@@ -14,6 +14,9 @@ const client = new ApolloClient({
 
 const getLiveStreamsCache = async (first) => {
   try {
+    let cursor = null;
+    let numPeticiones = 0;
+    let dataStreams = [];
 
     client.setLink(
       new RestLink({
@@ -25,26 +28,37 @@ const getLiveStreamsCache = async (first) => {
         },
       })
     );
-    const query = gql`
+    while (first > 0) {
+      const query = gql`
       query getLiveStreams {
-        liveStreams @rest(type: "liveStreams", path: "streams?first=${first}") {
+        liveStreams @rest(type: "liveStreams", path: "streams?first=${
+          first > 50 ? 50 : first
+        }${cursor === null ? "" : `&after=${cursor}`}") {
           data
+          pagination
         }
       }
     `;
 
-    const response = await client.query({ query });
-    console.log(
-      `La cantidad de datos es: ${response.data.liveStreams.data.length}`
-    );
-    return response.data.liveStreams.data;
+      numPeticiones++;
+      const response = await client.query({ query });
+
+      first = first - response.data.liveStreams.data.length;
+      dataStreams = [...dataStreams, ...response.data.liveStreams.data];
+      cursor = response.data.liveStreams.pagination.cursor;
+    }
+    return { data: dataStreams, requests: numPeticiones };
   } catch (error) {
     console.log(error);
   }
 };
 
-const getVideosByGameCache = async (id) => {
+const getVideosByGameCache = async (id, first) => {
   try {
+    let cursor = null;
+    let numPeticiones = 0;
+    let dataVideos = [];
+
     client.setLink(
       new RestLink({
         uri: "https://api.twitch.tv/helix/",
@@ -55,24 +69,37 @@ const getVideosByGameCache = async (id) => {
         },
       })
     );
-    const query = gql`
+    while (first > 0) {
+      const query = gql`
       query getVideosByGame {
-        videosByGame @rest(type: "videosByGame", path: "videos?game_id=${id}") {
+        videosByGame @rest(type: "videosByGame", path: "videos?game_id=${id}&first=${
+        first > 50 ? 50 : first
+      }${cursor === null ? "" : `&after=${cursor}`}") {
           data
+          pagination
         }
       }
     `;
+      numPeticiones++;
+      const response = await client.query({ query });
 
-    const response = await client.query({ query });
+      first = first - response.data.videosByGame.data.length;
+      dataVideos = [...dataVideos, ...response.data.videosByGame.data];
+      cursor = response.data.videosByGame.pagination.cursor;
+    }
 
-    return response.data.videosByGame.data;
+    return { data: dataVideos, requests: numPeticiones };
   } catch (error) {
     console.log(error);
   }
 };
 
-const getClipsByUserCache = async (id) => {
+const getClipsByUserCache = async (id, first) => {
   try {
+    let cursor = null;
+    let numPeticiones = 0;
+    let dataClips = [];
+
     client.setLink(
       new RestLink({
         uri: "https://api.twitch.tv/helix/",
@@ -83,17 +110,26 @@ const getClipsByUserCache = async (id) => {
         },
       })
     );
-    const query = gql`
+    while (first > 0) {
+      const query = gql`
         query getClipsByUser {
-          clipsUser @rest(type: "clipsUser", path: "clips?broadcaster_id=${id}") {
+          clipsUser @rest(type: "clipsUser", path: "clips?broadcaster_id=${id}&first=${
+        first > 50 ? 50 : first
+      }${cursor === null ? "" : `&after=${cursor}`}") {
             data
+            pagination
           }
         }
       `;
+      numPeticiones++;
+      const response = await client.query({ query });
 
-    const response = await client.query({ query });
+      first = first - response.data.clipsUser.data.length;
+      dataClips = [...dataClips, ...response.data.clipsUser.data];
+      cursor = response.data.clipsUser.pagination.cursor;
+    }
 
-    return response.data.clipsUser.data;
+    return { data: dataClips, requests: numPeticiones };
   } catch (error) {
     console.log(error);
   }

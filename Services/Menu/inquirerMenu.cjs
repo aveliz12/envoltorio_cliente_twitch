@@ -8,7 +8,7 @@ const menuOptions = [
     choices: [
       {
         value: "1",
-        name: "1° Nivel: Streams en vivo",
+        name: "1° Nivel: Transmisiones en vivo",
       },
       {
         value: "2",
