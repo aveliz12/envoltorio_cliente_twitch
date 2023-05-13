@@ -2,7 +2,6 @@ import fetch from "node-fetch";
 import * as dotenv from "dotenv";
 dotenv.config();
 import Storage from "node-storage";
-import PromptSync from "prompt-sync";
 const store = new Storage("./store");
 
 //Variables

@@ -9,6 +9,10 @@ const { performance } = require("perf_hooks");
 const fetch = require("node-fetch");
 globalThis.fetch = fetch;
 
+
+/*____________________REST CON CACHE______________________________*/
+
+
 const getTime = (t1, t2) => {
   const milisegundos = (t2 - t1).toFixed(3);
   const segundos = ((t2 - t1) / 1000).toFixed(3);

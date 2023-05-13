@@ -74,8 +74,8 @@ const distribucionDatosCaso1 = async () => {
 };
 const distribucionDatosCaso2 = async () => {
   const data = {
-    first: 0,
-    firts2: 0,
+    limite: 0,
+    limite2: 0,
   };
   let opt = "";
 
@@ -84,28 +84,28 @@ const distribucionDatosCaso2 = async () => {
 
     switch (opt) {
       case "1":
-        data.first = 1;
-        data.firts2 = 1;
+        data.limite = 1;
+        data.limite2 = 1;
         return data;
       case "2":
-        data.first = 6;
-        data.firts2 = 6;
+        data.limite = 6;
+        data.limite2 = 6;
         return data;
       case "3":
-        data.first = 16;
-        data.firts2 = 16;
+        data.limite = 16;
+        data.limite2 = 16;
         return data;
       case "4":
-        data.first = 56;
-        data.firts2 = 56;
+        data.limite = 56;
+        data.limite2 = 56;
         return data;
       case "5":
-        data.first = 181;
-        data.firts2 = 181;
+        data.limite = 181;
+        data.limite2 = 181;
         return data;
       case "6":
-        data.first = 316;
-        data.firts2 = 316;
+        data.limite = 316;
+        data.limite2 = 316;
         return data;
       default:
         break;
@@ -114,9 +114,9 @@ const distribucionDatosCaso2 = async () => {
 };
 const distribucionDatosCaso3 = async () => {
   const data = {
-    first: 0,
-    firts2: 0,
-    firts3: 0,
+    limite: 0,
+    limite2: 0,
+    limite3: 0,
   };
   let opt = "";
 
@@ -125,34 +125,34 @@ const distribucionDatosCaso3 = async () => {
 
     switch (opt) {
       case "1":
-        data.first = 1;
-        data.firts2 = 1;
-        data.firts3 = 1;
+        data.limite = 1;
+        data.limite2 = 1;
+        data.limite3 = 1;
         return data;
       case "2":
-        data.first = 3;
-        data.firts2 = 3;
-        data.firts3 = 3;
+        data.limite = 3;
+        data.limite2 = 3;
+        data.limite3 = 3;
         return data;
       case "3":
-        data.first = 6;
-        data.firts2 = 6;
-        data.firts3 = 6;
+        data.limite = 6;
+        data.limite2 = 6;
+        data.limite3 = 6;
         return data;
       case "4":
-        data.first = 15;
-        data.firts2 = 15;
-        data.firts3 = 15;
+        data.limite = 15;
+        data.limite2 = 15;
+        data.limite3 = 15;
         return data;
       case "5":
-        data.first = 32;
-        data.firts2 = 32;
-        data.firts3 = 32;
+        data.limite = 32;
+        data.limite2 = 32;
+        data.limite3 = 32;
         return data;
       case "6":
-        data.first = 46;
-        data.firts2 = 46;
-        data.firts3 = 46;
+        data.limite = 46;
+        data.limite2 = 46;
+        data.limite3 = 46;
         return data;
       default:
         break;
@@ -161,10 +161,10 @@ const distribucionDatosCaso3 = async () => {
 };
 const distribucionDatosCaso4 = async () => {
   const data = {
-    first: 0,
-    firts2: 0,
-    firts3: 0,
-    firts4: 0,
+    limite: 0,
+    limite2: 0,
+    limite3: 0,
+    limite4: 0,
   };
   let opt = "";
 
@@ -173,40 +173,40 @@ const distribucionDatosCaso4 = async () => {
 
     switch (opt) {
       case "1":
-        data.first = 1;
-        data.firts2 = 1;
-        data.firts3 = 1;
-        data.firts4 = 1;
+        data.limite = 1;
+        data.limite2 = 1;
+        data.limite3 = 1;
+        data.limite4 = 1;
         return data;
       case "2":
-        data.first = 3;
-        data.firts2 = 3;
-        data.firts3 = 3;
-        data.firts4 = 1;
+        data.limite = 3;
+        data.limite2 = 3;
+        data.limite3 = 3;
+        data.limite4 = 1;
         return data;
       case "3":
-        data.first = 6;
-        data.firts2 = 6;
-        data.firts3 = 6;
-        data.firts4 = 1;
+        data.limite = 6;
+        data.limite2 = 6;
+        data.limite3 = 6;
+        data.limite4 = 1;
         return data;
       case "4":
-        data.first = 15;
-        data.firts2 = 15;
-        data.firts3 = 15;
-        data.firts4 = 1;
+        data.limite = 15;
+        data.limite2 = 15;
+        data.limite3 = 15;
+        data.limite4 = 1;
         return data;
       case "5":
-        data.first = 32;
-        data.firts2 = 32;
-        data.firts3 = 32;
-        data.firts4 = 1;
+        data.limite = 32;
+        data.limite2 = 32;
+        data.limite3 = 32;
+        data.limite4 = 1;
         return data;
       case "6":
-        data.first = 46;
-        data.firts2 = 46;
-        data.firts3 = 46;
-        data.firts4 = 1;
+        data.limite = 46;
+        data.limite2 = 46;
+        data.limite3 = 46;
+        data.limite4 = 1;
         return data;
       default:
         break;
@@ -215,11 +215,11 @@ const distribucionDatosCaso4 = async () => {
 };
 const distribucionDatosCaso5 = async () => {
   const data = {
-    first: 0,
-    firts2: 0,
-    firts3: 0,
-    firts4: 0,
-    firts5: 0,
+    limite: 0,
+    limite2: 0,
+    limite3: 0,
+    limite4: 0,
+    limite5: 0,
   };
   let opt = "";
 
@@ -228,46 +228,46 @@ const distribucionDatosCaso5 = async () => {
 
     switch (opt) {
       case "1":
-        data.first = 1;
-        data.firts2 = 1;
-        data.firts3 = 1;
-        data.firts4 = 1;
-        data.firts5 = 1;
+        data.limite = 1;
+        data.limite2 = 1;
+        data.limite3 = 1;
+        data.limite4 = 1;
+        data.limite5 = 1;
         return data;
       case "2":
-        data.first = 3;
-        data.firts2 = 3;
-        data.firts3 = 3;
-        data.firts4 = 1;
-        data.firts5 = 1;
+        data.limite = 3;
+        data.limite2 = 3;
+        data.limite3 = 3;
+        data.limite4 = 1;
+        data.limite5 = 1;
         return data;
       case "3":
-        data.first = 6;
-        data.firts2 = 6;
-        data.firts3 = 6;
-        data.firts4 = 1;
-        data.firts5 = 1;
+        data.limite = 6;
+        data.limite2 = 6;
+        data.limite3 = 6;
+        data.limite4 = 1;
+        data.limite5 = 1;
         return data;
       case "4":
-        data.first = 15;
-        data.firts2 = 15;
-        data.firts3 = 15;
-        data.firts4 = 1;
-        data.firts5 = 1;
+        data.limite = 15;
+        data.limite2 = 15;
+        data.limite3 = 15;
+        data.limite4 = 1;
+        data.limite5 = 1;
         return data;
       case "5":
-        data.first = 32;
-        data.firts2 = 32;
-        data.firts3 = 32;
-        data.firts4 = 1;
-        data.firts5 = 1;
+        data.limite = 32;
+        data.limite2 = 32;
+        data.limite3 = 32;
+        data.limite4 = 1;
+        data.limite5 = 1;
         return data;
       case "6":
-        data.first = 46;
-        data.firts2 = 46;
-        data.firts3 = 46;
-        data.firts4 = 1;
-        data.firts5 = 1;
+        data.limite = 46;
+        data.limite2 = 46;
+        data.limite3 = 46;
+        data.limite4 = 1;
+        data.limite5 = 1;
         return data;
       default:
         break;

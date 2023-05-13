@@ -55,7 +55,7 @@ export const casoPrueba = async () => {
               "<=================NIVEL 1 REST=================>".red.bold
             );
             first = await distribucionDatosCaso1();
-            console.log("Cantidad de datos por nivel: ", first);
+            console.log("Cantidad de datos requeridos (Distribución) | Nivel 1: ", first);
 
             const { time, requests } = await casoPrueba1(first);
             imprimirDatos(time, requests);
@@ -68,9 +68,9 @@ export const casoPrueba = async () => {
             "<=================NIVEL 2 REST=================>".red.bold
           );
           await distribucionDatosCaso2().then((resp) => {
-            first = resp.first;
-            first2 = resp.firts2;
-            console.log("Cantidad de datos por nivel: ", resp);
+            first = resp.limite;
+            first2 = resp.limite2;
+            console.log("Cantidad de datos requeridos (Distribución) | Nivel 2: ", resp);
           });
 
           const { time2, requests2 } = await casoPrueba2(first, first2);
@@ -81,10 +81,10 @@ export const casoPrueba = async () => {
             "<=================NIVEL 3 REST=================>".red.bold
           );
           await distribucionDatosCaso3().then((resp) => {
-            first = resp.first;
-            first2 = resp.firts2;
-            first3 = resp.firts3;
-            console.log("Cantidad de datos por nivel: ", resp);
+            first = resp.limite;
+            first2 = resp.limite2;
+            first3 = resp.limite3;
+            console.log("Cantidad de datos requeridos (Distribución) | Nivel 3: ", resp);
           });
 
           const { time3, requests3 } = await casoPrueba3(first, first2, first3);
@@ -96,11 +96,11 @@ export const casoPrueba = async () => {
           );
 
           await distribucionDatosCaso4().then((resp) => {
-            first = resp.first;
-            first2 = resp.firts2;
-            first3 = resp.firts3;
-            first4 = resp.firts4;
-            console.log("Cantidad de datos por nivel: ", resp);
+            first = resp.limite;
+            first2 = resp.limite2;
+            first3 = resp.limite3;
+            first4 = resp.limite4;
+            console.log("Cantidad de datos requeridos (Distribución) | Nivel 4: ", resp);
           });
 
           const { time4, requests4 } = await casoPrueba4(
@@ -116,12 +116,12 @@ export const casoPrueba = async () => {
             "<=================NIVEL 5 REST=================>".red.bold
           );
           await distribucionDatosCaso5().then((resp) => {
-            first = resp.first;
-            first2 = resp.firts2;
-            first3 = resp.firts3;
-            first4 = resp.firts4;
-            first5 = resp.firts5;
-            console.log("Cantidad de datos por nivel: ", resp);
+            first = resp.limite;
+            first2 = resp.limite2;
+            first3 = resp.limite3;
+            first4 = resp.limite4;
+            first5 = resp.limite5;
+            console.log("Cantidad de datos requeridos (Distribución) | Nivel 5: ", resp);
           });
 
           const { time5, requests5 } = await casoPrueba5(
