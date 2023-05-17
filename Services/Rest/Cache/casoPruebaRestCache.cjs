@@ -9,9 +9,7 @@ const { performance } = require("perf_hooks");
 const fetch = require("node-fetch");
 globalThis.fetch = fetch;
 
-
 /*____________________REST CON CACHE______________________________*/
-
 
 const getTime = (t1, t2) => {
   const milisegundos = (t2 - t1).toFixed(3);
@@ -34,11 +32,11 @@ const getCasoPrueba1RestCache = async (first) => {
   const tiempo = getTime(t1, t2);
 
   const numPeticiones = requests;
-
   console.log(`Datos Nivel 1 Cache REST: ${data.length}.`.underline);
   return { data: data, time: tiempo, requests1: numPeticiones };
 };
 
+//CASO DE PRUEBA 2 CACHE: VIDEOS BY GAME
 const getCasoPrueba2RestCache = async (first, first2) => {
   const t1 = performance.now();
   let numPeticiones = 0;
@@ -46,13 +44,11 @@ const getCasoPrueba2RestCache = async (first, first2) => {
   const { data, requests1 } = await getCasoPrueba1RestCache(first);
   const dataLiveStreams = data;
   const gameId = dataLiveStreams.map((resp) => resp.game_id);
-
   for (const game_id of gameId) {
     const { data, requests } = await getVideosByGameCache(game_id, first2);
     numPeticiones += requests;
     objetos = [...objetos, ...data];
   }
-
   //TIEMPO
   const totalPeticiones = requests1 + numPeticiones;
   let t2 = performance.now();
@@ -153,11 +149,14 @@ const getCasoPrueba5RestCache = async (
   const channelInformation = data;
   const gameId = channelInformation.map((dataGame) => dataGame.game_id);
   for (const _id of gameId) {
-    const { dataGames, requestsGames } = await getGameInformationCache(_id, first5);
+    const { dataGames, requestsGames } = await getGameInformationCache(
+      _id,
+      first5
+    );
     allData = [...allData, ...data];
     numPeticiones += requestsGames;
   }
-  
+
   //TIEMPO
   const totalPeticiones = requests4 + numPeticiones;
 

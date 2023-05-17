@@ -23,7 +23,7 @@ const imprimirDatos = (time, requests) => {
   console.log(`Tiempo: ${time.segundos} segundos.`.underline);
   console.log(`Tiempo: ${time.minutos} minutos.`.underline);
 
-  //console.log(`Peticiones: ${requests}.`.underline);
+  console.log(`Peticiones: ${requests}.`.underline);
 };
 
 const casoPruebaCacheRest = async () => {
@@ -65,8 +65,8 @@ const casoPruebaCacheRest = async () => {
             "<=================NIVEL 2 REST-CACHE=================>".red.bold
           );
           await distribucionDatosCaso2().then((resp) => {
-            first = resp.first;
-            first2 = resp.firts2;
+            first = resp.limite;
+            first2 = resp.limite2;
             console.log("Cantidad de datos por nivel: ", resp);
           });
 
@@ -81,9 +81,9 @@ const casoPruebaCacheRest = async () => {
             "<=================NIVEL 3 REST-CACHE=================>".red.bold
           );
           await distribucionDatosCaso3().then((resp) => {
-            first = resp.first;
-            first2 = resp.firts2;
-            first3 = resp.firts3;
+            first = resp.limite;
+            first2 = resp.limite2;
+            first3 = resp.limite3;
             console.log("Cantidad de datos por nivel: ", resp);
           });
 
@@ -99,10 +99,10 @@ const casoPruebaCacheRest = async () => {
             "<=================NIVEL 4 REST-CACHE=================>".red.bold
           );
           await distribucionDatosCaso4().then((resp) => {
-            first = resp.first;
-            first2 = resp.firts2;
-            first3 = resp.firts3;
-            first4 = resp.firts4;
+            first = resp.limite;
+            first2 = resp.limite2;
+            first3 = resp.limite3;
+            first4 = resp.limite4;
             console.log("Cantidad de datos por nivel: ", resp);
           });
 
@@ -119,11 +119,11 @@ const casoPruebaCacheRest = async () => {
             "<=================NIVEL 5 REST-CACHE=================>".red.bold
           );
           await distribucionDatosCaso5().then((resp) => {
-            first = resp.first;
-            first2 = resp.firts2;
-            first3 = resp.firts3;
-            first4 = resp.firts4;
-            first5 = resp.firts5;
+            first = resp.limite;
+            first2 = resp.limite2;
+            first3 = resp.limite3;
+            first4 = resp.limite4;
+            first5 = resp.limite5;
             console.log("Cantidad de datos por nivel: ", resp);
           });
 

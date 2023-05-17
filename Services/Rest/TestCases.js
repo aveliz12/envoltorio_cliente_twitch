@@ -9,7 +9,6 @@ import { performance } from "perf_hooks";
 
 /*____________________REST SIN CACHE______________________________*/
 
-
 const getTime = (t1, t2) => {
   const milisegundos = (t2 - t1).toFixed(3);
   const segundos = ((t2 - t1) / 1000).toFixed(3);
@@ -26,11 +25,12 @@ const getTime = (t1, t2) => {
 //CASO DE PRUEBA 1: LIVE STREAMS
 export const casoPrueba1 = async (first) => {
   let t1 = performance.now();
-  const { data, request } = await getLiveStreams(first);
+  const { data, requests } = await getLiveStreams(first);
   let t2 = performance.now();
   const tiempo = getTime(t1, t2);
 
-  const numPeticiones = request;
+  const numPeticiones = requests;
+
   console.log(`Datos del nivel 1: ${data.length}.`.underline);
 
   return { data: data, time: tiempo, requests: numPeticiones };
@@ -68,11 +68,10 @@ export const casoPrueba3 = async (first, first2, first3) => {
   const { data, requests2 } = await casoPrueba2(first, first2);
   const dataVideosByGame = data;
   const idUserVideos = dataVideosByGame.map((resp) => resp.user_id);
-
-  for (const _id of idUserVideos) {
-    const { data, requests } = await getClipsByUser(_id, first3);
-    allData = [...allData, ...data];
+  for (const broadcaster_id of idUserVideos) {
+    const { data, requests } = await getClipsByUser(broadcaster_id, first3);
     numPeticiones += requests;
+    allData = [...allData, ...data];
   }
 
   const totalPeticiones = requests2 + numPeticiones;

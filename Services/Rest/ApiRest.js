@@ -103,11 +103,10 @@ export const getVideosByGame = async (id, first) => {
 //Funcion para extraer clips por usuario
 export const getClipsByUser = async (id, first) => {
   try {
-    const token = store.get("token");
-    let numPeticiones = 0;
     let cursor = null;
     let dataClips = [];
-
+    const token = store.get("token");
+    let numPeticiones = 0;
     while (first > 0) {
       const response = await fetch(
         `${url}clips?broadcaster_id=${id}&first=${first > 50 ? 50 : first}${
@@ -124,11 +123,12 @@ export const getClipsByUser = async (id, first) => {
       );
       numPeticiones++;
       const dataClipsByUser = await response.json();
-      
+
       first = first - dataClipsByUser.data.length;
       dataClips = [...dataClips, ...dataClipsByUser.data];
       cursor = dataClipsByUser.pagination.cursor;
     }
+
     return { data: dataClips, requests: numPeticiones };
   } catch (error) {
     console.log(error);

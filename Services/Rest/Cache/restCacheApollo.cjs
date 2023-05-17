@@ -12,6 +12,7 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+//LIVE STREAMS
 const getLiveStreamsCache = async (first) => {
   try {
     let cursor = null;
@@ -87,7 +88,7 @@ const getVideosByGameCache = async (id, first) => {
       dataVideos = [...dataVideos, ...response.data.videosByGame.data];
       cursor = response.data.videosByGame.pagination.cursor;
     }
-
+    
     return { data: dataVideos, requests: numPeticiones };
   } catch (error) {
     console.log(error);

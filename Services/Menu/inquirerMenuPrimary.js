@@ -25,7 +25,7 @@ const menuOptions = [
       },
       {
         value: "0",
-        name: "5. Salir",
+        name: "5. Regresar",
       },
     ],
   },

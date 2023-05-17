@@ -16,90 +16,143 @@ import { performance } from "perf_hooks";
 
 const uri = "http://localhost:4000/";
 
+const getTime = (t1, t2) => {
+  const milisegundos = (t2 - t1).toFixed(3);
+  const segundos = ((t2 - t1) / 1000).toFixed(3);
+  const minutos = ((t2 - t1) / 60000).toFixed(3);
+  const tiempo = {
+    milisegundos,
+    segundos,
+    minutos,
+  };
+
+  return tiempo;
+};
+
 const client = new ApolloClient({
   link: new HttpLink({ uri, fetch }),
   cache: new InMemoryCache(),
 });
 
-export const casoPrueba1Cache = async (first) => {
+//LIVE STREAMS
+export const casoPrueba1Cache = async (limitNivel1) => {
   const t1 = performance.now();
+
+  //CONSUMO
   const response = await client.query({
     query: DATA_CASOPRUEBA1,
     variables: {
-      "first": first,
+      limitNivel1,
     },
   });
   const t2 = performance.now();
-  let segundos = ((t2 - t1) / 1000).toFixed(2);
+  const tiempo = getTime(t1, t2);
   console.log(
-    "<=================NIVEL 1 GRAPHQL-CACHE=================>".red.bold
+    `Datos del nivel 1 GraphQL con Cache: ${response.data.getCasosPruebasLiveStreams.length}.`
+      .underline
   );
-  console.log(`La cantidad de datos es: ${response.data.getCasosPruebasLiveStreams.length}.`)
-  console.log(
-    `La consulta desde cache de graphql tardó: ${segundos} segundos`.red
-  );
+  return tiempo;
 };
 
-export const casoPrueba2Cache = async () => {
+//VIDEOS BY GAME
+export const casoPrueba2Cache = async (limitNivel1, limitNivel2) => {
   const t1 = performance.now();
 
+  //CONSULTA
   const response = await client.query({
     query: DATA_CASOPRUEBA2,
+    variables: {
+      limitNivel1,
+      limitNivel2,
+    },
   });
   const t2 = performance.now();
-  let segundos = ((t2 - t1) / 1000).toFixed(2);
+  const tiempo = getTime(t1, t2);
   console.log(
-    "<=================NIVEL 2 GRAPHQL-CACHE=================>".red.bold
+    `Datos del nivel 2 GraphQL con Cache: ${response.data.getCasosPruebasLiveStreams.length}.`
+      .underline
   );
-  console.log(
-    `La consulta desde cache de graphql tardó: ${segundos} segundos`.red
-  );
+
+  return tiempo;
 };
 
-export const casoPrueba3Cache = async () => {
+//CLIPS BY USER
+export const casoPrueba3Cache = async (
+  limitNivel1,
+  limitNivel2,
+  limitNivel3
+) => {
   const t1 = performance.now();
 
+  //CONSULTA
   const response = await client.query({
     query: DATA_CASOPRUEBA3,
+    variables: {
+      limitNivel1,
+      limitNivel2,
+      limitNivel3
+    },
   });
   const t2 = performance.now();
-  let segundos = ((t2 - t1) / 1000).toFixed(2);
+  const tiempo = getTime(t1, t2);
   console.log(
-    "<=================NIVEL 3 GRAPHQL-CACHE=================>".red.bold
+    `Datos del nivel 3 GraphQL con Cache: ${response.data.getCasosPruebasLiveStreams.length}.`
+      .underline
   );
-  console.log(
-    `La consulta desde cache de graphql tardó: ${segundos} segundos`.red
-  );
+
+  return tiempo;
 };
 
-export const casoPrueba4Cache = async () => {
+export const casoPrueba4Cache = async (
+  limitNivel1,
+  limitNivel2,
+  limitNivel3,
+  limitNivel4
+) => {
   const t1 = performance.now();
 
   const response = await client.query({
     query: DATA_CASOPRUEBA4,
+    variables: {
+      limitNivel1,
+      limitNivel2,
+      limitNivel3,
+      limitNivel4,
+    },
   });
   const t2 = performance.now();
-  let segundos = ((t2 - t1) / 1000).toFixed(2);
+  const tiempo = getTime(t1, t2);
   console.log(
-    "<=================NIVEL 4 GRAPHQL-CACHE=================>".red.bold
+    `Datos del nivel 4 GraphQL con Cache: ${response.data.getCasosPruebasLiveStreams.length}.`
+      .underline
   );
-  console.log(
-    `La consulta desde cache de graphql tardó: ${segundos} segundos`.red
-  );
+  return tiempo;
 };
 
-export const casoPrueba5Cache = async () => {
+export const casoPrueba5Cache = async (
+  limitNivel1,
+  limitNivel2,
+  limitNivel3,
+  limitNivel4,
+  limitNivel5
+) => {
   const t1 = performance.now();
 
   const response = await client.query({
     query: DATA_CASOPRUEBA5,
+    variables: {
+      limitNivel1,
+      limitNivel2,
+      limitNivel3,
+      limitNivel4,
+      limitNivel5,
+    },
   });
   const t2 = performance.now();
-  let segundos = ((t2 - t1) / 1000).toFixed(2);
+  const tiempo = getTime(t1, t2);
   console.log(
-    "<=================NIVEL 5 GRAPHQL-CACHE=================>".red.bold
+    `Datos del nivel 5 GraphQL con Cache: ${response.data.getCasosPruebasLiveStreams.length}.`
+      .underline
   );
-  console.log(
-    `La consulta desde cache de graphql tardó: ${segundos} segundos`.red
-  );
+  return tiempo;
 };
