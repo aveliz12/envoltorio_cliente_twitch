@@ -74,8 +74,8 @@ const distribucionDatosCaso1 = async () => {
 };
 const distribucionDatosCaso2 = async () => {
   const data = {
-    limite: 0,
-    limite2: 0,
+    limiteNivel1: 0,
+    limiteNivel2: 0,
   };
   let opt = "";
 
@@ -84,28 +84,28 @@ const distribucionDatosCaso2 = async () => {
 
     switch (opt) {
       case "1":
-        data.limite = 1;
-        data.limite2 = 1;
+        data.limiteNivel1 = 1;
+        data.limiteNivel2 = 1;
         return data;
       case "2":
-        data.limite = 6;
-        data.limite2 = 6;
+        data.limiteNivel1 = 6;
+        data.limiteNivel2 = 6;
         return data;
       case "3":
-        data.limite = 16;
-        data.limite2 = 16;
+        data.limiteNivel1 = 16;
+        data.limiteNivel2 = 16;
         return data;
       case "4":
-        data.limite = 56;
-        data.limite2 = 56;
+        data.limiteNivel1 = 56;
+        data.limiteNivel2 = 56;
         return data;
       case "5":
-        data.limite = 181;
-        data.limite2 = 181;
+        data.limiteNivel1 = 181;
+        data.limiteNivel2 = 181;
         return data;
       case "6":
-        data.limite = 316;
-        data.limite2 = 316;
+        data.limiteNivel1 = 316;
+        data.limiteNivel2 = 316;
         return data;
       default:
         break;
@@ -114,9 +114,9 @@ const distribucionDatosCaso2 = async () => {
 };
 const distribucionDatosCaso3 = async () => {
   const data = {
-    limite: 0,
-    limite2: 0,
-    limite3: 0,
+    limiteNivel1: 0,
+    limiteNivel2: 0,
+    limiteNivel3: 0,
   };
   let opt = "";
 
@@ -125,34 +125,34 @@ const distribucionDatosCaso3 = async () => {
 
     switch (opt) {
       case "1":
-        data.limite = 1;
-        data.limite2 = 1;
-        data.limite3 = 1;
+        data.limiteNivel1 = 1;
+        data.limiteNivel2 = 1;
+        data.limiteNivel3 = 1;
         return data;
       case "2":
-        data.limite = 3;
-        data.limite2 = 3;
-        data.limite3 = 3;
+        data.limiteNivel1 = 3;
+        data.limiteNivel2 = 3;
+        data.limiteNivel3 = 3;
         return data;
       case "3":
-        data.limite = 6;
-        data.limite2 = 6;
-        data.limite3 = 6;
+        data.limiteNivel1 = 6;
+        data.limiteNivel2 = 6;
+        data.limiteNivel3 = 6;
         return data;
       case "4":
-        data.limite = 15;
-        data.limite2 = 15;
-        data.limite3 = 15;
+        data.limiteNivel1 = 15;
+        data.limiteNivel2 = 15;
+        data.limiteNivel3 = 15;
         return data;
       case "5":
-        data.limite = 32;
-        data.limite2 = 32;
-        data.limite3 = 32;
+        data.limiteNivel1 = 32;
+        data.limiteNivel2 = 32;
+        data.limiteNivel3 = 32;
         return data;
       case "6":
-        data.limite = 46;
-        data.limite2 = 46;
-        data.limite3 = 46;
+        data.limiteNivel1 = 46;
+        data.limiteNivel2 = 46;
+        data.limiteNivel3 = 46;
         return data;
       default:
         break;
@@ -161,10 +161,10 @@ const distribucionDatosCaso3 = async () => {
 };
 const distribucionDatosCaso4 = async () => {
   const data = {
-    limite: 0,
-    limite2: 0,
-    limite3: 0,
-    limite4: 0,
+    limiteNivel1: 0,
+    limiteNivel2: 0,
+    limiteNivel3: 0,
+    limiteNivel4: 0,
   };
   let opt = "";
 
@@ -173,40 +173,40 @@ const distribucionDatosCaso4 = async () => {
 
     switch (opt) {
       case "1":
-        data.limite = 1;
-        data.limite2 = 1;
-        data.limite3 = 1;
-        data.limite4 = 1;
+        data.limiteNivel1 = 1;
+        data.limiteNivel2 = 1;
+        data.limiteNivel3 = 1;
+        data.limiteNivel4 = 1;
         return data;
       case "2":
-        data.limite = 3;
-        data.limite2 = 3;
-        data.limite3 = 3;
-        data.limite4 = 1;
+        data.limiteNivel1 = 3;
+        data.limiteNivel2 = 3;
+        data.limiteNivel3 = 3;
+        data.limiteNivel4 = 1;
         return data;
       case "3":
-        data.limite = 6;
-        data.limite2 = 6;
-        data.limite3 = 6;
-        data.limite4 = 1;
+        data.limiteNivel1 = 6;
+        data.limiteNivel2 = 6;
+        data.limiteNivel3 = 6;
+        data.limiteNivel4 = 1;
         return data;
       case "4":
-        data.limite = 15;
-        data.limite2 = 15;
-        data.limite3 = 15;
-        data.limite4 = 1;
+        data.limiteNivel1 = 15;
+        data.limiteNivel2 = 15;
+        data.limiteNivel3 = 15;
+        data.limiteNivel4 = 1;
         return data;
       case "5":
-        data.limite = 32;
-        data.limite2 = 32;
-        data.limite3 = 32;
-        data.limite4 = 1;
+        data.limiteNivel1 = 32;
+        data.limiteNivel2 = 32;
+        data.limiteNivel3 = 32;
+        data.limiteNivel4 = 1;
         return data;
       case "6":
-        data.limite = 46;
-        data.limite2 = 46;
-        data.limite3 = 46;
-        data.limite4 = 1;
+        data.limiteNivel1 = 46;
+        data.limiteNivel2 = 46;
+        data.limiteNivel3 = 46;
+        data.limiteNivel4 = 1;
         return data;
       default:
         break;
@@ -215,11 +215,11 @@ const distribucionDatosCaso4 = async () => {
 };
 const distribucionDatosCaso5 = async () => {
   const data = {
-    limite: 0,
-    limite2: 0,
-    limite3: 0,
-    limite4: 0,
-    limite5: 0,
+    limiteNivel1: 0,
+    limiteNivel2: 0,
+    limiteNivel3: 0,
+    limiteNivel4: 0,
+    limiteNivel5: 0,
   };
   let opt = "";
 
@@ -228,46 +228,46 @@ const distribucionDatosCaso5 = async () => {
 
     switch (opt) {
       case "1":
-        data.limite = 1;
-        data.limite2 = 1;
-        data.limite3 = 1;
-        data.limite4 = 1;
-        data.limite5 = 1;
+        data.limiteNivel1 = 1;
+        data.limiteNivel2 = 1;
+        data.limiteNivel3 = 1;
+        data.limiteNivel4 = 1;
+        data.limiteNivel5 = 1;
         return data;
       case "2":
-        data.limite = 3;
-        data.limite2 = 3;
-        data.limite3 = 3;
-        data.limite4 = 1;
-        data.limite5 = 1;
+        data.limiteNivel1 = 3;
+        data.limiteNivel2 = 3;
+        data.limiteNivel3 = 3;
+        data.limiteNivel4 = 1;
+        data.limiteNivel5 = 1;
         return data;
       case "3":
-        data.limite = 6;
-        data.limite2 = 6;
-        data.limite3 = 6;
-        data.limite4 = 1;
-        data.limite5 = 1;
+        data.limiteNivel1 = 6;
+        data.limiteNivel2 = 6;
+        data.limiteNivel3 = 6;
+        data.limiteNivel4 = 1;
+        data.limiteNivel5 = 1;
         return data;
       case "4":
-        data.limite = 15;
-        data.limite2 = 15;
-        data.limite3 = 15;
-        data.limite4 = 1;
-        data.limite5 = 1;
+        data.limiteNivel1 = 15;
+        data.limiteNivel2 = 15;
+        data.limiteNivel3 = 15;
+        data.limiteNivel4 = 1;
+        data.limiteNivel5 = 1;
         return data;
       case "5":
-        data.limite = 32;
-        data.limite2 = 32;
-        data.limite3 = 32;
-        data.limite4 = 1;
-        data.limite5 = 1;
+        data.limiteNivel1 = 32;
+        data.limiteNivel2 = 32;
+        data.limiteNivel3 = 32;
+        data.limiteNivel4 = 1;
+        data.limiteNivel5 = 1;
         return data;
       case "6":
-        data.limite = 46;
-        data.limite2 = 46;
-        data.limite3 = 46;
-        data.limite4 = 1;
-        data.limite5 = 1;
+        data.limiteNivel1 = 46;
+        data.limiteNivel2 = 46;
+        data.limiteNivel3 = 46;
+        data.limiteNivel4 = 1;
+        data.limiteNivel5 = 1;
         return data;
       default:
         break;

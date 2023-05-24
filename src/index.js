@@ -10,7 +10,8 @@ import {
 } from "../Services/Menu/inquirerMenuPrimary.js";
 import Storage from "node-storage";
 const store = new Storage("./store");
-import { getToken } from "../Services/Rest/ApiRest.js";
+import pkgToken from "../Services/Rest/ApiRest.cjs";
+const { getToken } = pkgToken;
 
 let token = "";
 const consumoTwtich = async () => {

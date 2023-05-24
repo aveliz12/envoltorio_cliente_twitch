@@ -1,10 +1,12 @@
-import {
+import pkg from "./ApiRest.cjs";
+
+const {
   getLiveStreams,
   getVideosByGame,
   getInformationChannel,
   getClipsByUser,
   getInformationGame,
-} from "./ApiRest.js";
+} = pkg;
 import { performance } from "perf_hooks";
 
 /*____________________REST SIN CACHE______________________________*/
@@ -28,7 +30,6 @@ export const casoPrueba1 = async (first) => {
   const { data, requests } = await getLiveStreams(first);
   let t2 = performance.now();
   const tiempo = getTime(t1, t2);
-
   const numPeticiones = requests;
 
   console.log(`Datos del nivel 1: ${data.length}.`.underline);
@@ -36,16 +37,66 @@ export const casoPrueba1 = async (first) => {
   return { data: data, time: tiempo, requests: numPeticiones };
 };
 
+//Obtener iDs que contengan la cantidad de datos establecida en el nivel 2
+const getDataForCaso2 = async (first, first2) => {
+  try {
+    let dataVideosForCaso2 = [];
+    let totalDataVideos = 0;
+    let numPeticiones;
+    do {
+      const { data, requests } = await casoPrueba1(first);
+
+      const idGame = data.map((resp) => resp.game_id);
+      for (const iDs of idGame) {
+        const response = await getVideosByGame(iDs, first2);
+
+        if (response?.data?.length >= first2 && response?.data?.length > 0) {
+          dataVideosForCaso2.push(iDs);
+          totalDataVideos++;
+        }
+
+        if (totalDataVideos >= first) {
+          break;
+        }
+      }
+
+      if (totalDataVideos > first) {
+        //se utiliza el método slice para reducir la longitud del arreglo dataVideosForCaso2 a first elementos
+        dataVideosForCaso2 = dataVideosForCaso2.slice(0, first);
+        totalDataVideos = first;
+        break;
+      }
+
+      numPeticiones = requests;
+
+      // console.log(
+      //   "PARA CASO 2._Cantidad de IDs con mas datos que ",
+      //   first2,
+      //   ": ",
+      //   dataVideosForCaso2.length
+      // );
+
+      // if (totalDataVideos < first) {
+      //   console.log(
+      //     `PARA CASO 2._Se encontraron ${dataVideosForCaso2.length} IDs con más de ${first2} datos. Realizando nuevas consultas...`
+      //   );
+      // }
+    } while (totalDataVideos === first);
+    return { data: dataVideosForCaso2, requests: numPeticiones };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 //CASO DE PRUEBA 2: VIDEOS BY GAME
 export const casoPrueba2 = async (first, first2) => {
   let t1 = performance.now();
   let numPeticiones = 0;
-  let objetos = [];
-  const { data, requests } = await casoPrueba1(first);
-  const dataLiveStreams = data;
-  const idGame = dataLiveStreams.map((resp) => resp.game_id);
 
-  for (const game_id of idGame) {
+  let objetos = [];
+
+  const { data, requests } = await getDataForCaso2(first, first2);
+  for (const game_id of data) {
     const { data, requests } = await getVideosByGame(game_id, first2);
     numPeticiones += requests;
     objetos = [...objetos, ...data];
@@ -54,10 +105,61 @@ export const casoPrueba2 = async (first, first2) => {
   const totalPeticiones = requests + numPeticiones;
   let t2 = performance.now();
   const tiempo = getTime(t1, t2);
-
   console.log(`Datos del nivel 2: ${objetos.length}.`.underline);
 
   return { data: objetos, time2: tiempo, requests2: totalPeticiones };
+};
+
+//Obtener iDs que contengan la cantidad de datos establecida en el nivel 2
+const getDataForCaso3 = async (first, first2, first3) => {
+  try {
+    let dataVideosForCaso3 = [];
+    let totalDataVideos = 0;
+    let numPeticiones;
+    let data;
+    let requests2;
+
+    do {
+      const result = await casoPrueba2(first, first2);
+      data = result.data;
+      requests2 = result.requests2;
+
+      const idUserVideos = data.map((resp) => resp.user_id);
+      for (const iDs of idUserVideos) {
+        const response = await getClipsByUser(iDs, first3);
+        if (response?.data?.length >= first3 && response?.data?.length > 0) {
+          dataVideosForCaso3.push(iDs);
+          totalDataVideos++;
+        }
+        if (totalDataVideos >= data.length) {
+          break;
+        }
+      }
+
+      if (totalDataVideos > data.length) {
+        dataVideosForCaso3 = dataVideosForCaso3.slice(0, data.length);
+        totalDataVideos = data.length;
+        break;
+      }
+
+      // console.log(
+      //   "PARA CASO 3._Cantidad de IDs con mas datos que ",
+      //   first3,
+      //   ": ",
+      //   dataVideosForCaso3.length
+      // );
+
+      // if (totalDataVideos < data.length) {
+      //   console.log(
+      //     `PARA CASO 3._Se encontraron ${dataVideosForCaso3.length} IDs con más de ${first3} datos. Realizando nuevas consultas...`
+      //   );
+      // }
+    } while (totalDataVideos !== data.length);
+    numPeticiones = requests2;
+    return { data: dataVideosForCaso3, resquests2: numPeticiones };
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 //CASO DE PRUEBA 3: CLIPS BY USER
@@ -65,16 +167,16 @@ export const casoPrueba3 = async (first, first2, first3) => {
   let t1 = performance.now();
   let allData = [];
   let numPeticiones = 0;
-  const { data, requests2 } = await casoPrueba2(first, first2);
-  const dataVideosByGame = data;
-  const idUserVideos = dataVideosByGame.map((resp) => resp.user_id);
-  for (const broadcaster_id of idUserVideos) {
+  const { data, resquests2 } = await getDataForCaso3(first, first2, first3);
+  // const { data, requests2 } = await casoPrueba2(first, first2);
+  // const dataVideosByGame = data;
+  // const idUserVideos = dataVideosByGame.map((resp) => resp.user_id);
+  for (const broadcaster_id of data) {
     const { data, requests } = await getClipsByUser(broadcaster_id, first3);
     numPeticiones += requests;
     allData = [...allData, ...data];
   }
-
-  const totalPeticiones = requests2 + numPeticiones;
+  const totalPeticiones = resquests2 + numPeticiones;
 
   let t2 = performance.now();
   const tiempo = getTime(t1, t2);
@@ -91,7 +193,6 @@ export const casoPrueba4 = async (first, first2, first3, first4) => {
   let allData = [];
   const { data, requests3 } = await casoPrueba3(first, first2, first3);
   const dataClipsByUser = data;
-
   const broadcaster_id = [];
   dataClipsByUser.forEach((id) => {
     broadcaster_id.push(id.broadcaster_id);
@@ -115,7 +216,6 @@ export const casoPrueba4 = async (first, first2, first3, first4) => {
   //     return arr;
   //   })
   // );
-
   const totalPeticiones = requests3 + numPeticiones;
 
   let t2 = performance.now();

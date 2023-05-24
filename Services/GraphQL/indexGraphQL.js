@@ -37,136 +37,105 @@ export const casoPruebaGraphQL = async () => {
     return;
   } else {
     console.log(`Su token generado es: ${token}`.bold);
-    let limitNivel1 = 0,
-      limitNivel2 = 0,
-      limitNivel3 = 0,
-      limitNivel4 = 0,
-      limitNivel5 = 0;
     let opt = " ";
-    do {
-      opt = await inquirerMenu();
+    try {
+      do {
+        opt = await inquirerMenu();
 
-      switch (opt) {
-        case "1":
-          try {
+        switch (opt) {
+          case "1":
             console.log(
               "<=================NIVEL 1 GRAPHQL=================>".red.bold
             );
 
-            limitNivel1 = await distribucionDatosCaso1();
-            console.log(
-              "Cantidad de datos requeridos (Distribución) | Nivel 1: ",
-              limitNivel1
-            );
-            const time = await casoPrueba1GraphQL(limitNivel1);
-            imprimirDatos(time);
-          } catch (error) {
-            console.log(error);
-          }
-          break;
-        case "2":
-          try {
+            await distribucionDatosCaso1().then(async (resp) => {
+              console.log(
+                "Cantidad de datos requeridos (Distribución) | Nivel 1: ",
+                resp
+              );
+              const time = await casoPrueba1GraphQL(resp);
+              imprimirDatos(time);
+            });
+
+            break;
+          case "2":
             console.log(
               "<=================NIVEL 2 GRAPHQL=================>".red.bold
             );
-
-            await distribucionDatosCaso2().then((resp) => {
-              limitNivel1 = resp.limite;
-              limitNivel2 = resp.limite2;
+            await distribucionDatosCaso2().then(async (resp) => {
               console.log(
                 "Cantidad de datos requeridos (Distribución) | Nivel 2: ",
                 resp
               );
+              const time = await casoPrueba2GraphQL(resp.limiteNivel1, resp.limiteNivel2);
+              imprimirDatos(time);
             });
 
-            const time = await casoPrueba2GraphQL(limitNivel1, limitNivel2);
-            imprimirDatos(time);
-          } catch (error) {
-            console.log(error);
-          }
-          break;
-        case "3":
-          try {
+            break;
+          case "3":
             console.log(
               "<=================NIVEL 3 GRAPHQL=================>".red.bold
             );
-            await distribucionDatosCaso3().then((resp) => {
-              limitNivel1 = resp.limite;
-              limitNivel2 = resp.limite2;
-              limitNivel3 = resp.limite3;
+            await distribucionDatosCaso3().then(async (resp) => {
               console.log(
                 "Cantidad de datos requeridos (Distribución) | Nivel 3: ",
                 resp
               );
+              const time = await casoPrueba3GraphQL(
+                resp.limiteNivel1,
+                resp.limiteNivel2,
+                resp.limiteNivel3
+              );
+              imprimirDatos(time);
             });
-            const time = await casoPrueba3GraphQL(
-              limitNivel1,
-              limitNivel2,
-              limitNivel3
-            );
-            imprimirDatos(time);
-          } catch (error) {
-            console.log(error);
-          }
-          break;
-        case "4":
-          try {
+
+            break;
+          case "4":
             console.log(
               "<=================NIVEL 4 GRAPHQL=================>".red
             );
-            await distribucionDatosCaso4().then((resp) => {
-              limitNivel1 = resp.limite;
-              limitNivel2 = resp.limite2;
-              limitNivel3 = resp.limite3;
-              limitNivel4 = resp.limite4;
+            await distribucionDatosCaso4().then(async (resp) => {
               console.log(
                 "Cantidad de datos requeridos (Distribución) | Nivel 4: ",
                 resp
               );
+              const time = await casoPrueba4GraphQL(
+                resp.limiteNivel1,
+                resp.limiteNivel2,
+                resp.limiteNivel3,
+                resp.limiteNivel4
+              );
+              imprimirDatos(time);
             });
-            const time = await casoPrueba4GraphQL(
-              limitNivel1,
-              limitNivel2,
-              limitNivel3,
-              limitNivel4
-            );
-            imprimirDatos(time);
-          } catch (error) {
-            console.log(error);
-          }
-          break;
-        case "5":
-          try {
+
+            break;
+          case "5":
             console.log(
               "<=================NIVEL 5 GRAPHQL=================>".red.bold
             );
-            await distribucionDatosCaso5().then((resp) => {
-              limitNivel1 = resp.limite;
-              limitNivel2 = resp.limite2;
-              limitNivel3 = resp.limite3;
-              limitNivel4 = resp.limite4;
-              limitNivel5 = resp.limite5;
+            await distribucionDatosCaso5().then(async (resp) => {
               console.log(
                 "Cantidad de datos requeridos (Distribución) | Nivel 5: ",
                 resp
               );
-            });
-            const time = await casoPrueba5GraphQL(
-              limitNivel1,
-              limitNivel2,
-              limitNivel3,
-              limitNivel4,
-              limitNivel5
-            );
+              const time = await casoPrueba5GraphQL(
+                resp.limiteNivel1,
+                resp.limiteNivel2,
+                resp.limiteNivel3,
+                resp.limiteNivel4,
+                resp.limiteNivel5
+              );
 
-            imprimirDatos(time);
-          } catch (error) {
-            console.log(error);
-          }
-          break;
-        default:
-          break;
-      }
-    } while (opt !== "0");
+              imprimirDatos(time);
+            });
+
+            break;
+          default:
+            break;
+        }
+      } while (opt !== "0");
+    } catch (error) {
+      console.log(error);
+    }
   }
 };

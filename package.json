@@ -12,7 +12,10 @@
   "license": "ISC",
   "dependencies": {
     "@apollo/client": "^3.7.9",
+    "@lifeomic/axios-fetch": "^3.0.1",
     "apollo-link-rest": "^0.9.0",
+    "axios": "^1.4.0",
+    "axios-fetch": "^1.1.0",
     "colors": "^1.4.0",
     "dotenv": "^16.0.3",
     "graphql-tag": "^2.12.6",

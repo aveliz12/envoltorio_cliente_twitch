@@ -37,109 +37,90 @@ const casoPruebaCacheRest = async () => {
   } else {
     //console.log(`Su token generado es: ${token}`.bold);
     let opt = "";
-    let first = 0,
-      first2 = 0,
-      first3 = 0,
-      first4 = 0,
-      first5 = 0;
-    do {
-      opt = await inquirerMenu();
+    try {
+      do {
+        opt = await inquirerMenu();
 
-      switch (opt) {
-        case "1":
-          try {
+        switch (opt) {
+          case "1":
             console.log(
               "<=================NIVEL 1 REST-CACHE=================>".red.bold
             );
-            first = await distribucionDatosCaso1();
-            console.log("Cantidad de datos por nivel: ", first);
+            await distribucionDatosCaso1().then(async (resp) => {
+              console.log("Cantidad de datos por nivel: ", resp);
+              const { time, requests1 } = await getCasoPrueba1RestCache(resp);
+              imprimirDatos(time, requests1);
+            });
 
-            const { time, requests1 } = await getCasoPrueba1RestCache(first);
-            imprimirDatos(time, requests1);
-          } catch (error) {
-            console.log(error);
-          }
-          break;
-        case "2":
-          console.log(
-            "<=================NIVEL 2 REST-CACHE=================>".red.bold
-          );
-          await distribucionDatosCaso2().then((resp) => {
-            first = resp.limite;
-            first2 = resp.limite2;
-            console.log("Cantidad de datos por nivel: ", resp);
-          });
+            break;
+          case "2":
+            console.log(
+              "<=================NIVEL 2 REST-CACHE=================>".red.bold
+            );
+            await distribucionDatosCaso2().then(async (resp) => {
+              console.log("Cantidad de datos por nivel: ", resp);
+              const { time2, requests2 } = await getCasoPrueba2RestCache(
+                resp.limiteNivel1,
+                resp.limiteNivel2
+              );
+              imprimirDatos(time2, requests2);
+            });
 
-          const { time2, requests2 } = await getCasoPrueba2RestCache(
-            first,
-            first2
-          );
-          imprimirDatos(time2, requests2);
-          break;
-        case "3":
-          console.log(
-            "<=================NIVEL 3 REST-CACHE=================>".red.bold
-          );
-          await distribucionDatosCaso3().then((resp) => {
-            first = resp.limite;
-            first2 = resp.limite2;
-            first3 = resp.limite3;
-            console.log("Cantidad de datos por nivel: ", resp);
-          });
+            break;
+          case "3":
+            console.log(
+              "<=================NIVEL 3 REST-CACHE=================>".red.bold
+            );
+            await distribucionDatosCaso3().then(async (resp) => {
+              console.log("Cantidad de datos por nivel: ", resp);
+              const { time3, requests3 } = await getCasoPrueba3RestCache(
+                resp.limiteNivel1,
+                resp.limiteNivel2,
+                resp.limiteNivel3
+              );
+              imprimirDatos(time3, requests3);
+            });
 
-          const { time3, requests3 } = await getCasoPrueba3RestCache(
-            first,
-            first2,
-            first3
-          );
-          imprimirDatos(time3, requests3);
-          break;
-        case "4":
-          console.log(
-            "<=================NIVEL 4 REST-CACHE=================>".red.bold
-          );
-          await distribucionDatosCaso4().then((resp) => {
-            first = resp.limite;
-            first2 = resp.limite2;
-            first3 = resp.limite3;
-            first4 = resp.limite4;
-            console.log("Cantidad de datos por nivel: ", resp);
-          });
+            break;
+          case "4":
+            console.log(
+              "<=================NIVEL 4 REST-CACHE=================>".red.bold
+            );
+            await distribucionDatosCaso4().then(async (resp) => {
+              console.log("Cantidad de datos por nivel: ", resp);
+              const { time4, requests4 } = await getCasoPrueba4RestCache(
+                resp.limiteNivel1,
+                resp.limiteNivel2,
+                resp.limiteNivel3,
+                resp.limiteNivel4
+              );
+              imprimirDatos(time4, requests4);
+            });
 
-          const { time4, requests4 } = await getCasoPrueba4RestCache(
-            first,
-            first2,
-            first3,
-            first4
-          );
-          imprimirDatos(time4, requests4);
-          break;
-        case "5":
-          console.log(
-            "<=================NIVEL 5 REST-CACHE=================>".red.bold
-          );
-          await distribucionDatosCaso5().then((resp) => {
-            first = resp.limite;
-            first2 = resp.limite2;
-            first3 = resp.limite3;
-            first4 = resp.limite4;
-            first5 = resp.limite5;
-            console.log("Cantidad de datos por nivel: ", resp);
-          });
-
-          const { time5, requests5 } = await getCasoPrueba5RestCache(
-            first,
-            first2,
-            first3,
-            first4,
-            first5
-          );
-          imprimirDatos(time5, requests5);
-          break;
-        default:
-          break;
-      }
-    } while (opt !== "0");
+            break;
+          case "5":
+            console.log(
+              "<=================NIVEL 5 REST-CACHE=================>".red.bold
+            );
+            await distribucionDatosCaso5().then(async (resp) => {
+              console.log("Cantidad de datos por nivel: ", resp);
+              const { time5, requests5 } = await getCasoPrueba5RestCache(
+                resp.limiteNivel1,
+                resp.limiteNivel2,
+                resp.limiteNivel3,
+                resp.limiteNivel4,
+                resp.limiteNivel5
+              );
+              imprimirDatos(time5, requests5);
+            });
+            break;
+          default:
+            break;
+        }
+      } while (opt !== "0");
+    } catch (error) {
+      console.log(error);
+    }
   }
 };
 
