@@ -176,15 +176,15 @@ const getClipsByUser = async (id, first) => {
 
     while (first > 0) {
       const query = gql`
-        query getClipsByUser {
-          clipsUser @rest(type: "clipsUser", path: "clips?broadcaster_id=${id}&first=${
+      query getClipsByUser {
+        clipsUser @rest(type: "clipsUser", path: "clips?broadcaster_id=${id}&first=${
         first > 50 ? 50 : first
       }${cursor === null ? "" : `&after=${cursor}`}") {
-            data
-            pagination
-          }
+          data
+          pagination
         }
-      `;
+      }
+    `;
       numPeticiones++;
       const response = await client.query({ query });
       const dataClipsByUser = response.data.clipsUser;
@@ -194,7 +194,9 @@ const getClipsByUser = async (id, first) => {
       ) {
         first = first - dataClipsByUser.data.length;
         dataClips = [...dataClips, ...dataClipsByUser.data];
-        cursor = dataClipsByUser.pagination.cursor;
+        if (dataClipsByUser.pagination.cursor !== undefined) {
+          cursor = dataClipsByUser.pagination.cursor;
+        }
       } else {
         break;
       }
