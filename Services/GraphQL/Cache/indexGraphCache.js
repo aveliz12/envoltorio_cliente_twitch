@@ -52,7 +52,7 @@ export const casoPruebaGraphQLCache = async () => {
                 "Cantidad de datos requeridos (Distribución) | Nivel 1: ",
                 resp
               );
-              const time = await casoPrueba1Cache(resp);
+              const {time} = await casoPrueba1Cache(resp);
               imprimirDatos(time);
             });
 

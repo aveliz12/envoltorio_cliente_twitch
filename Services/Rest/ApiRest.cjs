@@ -13,12 +13,18 @@ const { RestLink } = require("apollo-link-rest");
 global.Headers = fetch.Headers;
 const axios = require("axios");
 const { buildAxiosFetch } = require("@lifeomic/axios-fetch");
-
+const {
+  queryLiveStreams,
+  queryVideosByGame,
+  queryClipsByUser,
+  queryChannelInfo,
+  queryGameInfo,
+} = require("./models/modelApolloRest.cjs");
 //VARIABLES
 const store = new Storage("./store");
 /* Configuración del tiempo de espera en apollo client */
 const instanceAxios = axios.create({
-  timeout: 3000000,
+  timeout: 7200000,
 });
 
 const uri = "https://api.twitch.tv/helix/";
@@ -72,7 +78,7 @@ const getLiveStreams = async (first) => {
     client.setLink(
       new RestLink({
         uri: "https://api.twitch.tv/helix/",
-        customFetch: fetch,
+        //customFetch: fetch,
         headers: {
           Authorization: "Bearer " + token,
           "Client-Id": process.env.CLIENTID,
@@ -81,19 +87,15 @@ const getLiveStreams = async (first) => {
     );
     //CONSULTA
     while (first > 0) {
-      const query = gql`
-      query getLiveStreams {
-        liveStreams @rest(type: "liveStreams", path: "streams?first=${
-          first > 50 ? 50 : first
-        }${cursor === null ? "" : `&after=${cursor}`}") {
-          data
-          pagination
-        }
-      }
-    `;
+      const response = await client.query({
+        query: queryLiveStreams,
+        variables: {
+          limitNivel1: first > 50 ? 50 : first,
+          cursor: cursor === null ? "" : `&after=${cursor}`,
+        },
+      });
 
       numPeticiones++;
-      const response = await client.query({ query });
       first = first - response.data.liveStreams.data.length;
       dataStreams = [...dataStreams, ...response.data.liveStreams.data];
       cursor = response.data.liveStreams.pagination.cursor;
@@ -115,7 +117,7 @@ const getVideosByGame = async (id, first) => {
     client.setLink(
       new RestLink({
         uri: "https://api.twitch.tv/helix/",
-        customFetch: fetch,
+        //customFetch: fetch,
         headers: {
           Authorization: "Bearer " + token,
           "Client-Id": process.env.CLIENTID,
@@ -123,18 +125,15 @@ const getVideosByGame = async (id, first) => {
       })
     );
     while (first > 0) {
-      const query = gql`
-      query getVideosByGame {
-        videosByGame @rest(type: "videosByGame", path: "videos?game_id=${id}&first=${
-        first > 50 ? 50 : first
-      }${cursor === null ? "" : `&after=${cursor}`}") {
-          data
-          pagination
-        }
-      }
-    `;
+      const response = await client.query({
+        query: queryVideosByGame,
+        variables: {
+          id,
+          limitNivel2: first > 50 ? 50 : first,
+          cursor: cursor === null ? "" : `&after=${cursor}`,
+        },
+      });
       numPeticiones++;
-      const response = await client.query({ query });
       const dataVideosByGame = response.data.videosByGame;
 
       if (
@@ -166,7 +165,7 @@ const getClipsByUser = async (id, first) => {
     client.setLink(
       new RestLink({
         uri: "https://api.twitch.tv/helix/",
-        customFetch: fetch,
+        //customFetch: fetch,
         headers: {
           Authorization: "Bearer " + token,
           "Client-Id": process.env.CLIENTID,
@@ -175,18 +174,15 @@ const getClipsByUser = async (id, first) => {
     );
 
     while (first > 0) {
-      const query = gql`
-      query getClipsByUser {
-        clipsUser @rest(type: "clipsUser", path: "clips?broadcaster_id=${id}&first=${
-        first > 50 ? 50 : first
-      }${cursor === null ? "" : `&after=${cursor}`}") {
-          data
-          pagination
-        }
-      }
-    `;
+      const response = await client.query({
+        query: queryClipsByUser,
+        variables: {
+          id,
+          limitNivel3: first > 50 ? 50 : first,
+          cursor: cursor === null ? "" : `&after=${cursor}`,
+        },
+      });
       numPeticiones++;
-      const response = await client.query({ query });
       const dataClipsByUser = response.data.clipsUser;
       if (
         dataClipsByUser?.data?.length > 0 ||
@@ -209,10 +205,9 @@ const getClipsByUser = async (id, first) => {
 };
 
 //Funcion para extraer Informacion del canal
-const getInformationChannel = async (id, first) => {
+const getInformationChannel = async (id) => {
   try {
     const token = store.get("token");
-    // let cursor = null;
     let dataChannel = [];
     let numPeticiones = 0;
 
@@ -220,31 +215,27 @@ const getInformationChannel = async (id, first) => {
     client.setLink(
       new RestLink({
         uri: "https://api.twitch.tv/helix/",
-        customFetch: fetch,
+        //customFetch: fetch,
         headers: {
           Authorization: "Bearer " + token,
           "Client-Id": process.env.CLIENTID,
         },
       })
     );
-    while (first > 0) {
-      const query = gql`
-        query getChannelInformation {
-          channelInfo @rest(type: "channelInfo", path: "channels?broadcaster_id=${id}&first=${
-        first > 50 ? 50 : first
-      }") {
-            data
-          }
-        }
-      `;
-      numPeticiones++;
-      const response = await client.query({ query });
-      const dataInformationChannel = response.data.channelInfo;
+    const response = await client.query({
+      query: queryChannelInfo,
+      variables: {
+        id,
+      },
+    });
+    numPeticiones++;
 
-      first = first - dataInformationChannel.data.length;
-      dataChannel = [...dataChannel, ...dataInformationChannel.data];
-      // cursor = dataInformationChannel.pagination.cursor;
-    }
+    const dataInformationChannel = response.data.channelInfo;
+
+    //first = first - dataInformationChannel.data.length;
+    dataChannel = [...dataChannel, ...dataInformationChannel.data];
+    // cursor = dataInformationChannel.pagination.cursor;
+
     return { data: dataChannel, requests: numPeticiones };
   } catch (error) {
     console.log(error);
@@ -252,7 +243,7 @@ const getInformationChannel = async (id, first) => {
 };
 
 //Funcion para extraer la informacion del juego
-const getInformationGame = async (id, first) => {
+const getInformationGame = async (id) => {
   try {
     const token = store.get("token");
     // let cursor = null;
@@ -263,31 +254,27 @@ const getInformationGame = async (id, first) => {
     client.setLink(
       new RestLink({
         uri: "https://api.twitch.tv/helix/",
-        customFetch: fetch,
+        //customFetch: fetch,
         headers: {
           Authorization: "Bearer " + token,
           "Client-Id": process.env.CLIENTID,
         },
       })
     );
-    while (first > 0) {
-      const query = gql`
-          query getGameInformation {
-            gameInfo @rest(type: "gameInfo", path: "games?id=${id}&first=${
-        first > 50 ? 50 : first
-      }") {
-                data
-            }
-          }
-        `;
-      numPeticiones++;
-      const response = await client.query({ query });
-      const dataInformationGame = response.data.gameInfo;
+    //while (first > 0) {
+    const response = await client.query({
+      query: queryGameInfo,
+      variables: {
+        id,
+      },
+    });
+    numPeticiones++;
+    const dataInformationGame = response.data.gameInfo;
 
-      first = first - dataInformationGame.data.length;
-      dataGames = [...dataGames, ...dataInformationGame.data];
-      // cursor = dataInformationGame.pagination.cursor;
-    }
+    //first = first - dataInformationGame.data.length;
+    dataGames = [...dataGames, ...dataInformationGame.data];
+    // cursor = dataInformationGame.pagination.cursor;
+    //}
 
     return { data: dataGames, requests: numPeticiones };
   } catch (error) {

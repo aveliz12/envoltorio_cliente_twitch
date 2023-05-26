@@ -6,14 +6,19 @@ const {
   DATA_CASOPRUEBA5,
 } = require("./Cache/querys.cjs");
 const fetch = require("node-fetch");
-
 const {
   ApolloClient,
   HttpLink,
   InMemoryCache,
 } = require("@apollo/client/core");
 const { performance } = require("perf_hooks");
+const axios = require("axios");
+const { buildAxiosFetch } = require("@lifeomic/axios-fetch");
 
+/* Configuración del tiempo de espera en apollo client */
+const instanceAxios = axios.create({
+  timeout: 7200000,
+});
 const uri = "http://localhost:4000/";
 
 /*____________________GRAPHQL SIN CACHE______________________________*/
@@ -43,7 +48,7 @@ const getTime = (t1, t2) => {
 };
 
 const client = new ApolloClient({
-  link: new HttpLink({ uri, fetch }),
+  link: new HttpLink({ uri, fetch: buildAxiosFetch(instanceAxios) }),
   cache: new InMemoryCache(),
   defaultOptions: defaultOptions,
 });

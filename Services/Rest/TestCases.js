@@ -32,7 +32,7 @@ export const casoPrueba1 = async (first) => {
   const tiempo = getTime(t1, t2);
   const numPeticiones = requests;
 
-  console.log(`Datos del nivel 1: ${data.length}.`.underline);
+  //console.log(`Datos del nivel 1: ${data.length}.`.underline);
 
   return { data: data, time: tiempo, requests: numPeticiones };
 };
@@ -81,7 +81,9 @@ const getDataForCaso2 = async (first, first2) => {
       //     `PARA CASO 2._Se encontraron ${dataVideosForCaso2.length} IDs con más de ${first2} datos. Realizando nuevas consultas...`
       //   );
       // }
+      console.log("EXTRAYENDO DATOS PARA CASO 2");
     } while (totalDataVideos === first);
+    console.log("DATOS EXTRAIDOS, PASO A CASO 2");
     return { data: dataVideosForCaso2, requests: numPeticiones };
   } catch (error) {
     console.log(error);
@@ -96,6 +98,7 @@ export const casoPrueba2 = async (first, first2) => {
   let objetos = [];
 
   const { data, requests } = await getDataForCaso2(first, first2);
+  console.log("EN CASO DE PRUEBA 2")
   for (const game_id of data) {
     const { data, requests } = await getVideosByGame(game_id, first2);
     numPeticiones += requests;
@@ -105,9 +108,9 @@ export const casoPrueba2 = async (first, first2) => {
   const totalPeticiones = requests + numPeticiones;
   let t2 = performance.now();
   const tiempo = getTime(t1, t2);
-  console.log(`Datos del nivel 2: ${objetos.length}.`.underline);
+  //console.log(`Datos del nivel 2: ${objetos.length}.`.underline);
 
-  return { data: objetos, time2: tiempo, requests2: totalPeticiones };
+  return { data2: objetos, time2: tiempo, requests2: totalPeticiones };
 };
 
 //Obtener iDs que contengan la cantidad de datos establecida en el nivel 2
@@ -121,7 +124,7 @@ const getDataForCaso3 = async (first, first2, first3) => {
 
     do {
       const result = await casoPrueba2(first, first2);
-      data = result.data;
+      data = result.data2;
       requests2 = result.requests2;
 
       const idUserVideos = data.map((resp) => resp.user_id);
@@ -154,7 +157,9 @@ const getDataForCaso3 = async (first, first2, first3) => {
       //     `PARA CASO 3._Se encontraron ${dataVideosForCaso3.length} IDs con más de ${first3} datos. Realizando nuevas consultas...`
       //   );
       // }
+      console.log("EXTRAYENDO DATOS PARA CASO 3");
     } while (totalDataVideos !== data.length);
+    console.log("DATOS EXTRAIDOS, PASO A CASO 3");
     numPeticiones = requests2;
     return { data: dataVideosForCaso3, resquests2: numPeticiones };
   } catch (error) {
@@ -167,6 +172,7 @@ export const casoPrueba3 = async (first, first2, first3) => {
   let t1 = performance.now();
   let allData = [];
   let numPeticiones = 0;
+  console.log("EN CASO DE PRUEBA 3")
   const { data, resquests2 } = await getDataForCaso3(first, first2, first3);
   // const { data, requests2 } = await casoPrueba2(first, first2);
   // const dataVideosByGame = data;
@@ -174,6 +180,7 @@ export const casoPrueba3 = async (first, first2, first3) => {
   for (const broadcaster_id of data) {
     const { data, requests } = await getClipsByUser(broadcaster_id, first3);
     numPeticiones += requests;
+    console.log("Consultando ", numPeticiones);
     allData = [...allData, ...data];
   }
   const totalPeticiones = resquests2 + numPeticiones;
@@ -181,25 +188,25 @@ export const casoPrueba3 = async (first, first2, first3) => {
   let t2 = performance.now();
   const tiempo = getTime(t1, t2);
 
-  console.log(`Datos del nivel 3: ${allData.length}.`.underline);
+  //console.log(`Datos del nivel 3: ${allData.length}.`.underline);
 
-  return { data: allData, time3: tiempo, requests3: totalPeticiones };
+  return { data3: allData, time3: tiempo, requests3: totalPeticiones };
 };
 
 //CASO DE PRUEBA 4: INFORMATION CHANNEL
-export const casoPrueba4 = async (first, first2, first3, first4) => {
+export const casoPrueba4 = async (first, first2, first3) => {
   let t1 = performance.now();
   let numPeticiones = 0;
   let allData = [];
-  const { data, requests3 } = await casoPrueba3(first, first2, first3);
-  const dataClipsByUser = data;
+  const { data3, requests3 } = await casoPrueba3(first, first2, first3);
+  const dataClipsByUser = data3;
   const broadcaster_id = [];
   dataClipsByUser.forEach((id) => {
     broadcaster_id.push(id.broadcaster_id);
   });
 
   for (const _id of broadcaster_id) {
-    const { data, requests } = await getInformationChannel(_id, first4);
+    const { data, requests } = await getInformationChannel(_id);
     allData = [...allData, ...data];
     numPeticiones += requests;
   }
@@ -220,18 +227,18 @@ export const casoPrueba4 = async (first, first2, first3, first4) => {
 
   let t2 = performance.now();
   const tiempo = getTime(t1, t2);
-  console.log(`Datos del nivel 4: ${allData.length}.`.underline);
+  //console.log(`Datos del nivel 4: ${allData.length}.`.underline);
 
-  return { data: allData, time4: tiempo, requests4: totalPeticiones };
+  return { data4: allData, time4: tiempo, requests4: totalPeticiones };
 };
 
 //CASO DE PRUEBA 5: INFORMATION GAME
-export const casoPrueba5 = async (first, first2, first3, first4, first5) => {
+export const casoPrueba5 = async (first, first2, first3) => {
   let t1 = performance.now();
   let numPeticiones = 0;
   let allData = [];
-  const { data, requests4 } = await casoPrueba4(first, first2, first3, first4);
-  const dataInformationChannel = data;
+  const { data4, requests4 } = await casoPrueba4(first, first2, first3);
+  const dataInformationChannel = data4;
 
   const dataGame = [];
 
@@ -240,7 +247,7 @@ export const casoPrueba5 = async (first, first2, first3, first4, first5) => {
   });
 
   for (const _id of dataGame) {
-    const { data, requests } = await getInformationGame(_id, first5);
+    const { data, requests } = await getInformationGame(_id);
     allData = [...allData, ...data];
     numPeticiones += requests;
   }
@@ -263,10 +270,10 @@ export const casoPrueba5 = async (first, first2, first3, first4, first5) => {
 
   let t2 = performance.now();
   const tiempo = getTime(t1, t2);
-  console.log(`Datos del nivel 5: ${allData.length}.`.underline);
+  //console.log(`Datos del nivel 5: ${allData.length}.`.underline);
 
   return {
-    data: allData,
+    data5: allData,
     time5: tiempo,
     requests5: totalPeticiones,
   };

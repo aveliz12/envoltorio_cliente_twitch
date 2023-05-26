@@ -22,12 +22,14 @@ const store = new Storage("./store");
 
 const token = store.get("token");
 
-const imprimirDatos = (time, requests) => {
+const imprimirDatos = (data,time, requests) => {
   console.log(`Tiempo: ${time.milisegundos} milisegundos.`.underline);
   console.log(`Tiempo: ${time.segundos} segundos.`.underline);
   console.log(`Tiempo: ${time.minutos} minutos.`.underline);
 
   console.log(`Peticiones: ${requests}.`.underline);
+
+  console.log(`Número total de datos: ${data.length}.`.underline);
 };
 export const casoPrueba = async () => {
   console.log(
@@ -54,8 +56,8 @@ export const casoPrueba = async () => {
                 "Cantidad de datos requeridos (Distribución) | Nivel 1: ",
                 resp
               );
-              const { time, requests } = await casoPrueba1(resp);
-              imprimirDatos(time, requests);
+              const { data, time, requests } = await casoPrueba1(resp);
+              imprimirDatos(data, time, requests);
             });
 
             break;
@@ -68,11 +70,11 @@ export const casoPrueba = async () => {
                 "Cantidad de datos requeridos (Distribución) | Nivel 2: ",
                 resp
               );
-              const { time2, requests2 } = await casoPrueba2(
+              const { data2, time2, requests2 } = await casoPrueba2(
                 resp.limiteNivel1,
                 resp.limiteNivel2
               );
-              imprimirDatos(time2, requests2);
+              imprimirDatos(data2, time2, requests2);
             });
 
             break;
@@ -85,12 +87,12 @@ export const casoPrueba = async () => {
                 "Cantidad de datos requeridos (Distribución) | Nivel 3: ",
                 resp
               );
-              const { time3, requests3 } = await casoPrueba3(
+              const { data3, time3, requests3 } = await casoPrueba3(
                 resp.limiteNivel1,
                 resp.limiteNivel2,
                 resp.limiteNivel3
               );
-              imprimirDatos(time3, requests3);
+              imprimirDatos(data3, time3, requests3);
             });
 
             break;
@@ -104,13 +106,12 @@ export const casoPrueba = async () => {
                 "Cantidad de datos requeridos (Distribución) | Nivel 4: ",
                 resp
               );
-              const { time4, requests4 } = await casoPrueba4(
+              const { data4, time4, requests4 } = await casoPrueba4(
                 resp.limiteNivel1,
                 resp.limiteNivel2,
                 resp.limiteNivel3,
-                resp.limiteNivel4
               );
-              imprimirDatos(time4, requests4);
+              imprimirDatos(data4, time4, requests4);
             });
 
             break;
@@ -123,14 +124,12 @@ export const casoPrueba = async () => {
                 "Cantidad de datos requeridos (Distribución) | Nivel 5: ",
                 resp
               );
-              const { time5, requests5 } = await casoPrueba5(
+              const { data5, time5, requests5 } = await casoPrueba5(
                 resp.limiteNivel1,
                 resp.limiteNivel2,
                 resp.limiteNivel3,
-                resp.limiteNivel4,
-                resp.limiteNivel5
               );
-              imprimirDatos(time5, requests5);
+              imprimirDatos(data5, time5, requests5);
             });
 
             break;
