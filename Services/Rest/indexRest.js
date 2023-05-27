@@ -22,14 +22,14 @@ const store = new Storage("./store");
 
 const token = store.get("token");
 
-const imprimirDatos = (data,time, requests) => {
+const imprimirDatos = (data, time, requests) => {
   console.log(`Tiempo: ${time.milisegundos} milisegundos.`.underline);
   console.log(`Tiempo: ${time.segundos} segundos.`.underline);
   console.log(`Tiempo: ${time.minutos} minutos.`.underline);
 
   console.log(`Peticiones: ${requests}.`.underline);
 
-  console.log(`Número total de datos: ${data.length}.`.underline);
+  console.log(`Número de registros: ${data.length}.`.underline);
 };
 export const casoPrueba = async () => {
   console.log(
@@ -109,7 +109,7 @@ export const casoPrueba = async () => {
               const { data4, time4, requests4 } = await casoPrueba4(
                 resp.limiteNivel1,
                 resp.limiteNivel2,
-                resp.limiteNivel3,
+                resp.limiteNivel3
               );
               imprimirDatos(data4, time4, requests4);
             });
@@ -127,7 +127,7 @@ export const casoPrueba = async () => {
               const { data5, time5, requests5 } = await casoPrueba5(
                 resp.limiteNivel1,
                 resp.limiteNivel2,
-                resp.limiteNivel3,
+                resp.limiteNivel3
               );
               imprimirDatos(data5, time5, requests5);
             });

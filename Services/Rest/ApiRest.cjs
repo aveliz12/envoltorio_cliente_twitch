@@ -74,7 +74,7 @@ const getLiveStreams = async (first) => {
     let dataStreams = [];
     const token = store.get("token");
     let numPeticiones = 0;
-
+    
     client.setLink(
       new RestLink({
         uri: "https://api.twitch.tv/helix/",
@@ -111,8 +111,8 @@ const getVideosByGame = async (id, first) => {
   try {
     let cursor = null;
     let dataVideos = [];
-    const token = store.get("token");
     let numPeticiones = 0;
+    const token = store.get("token");
     //CONSULTA
     client.setLink(
       new RestLink({
@@ -192,6 +192,8 @@ const getClipsByUser = async (id, first) => {
         dataClips = [...dataClips, ...dataClipsByUser.data];
         if (dataClipsByUser.pagination.cursor !== undefined) {
           cursor = dataClipsByUser.pagination.cursor;
+          console.log("CURSOR DE CLIPS", cursor);
+          break;
         }
       } else {
         break;
@@ -248,7 +250,7 @@ const getInformationGame = async (id) => {
     const token = store.get("token");
     // let cursor = null;
     let dataGames = [];
-    let numPeticiones;
+    let numPeticiones = 0;
 
     //CONSULTAS
     client.setLink(
