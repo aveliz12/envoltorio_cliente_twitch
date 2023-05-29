@@ -74,7 +74,7 @@ const getLiveStreams = async (first) => {
     let dataStreams = [];
     const token = store.get("token");
     let numPeticiones = 0;
-    
+
     client.setLink(
       new RestLink({
         uri: "https://api.twitch.tv/helix/",
@@ -135,7 +135,6 @@ const getVideosByGame = async (id, first) => {
       });
       numPeticiones++;
       const dataVideosByGame = response.data.videosByGame;
-
       if (
         dataVideosByGame?.data?.length > 0 ||
         dataVideosByGame?.pagination?.length > 0

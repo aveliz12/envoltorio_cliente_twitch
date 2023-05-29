@@ -50,7 +50,7 @@ const getDataForCaso2 = async (first, first2) => {
     let response;
 
     do {
-      const {data, requests } = await casoPrueba1(first);
+      const { data, requests } = await casoPrueba1(first);
 
       const idGame = data.map((resp) => resp.game_id);
       for (const iDs of idGame) {
@@ -66,7 +66,7 @@ const getDataForCaso2 = async (first, first2) => {
           break;
         }
       }
-
+      console.log(response);
       if (totalDataVideos > first) {
         //se utiliza el método slice para reducir la longitud del arreglo dataVideosForCaso2 a first elementos
         dataVideosForCaso2 = dataVideosForCaso2.slice(0, first);
@@ -189,11 +189,7 @@ export const casoPrueba3 = async (first, first2, first3) => {
   let allData = [];
   let numPeticiones = 0;
   console.log("EN CASO DE PRUEBA 3");
-  const { data, resquests2 } = await getDataForCaso3(
-    first,
-    first2,
-    first3
-  );
+  const { data, resquests2 } = await getDataForCaso3(first, first2, first3);
   // const { data, requests2 } = await casoPrueba2(first, first2);
   // const dataVideosByGame = data;
   // const idUserVideos = dataVideosByGame.map((resp) => resp.user_id);

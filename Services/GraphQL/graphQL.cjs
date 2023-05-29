@@ -110,7 +110,7 @@ const casoPrueba3GraphQL = async (limitNivel1, limitNivel2, limitNivel3) => {
       limitNivel3,
     },
   });
-
+  console.log(response.data.getCasosPruebasLiveStreams.data);
   const t2 = performance.now();
   const tiempo = getTime(t1, t2);
 
