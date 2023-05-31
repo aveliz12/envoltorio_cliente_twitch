@@ -124,6 +124,7 @@ const getVideosByGame = async (id, first) => {
         },
       })
     );
+
     while (first > 0) {
       const response = await client.query({
         query: queryVideosByGame,
@@ -135,6 +136,7 @@ const getVideosByGame = async (id, first) => {
       });
       numPeticiones++;
       const dataVideosByGame = response.data.videosByGame;
+
       if (
         dataVideosByGame?.data?.length > 0 ||
         dataVideosByGame?.pagination?.length > 0
@@ -164,7 +166,6 @@ const getClipsByUser = async (id, first) => {
     client.setLink(
       new RestLink({
         uri: "https://api.twitch.tv/helix/",
-        //customFetch: fetch,
         headers: {
           Authorization: "Bearer " + token,
           "Client-Id": process.env.CLIENTID,
@@ -191,7 +192,6 @@ const getClipsByUser = async (id, first) => {
         dataClips = [...dataClips, ...dataClipsByUser.data];
         if (dataClipsByUser.pagination.cursor !== undefined) {
           cursor = dataClipsByUser.pagination.cursor;
-          console.log("CURSOR DE CLIPS", cursor);
           break;
         }
       } else {

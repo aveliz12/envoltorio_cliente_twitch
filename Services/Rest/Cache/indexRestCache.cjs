@@ -18,12 +18,14 @@ const {
   distribucionDatosCaso5,
 } = require("../../Menu/distribucion.cjs");
 
-const imprimirDatos = (time, requests) => {
+const imprimirDatos = (data, time, requests) => {
   console.log(`Tiempo: ${time.milisegundos} milisegundos.`.underline);
   console.log(`Tiempo: ${time.segundos} segundos.`.underline);
   console.log(`Tiempo: ${time.minutos} minutos.`.underline);
 
   console.log(`Peticiones: ${requests}.`.underline);
+
+  console.log(`Número de registros: ${data.length}.`.underline);
 };
 
 const casoPruebaCacheRest = async () => {
@@ -48,8 +50,10 @@ const casoPruebaCacheRest = async () => {
             );
             await distribucionDatosCaso1().then(async (resp) => {
               console.log("Cantidad de datos por nivel: ", resp);
-              const { time, requests1 } = await getCasoPrueba1RestCache(resp);
-              imprimirDatos(time, requests1);
+              const { data, time, requests1 } = await getCasoPrueba1RestCache(
+                resp
+              );
+              imprimirDatos(data, time, requests1);
             });
 
             break;
@@ -59,11 +63,11 @@ const casoPruebaCacheRest = async () => {
             );
             await distribucionDatosCaso2().then(async (resp) => {
               console.log("Cantidad de datos por nivel: ", resp);
-              const { time2, requests2 } = await getCasoPrueba2RestCache(
+              const { data2, time2, requests2 } = await getCasoPrueba2RestCache(
                 resp.limiteNivel1,
                 resp.limiteNivel2
               );
-              imprimirDatos(time2, requests2);
+              imprimirDatos(data2, time2, requests2);
             });
 
             break;
@@ -73,12 +77,12 @@ const casoPruebaCacheRest = async () => {
             );
             await distribucionDatosCaso3().then(async (resp) => {
               console.log("Cantidad de datos por nivel: ", resp);
-              const { time3, requests3 } = await getCasoPrueba3RestCache(
+              const { data3, time3, requests3 } = await getCasoPrueba3RestCache(
                 resp.limiteNivel1,
                 resp.limiteNivel2,
                 resp.limiteNivel3
               );
-              imprimirDatos(time3, requests3);
+              imprimirDatos(data3, time3, requests3);
             });
 
             break;
@@ -88,13 +92,12 @@ const casoPruebaCacheRest = async () => {
             );
             await distribucionDatosCaso4().then(async (resp) => {
               console.log("Cantidad de datos por nivel: ", resp);
-              const { time4, requests4 } = await getCasoPrueba4RestCache(
+              const { data4, time4, requests4 } = await getCasoPrueba4RestCache(
                 resp.limiteNivel1,
                 resp.limiteNivel2,
-                resp.limiteNivel3,
-                resp.limiteNivel4
+                resp.limiteNivel3
               );
-              imprimirDatos(time4, requests4);
+              imprimirDatos(data4, time4, requests4);
             });
 
             break;
@@ -104,14 +107,12 @@ const casoPruebaCacheRest = async () => {
             );
             await distribucionDatosCaso5().then(async (resp) => {
               console.log("Cantidad de datos por nivel: ", resp);
-              const { time5, requests5 } = await getCasoPrueba5RestCache(
+              const { data5, time5, requests5 } = await getCasoPrueba5RestCache(
                 resp.limiteNivel1,
                 resp.limiteNivel2,
-                resp.limiteNivel3,
-                resp.limiteNivel4,
-                resp.limiteNivel5
+                resp.limiteNivel3
               );
-              imprimirDatos(time5, requests5);
+              imprimirDatos(data5, time5, requests5);
             });
             break;
           default:

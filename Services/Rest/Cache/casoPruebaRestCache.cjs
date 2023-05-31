@@ -32,7 +32,6 @@ const getCasoPrueba1RestCache = async (first) => {
   const tiempo = getTime(t1, t2);
 
   const numPeticiones = requests;
-  console.log(`Datos Nivel 1 Cache REST: ${data.length}.`.underline);
   return { data: data, time: tiempo, requests1: numPeticiones };
 };
 
@@ -42,8 +41,8 @@ const getCasoPrueba2RestCache = async (first, first2) => {
   let numPeticiones = 0;
   let objetos = [];
   const { data, requests1 } = await getCasoPrueba1RestCache(first);
-  const dataLiveStreams = data;
-  const gameId = dataLiveStreams.map((resp) => resp.game_id);
+
+  const gameId = data.map((resp) => resp.game_id);
   for (const game_id of gameId) {
     const { data, requests } = await getVideosByGameCache(game_id, first2);
     numPeticiones += requests;
@@ -53,19 +52,18 @@ const getCasoPrueba2RestCache = async (first, first2) => {
   const totalPeticiones = requests1 + numPeticiones;
   let t2 = performance.now();
   const tiempo = getTime(t1, t2);
-  console.log(`Datos Nivel 2 Cache REST: ${objetos.length}.`.underline);
 
-  return { data: objetos, time2: tiempo, requests2: totalPeticiones };
+  return { data2: objetos, time2: tiempo, requests2: totalPeticiones };
 };
 
 const getCasoPrueba3RestCache = async (first, first2, first3) => {
   const t1 = performance.now();
   let allData = [];
   let numPeticiones = 0;
-  const { data, requests2 } = await getCasoPrueba2RestCache(first, first2);
-  const datavideosGame = data;
+  console.log(first,first2,first3)
+  const { data2, requests2 } = await getCasoPrueba2RestCache(first, first2);
 
-  const userId = datavideosGame.map((dataVideo) => dataVideo.user_id);
+  const userId = data2.map((dataVideo) => dataVideo.user_id);
 
   for (const _id of userId) {
     const { data, requests } = await getClipsByUserCache(_id, first3);
@@ -73,87 +71,57 @@ const getCasoPrueba3RestCache = async (first, first2, first3) => {
     numPeticiones += requests;
   }
 
-  // const dataPromiseClipsByUser = userId.map(async (id) => {
-  //   return await getClipsByUserCache(id);
-  // });
-
-  // const data = await Promise.all(dataPromiseClipsByUser);
   //TIEMPO
   const totalPeticiones = requests2 + numPeticiones;
 
   let t2 = performance.now();
   const tiempo = getTime(t1, t2);
 
-  console.log(`Datos Nivel 3 Cache REST: ${allData.length}.`.underline);
-
-  return { data: allData, time3: tiempo, requests3: totalPeticiones };
+  return { data3: allData, time3: tiempo, requests3: totalPeticiones };
 };
 
-const getCasoPrueba4RestCache = async (first, first2, first3, first4) => {
+const getCasoPrueba4RestCache = async (first, first2, first3) => {
   const t1 = performance.now();
   let numPeticiones = 0;
   let allData = [];
-  const { data, requests3 } = await getCasoPrueba3RestCache(
+  const { data3, requests3 } = await getCasoPrueba3RestCache(
     first,
     first2,
     first3
   );
-  const clipsByUser = data;
 
-  const broadcasterId = clipsByUser.map(
+  const broadcasterId = data3.map(
     (dataClips) => dataClips.broadcaster_id
   );
 
   for (const _id of broadcasterId) {
-    const { data, requests } = await getChannelInformationCache(_id, first4);
+    const { data, requests } = await getChannelInformationCache(_id);
     allData = [...allData, ...data];
     numPeticiones += requests;
   }
-  // clipsByUser.forEach((clips) => {
-  //   clips.forEach((dataClips) => {
-  //     broadcasterId.push(dataClips.broadcaster_id);
-  //   });
-  // });
-
-  // const dataPromiseInformationChannel = broadcasterId.map(async (id) => {
-  //   return await getChannelInformationCache(id);
-  // });
-
-  // const data = await Promise.all(dataPromiseInformationChannel);
+  
   //TIEMPO
   const totalPeticiones = requests3 + numPeticiones;
 
   let t2 = performance.now();
   const tiempo = getTime(t1, t2);
-  console.log(`Datos Nivel 4 Cache REST: ${allData.length}.`.underline);
 
-  return { data: allData, time4: tiempo, requests4: totalPeticiones };
+  return { data4: allData, time4: tiempo, requests4: totalPeticiones };
 };
 
-const getCasoPrueba5RestCache = async (
-  first,
-  first2,
-  first3,
-  first4,
-  first5
-) => {
+const getCasoPrueba5RestCache = async (first, first2, first3) => {
   const t1 = performance.now();
   let numPeticiones = 0;
   let allData = [];
-  const { data, requests4 } = await getCasoPrueba4RestCache(
+  const { data4, requests4 } = await getCasoPrueba4RestCache(
     first,
     first2,
-    first3,
-    first4
+    first3
   );
-  const channelInformation = data;
-  const gameId = channelInformation.map((dataGame) => dataGame.game_id);
+  const gameId = data4.map((dataGame) => dataGame.game_id);
   for (const _id of gameId) {
-    const { dataGames, requestsGames } = await getGameInformationCache(
-      _id,
-      first5
-    );
-    allData = [...allData, ...data];
+    const { dataGames, requestsGames } = await getGameInformationCache(_id);
+    allData = [...allData, ...dataGames];
     numPeticiones += requestsGames;
   }
 
@@ -162,10 +130,9 @@ const getCasoPrueba5RestCache = async (
 
   let t2 = performance.now();
   const tiempo = getTime(t1, t2);
-  console.log(`Datos Nivel 5 Cache REST: ${allData.length}.`.underline);
 
   return {
-    data: allData,
+    data5: allData,
     time5: tiempo,
     requests5: totalPeticiones,
   };

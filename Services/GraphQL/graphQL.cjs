@@ -126,7 +126,6 @@ const casoPrueba4GraphQL = async (
   limitNivel1,
   limitNivel2,
   limitNivel3,
-  limitNivel4
 ) => {
   const t1 = performance.now();
 
@@ -137,7 +136,6 @@ const casoPrueba4GraphQL = async (
       limitNivel1,
       limitNivel2,
       limitNivel3,
-      limitNivel4,
     },
   });
 
@@ -154,9 +152,7 @@ const casoPrueba4GraphQL = async (
 const casoPrueba5GraphQL = async (
   limitNivel1,
   limitNivel2,
-  limitNivel3,
-  limitNivel4,
-  limitNivel5
+  limitNivel3
 ) => {
   const t1 = performance.now();
 
@@ -166,9 +162,7 @@ const casoPrueba5GraphQL = async (
     variables: {
       limitNivel1,
       limitNivel2,
-      limitNivel3,
-      limitNivel4,
-      limitNivel5,
+      limitNivel3
     },
   });
 

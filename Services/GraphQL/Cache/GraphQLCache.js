@@ -55,58 +55,11 @@ export const casoPrueba1Cache = async (limitNivel1) => {
   return { data: dataLiveStreams, time: tiempo };
 };
 
-//Obtener iDs que contengan la cantidad de datos establecida en el nivel 2
-const getDataForCaso2Cache = async (limitNivel1, limitNivel2) => {
-  try {
-    const idsWithMoreData = [];
-    let totalData = 0;
-
-    while (totalData < limitNivel1) {
-      const { data } = casoPrueba1Cache(limitNivel1);
-      console.log(data);
-      const ids = data.map((item) => item.id);
-
-      const responseNivel2 = await client.query({
-        query: DATA_CASOPRUEBA2,
-        variables: {
-          limitNivel1,
-          limitNivel2,
-        },
-      });
-
-      ids.forEach((id) => {
-        const numData = responseNivel2.data.getCasosPruebasLiveStreams.filter(
-          (data) => data.id === id
-        ).length;
-
-        if (numData >= limitNivel2 && !idsWithMoreData.includes(id)) {
-          idsWithMoreData.push(id);
-          totalData++;
-        }
-      });
-
-      if (data.length === 0) {
-        break;
-      }
-    }
-
-    console.log(
-      `IDs con más datos que el límite (${limitNivel2}):`,
-      idsWithMoreData
-    );
-
-    return idsWithMoreData;
-  } catch (error) {
-    console.log(error);
-  }
-};
 
 //VIDEOS BY GAME
 export const casoPrueba2Cache = async (limitNivel1, limitNivel2) => {
   const t1 = performance.now();
 
-  const iDs = getDataForCaso2Cache(limitNivel1, limitNivel2);
-  console.log(iDs);
   //CONSULTA
   const response = await client.query({
     query: DATA_CASOPRUEBA2,
@@ -156,7 +109,7 @@ export const casoPrueba4Cache = async (
   limitNivel1,
   limitNivel2,
   limitNivel3,
-  limitNivel4
+  
 ) => {
   const t1 = performance.now();
 
@@ -165,8 +118,7 @@ export const casoPrueba4Cache = async (
     variables: {
       limitNivel1,
       limitNivel2,
-      limitNivel3,
-      limitNivel4,
+      limitNivel3
     },
   });
   const t2 = performance.now();
@@ -181,9 +133,7 @@ export const casoPrueba4Cache = async (
 export const casoPrueba5Cache = async (
   limitNivel1,
   limitNivel2,
-  limitNivel3,
-  limitNivel4,
-  limitNivel5
+  limitNivel3
 ) => {
   const t1 = performance.now();
 
@@ -192,9 +142,7 @@ export const casoPrueba5Cache = async (
     variables: {
       limitNivel1,
       limitNivel2,
-      limitNivel3,
-      limitNivel4,
-      limitNivel5,
+      limitNivel3
     },
   });
   const t2 = performance.now();

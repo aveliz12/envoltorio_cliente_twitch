@@ -141,7 +141,6 @@ const DATA_CASOPRUEBA4 = gql`
     $limitNivel1: Int
     $limitNivel2: Int
     $limitNivel3: Int
-    $limitNivel4: Int
   ) {
     getCasosPruebasLiveStreams(first: $limitNivel1) {
       id
@@ -194,7 +193,7 @@ const DATA_CASOPRUEBA4 = gql`
           thumbnail_url
           duration
           vod_offset
-          channelInformation(first: $limitNivel4) {
+          channelInformation {
             broadcaster_id
             broadcaster_login
             broadcaster_name
@@ -216,8 +215,6 @@ const DATA_CASOPRUEBA5 = gql`
     $limitNivel1: Int
     $limitNivel2: Int
     $limitNivel3: Int
-    $limitNivel4: Int
-    $limitNivel5: Int
   ) {
     getCasosPruebasLiveStreams(first: $limitNivel1) {
       id
@@ -270,7 +267,7 @@ const DATA_CASOPRUEBA5 = gql`
           thumbnail_url
           duration
           vod_offset
-          channelInformation(first: $limitNivel4) {
+          channelInformation {
             broadcaster_id
             broadcaster_login
             broadcaster_name
@@ -280,7 +277,7 @@ const DATA_CASOPRUEBA5 = gql`
             title
             delay
             tags
-            informationGame(first: $limitNivel5) {
+            informationGame {
               id
               name
               box_art_url

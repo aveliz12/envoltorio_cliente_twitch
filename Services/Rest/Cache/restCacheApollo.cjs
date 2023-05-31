@@ -5,7 +5,13 @@ const store = new Storage("./store");
 require("dotenv").config();
 const fetch = require("node-fetch");
 global.Headers = fetch.Headers;
-
+const {
+  queryLiveStreams,
+  queryVideosByGame,
+  queryClipsByUser,
+  queryChannelInfo,
+  queryGameInfo,
+} = require("../models/modelApolloRest.cjs");
 const token = store.get("token");
 
 const client = new ApolloClient({
@@ -30,20 +36,15 @@ const getLiveStreamsCache = async (first) => {
       })
     );
     while (first > 0) {
-      const query = gql`
-      query getLiveStreams {
-        liveStreams @rest(type: "liveStreams", path: "streams?first=${
-          first > 50 ? 50 : first
-        }${cursor === null ? "" : `&after=${cursor}`}") {
-          data
-          pagination
-        }
-      }
-    `;
+      const response = await client.query({
+        query: queryLiveStreams,
+        variables: {
+          limitNivel1: first > 50 ? 50 : first,
+          cursor: cursor === null ? "" : `&after=${cursor}`,
+        },
+      });
 
       numPeticiones++;
-      const response = await client.query({ query });
-
       first = first - response.data.liveStreams.data.length;
       dataStreams = [...dataStreams, ...response.data.liveStreams.data];
       cursor = response.data.liveStreams.pagination.cursor;
@@ -71,24 +72,29 @@ const getVideosByGameCache = async (id, first) => {
       })
     );
     while (first > 0) {
-      const query = gql`
-      query getVideosByGame {
-        videosByGame @rest(type: "videosByGame", path: "videos?game_id=${id}&first=${
-        first > 50 ? 50 : first
-      }${cursor === null ? "" : `&after=${cursor}`}") {
-          data
-          pagination
-        }
-      }
-    `;
+      const response = await client.query({
+        query: queryVideosByGame,
+        variables: {
+          id,
+          limitNivel2: first > 50 ? 50 : first,
+          cursor: cursor === null ? "" : `&after=${cursor}`,
+        },
+      });
       numPeticiones++;
-      const response = await client.query({ query });
+      const dataVideosByGame = response.data.videosByGame;
 
-      first = first - response.data.videosByGame.data.length;
-      dataVideos = [...dataVideos, ...response.data.videosByGame.data];
-      cursor = response.data.videosByGame.pagination.cursor;
+      if (
+        dataVideosByGame?.data?.length > 0 ||
+        dataVideosByGame?.pagination?.length > 0
+      ) {
+        first = first - dataVideosByGame.data.length;
+        dataVideos = [...dataVideos, ...dataVideosByGame.data];
+        cursor = dataVideosByGame.pagination.cursor;
+      } else {
+        break;
+      }
     }
-    
+
     return { data: dataVideos, requests: numPeticiones };
   } catch (error) {
     console.log(error);
@@ -112,22 +118,29 @@ const getClipsByUserCache = async (id, first) => {
       })
     );
     while (first > 0) {
-      const query = gql`
-        query getClipsByUser {
-          clipsUser @rest(type: "clipsUser", path: "clips?broadcaster_id=${id}&first=${
-        first > 50 ? 50 : first
-      }${cursor === null ? "" : `&after=${cursor}`}") {
-            data
-            pagination
-          }
-        }
-      `;
+      const response = await client.query({
+        query: queryClipsByUser,
+        variables: {
+          id,
+          limitNivel3: first > 50 ? 50 : first,
+          cursor: cursor === null ? "" : `&after=${cursor}`,
+        },
+      });
       numPeticiones++;
-      const response = await client.query({ query });
-
-      first = first - response.data.clipsUser.data.length;
-      dataClips = [...dataClips, ...response.data.clipsUser.data];
-      cursor = response.data.clipsUser.pagination.cursor;
+      const dataClipsByUser = response.data.clipsUser;
+      if (
+        dataClipsByUser?.data?.length > 0 ||
+        dataClipsByUser?.pagination?.length > 0
+      ) {
+        first = first - dataClipsByUser.data.length;
+        dataClips = [...dataClips, ...dataClipsByUser.data];
+        if (dataClipsByUser.pagination.cursor !== undefined) {
+          cursor = dataClipsByUser.pagination.cursor;
+          break;
+        }
+      } else {
+        break;
+      }
     }
 
     return { data: dataClips, requests: numPeticiones };
@@ -136,7 +149,7 @@ const getClipsByUserCache = async (id, first) => {
   }
 };
 
-const getChannelInformationCache = async (id, first) => {
+const getChannelInformationCache = async (id) => {
   try {
     let numPeticiones = 0;
     let dataChannel = [];
@@ -150,29 +163,25 @@ const getChannelInformationCache = async (id, first) => {
         },
       })
     );
-    while (first > 0) {
-      const query = gql`
-        query getChannelInformation {
-          channelInfo @rest(type: "channelInfo", path: "channels?broadcaster_id=${id}&first=${
-        first > 50 ? 50 : first
-      }") {
-            data
-          }
-        }
-      `;
-      numPeticiones++;
-      const response = await client.query({ query });
+    const response = await client.query({
+      query: queryChannelInfo,
+      variables: {
+        id,
+      },
+    });
+    numPeticiones++;
 
-      first = first - response.data.channelInfo.data.length;
-      dataChannel = [...dataChannel, ...response.data.channelInfo.data];
-    }
+    const dataInformationChannel = response.data.channelInfo;
+
+    dataChannel = [...dataChannel, ...dataInformationChannel.data];
+
     return { data: dataChannel, requests: numPeticiones };
   } catch (error) {
     console.log(error);
   }
 };
 
-const getGameInformationCache = async (id, first) => {
+const getGameInformationCache = async (id) => {
   try {
     let numPeticiones = 0;
     let dataGames = [];
@@ -187,22 +196,17 @@ const getGameInformationCache = async (id, first) => {
       })
     );
 
-    while (first > 0) {
-      const query = gql`
-          query getGameInformation {
-            gameInfo @rest(type: "gameInfo", path: "games?id=${id}&first=${
-        first > 50 ? 50 : first
-      }") {
-                data
-            }
-          }
-        `;
-      numPeticiones++;
-      const response = await client.query({ query });
+    const response = await client.query({
+      query: queryGameInfo,
+      variables: {
+        id,
+      },
+    });
+    numPeticiones++;
+    const dataInformationGame = response.data.gameInfo;
 
-      first = first - response.data.gameInfo.data.length;
-      dataGames = [...dataGames, ...response.data.gameInfo.data];
-    }
+    dataGames = [...dataGames, ...dataInformationGame.data];
+    
     return { dataGames: dataGames, requestsGames: numPeticiones };
   } catch (error) {
     console.log(error);
