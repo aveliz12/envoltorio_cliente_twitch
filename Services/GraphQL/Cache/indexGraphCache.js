@@ -104,8 +104,7 @@ export const casoPruebaGraphQLCache = async () => {
               const time = await casoPrueba4Cache(
                 resp.limiteNivel1,
                 resp.limiteNivel2,
-                resp.limiteNivel3,
-                resp.limiteNivel4
+                resp.limiteNivel3
               );
               imprimirDatos(time);
             });
@@ -124,9 +123,7 @@ export const casoPruebaGraphQLCache = async () => {
               const time = await casoPrueba5Cache(
                 resp.limiteNivel1,
                 resp.limiteNivel2,
-                resp.limiteNivel3,
-                resp.limiteNivel4,
-                resp.limiteNivel5
+                resp.limiteNivel3
               );
 
               imprimirDatos(time);

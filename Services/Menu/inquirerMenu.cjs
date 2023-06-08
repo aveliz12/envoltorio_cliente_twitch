@@ -8,23 +8,23 @@ const menuOptions = [
     choices: [
       {
         value: "1",
-        name: "1° Nivel: Transmisiones en vivo",
+        name: "Primer Nivel: Transmisiones en vivo.",
       },
       {
         value: "2",
-        name: "2° Nivel: Video por juego",
+        name: "Segundo Nivel: Videos por juego.",
       },
       {
         value: "3",
-        name: "3° Nivel: Clips por usuario",
+        name: "Tercer Nivel: Clips por usuario.",
       },
       {
         value: "4",
-        name: "4° Nivel: Información del canal",
+        name: "Cuarto Nivel: Información del canal de un usuario.",
       },
       {
         value: "5",
-        name: "5° Nivel: Informacion del juego",
+        name: "Quinto Nivel: Información de un juego.",
       },
       {
         value: "0",

@@ -110,7 +110,7 @@ const casoPrueba3GraphQL = async (limitNivel1, limitNivel2, limitNivel3) => {
       limitNivel3,
     },
   });
-  console.log(response.data.getCasosPruebasLiveStreams.data);
+  
   const t2 = performance.now();
   const tiempo = getTime(t1, t2);
 
@@ -122,11 +122,7 @@ const casoPrueba3GraphQL = async (limitNivel1, limitNivel2, limitNivel3) => {
 };
 
 //INFORMATION CHANNEL
-const casoPrueba4GraphQL = async (
-  limitNivel1,
-  limitNivel2,
-  limitNivel3,
-) => {
+const casoPrueba4GraphQL = async (limitNivel1, limitNivel2, limitNivel3) => {
   const t1 = performance.now();
 
   //CONSUMO
@@ -149,11 +145,7 @@ const casoPrueba4GraphQL = async (
 };
 
 //INFORMATION GAME
-const casoPrueba5GraphQL = async (
-  limitNivel1,
-  limitNivel2,
-  limitNivel3
-) => {
+const casoPrueba5GraphQL = async (limitNivel1, limitNivel2, limitNivel3) => {
   const t1 = performance.now();
 
   //CONSUMO
@@ -162,7 +154,7 @@ const casoPrueba5GraphQL = async (
     variables: {
       limitNivel1,
       limitNivel2,
-      limitNivel3
+      limitNivel3,
     },
   });
 

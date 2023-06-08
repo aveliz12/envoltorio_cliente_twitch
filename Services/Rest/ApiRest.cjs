@@ -7,7 +7,6 @@ const {
   ApolloClient,
   HttpLink,
   InMemoryCache,
-  gql,
 } = require("@apollo/client/core");
 const { RestLink } = require("apollo-link-rest");
 global.Headers = fetch.Headers;
@@ -96,7 +95,13 @@ const getLiveStreams = async (first) => {
       });
 
       numPeticiones++;
-      first = first - response.data.liveStreams.data.length;
+      console.log(
+        "DATA LIVE: ",
+        numPeticiones,
+        " CON: ",
+        response.data.liveStreams.data.length
+      );
+      first -= response.data.liveStreams.data.length;
       dataStreams = [...dataStreams, ...response.data.liveStreams.data];
       cursor = response.data.liveStreams.pagination.cursor;
     }
@@ -124,8 +129,10 @@ const getVideosByGame = async (id, first) => {
         },
       })
     );
-
+    const maxRetries = 3;
+    let retries = 0;
     while (first > 0) {
+      //try {
       const response = await client.query({
         query: queryVideosByGame,
         variables: {
@@ -136,17 +143,36 @@ const getVideosByGame = async (id, first) => {
       });
       numPeticiones++;
       const dataVideosByGame = response.data.videosByGame;
-
-      if (
-        dataVideosByGame?.data?.length > 0 ||
-        dataVideosByGame?.pagination?.length > 0
-      ) {
+      if (dataVideosByGame.data.length > 0) {
         first = first - dataVideosByGame.data.length;
         dataVideos = [...dataVideos, ...dataVideosByGame.data];
-        cursor = dataVideosByGame.pagination.cursor;
+        if (
+          dataVideosByGame.pagination.length > 0 ||
+          dataVideosByGame.pagination.cursor !== undefined
+        ) {
+          cursor = dataVideosByGame.pagination.cursor;
+          console.log(cursor);
+        } else {
+          break;
+        }
       } else {
         break;
       }
+
+      if (first === 0) {
+        break; // Se han obtenido todos los datos requeridos, salir del bucle
+      }
+      // } catch (error) {
+      //   if (error.code === "ECONNRESET" || error.code === "ETIMEDOUT") {
+      //     retries++;
+      //     console.log(
+      //       `Intento ${retries} de ${maxRetries} - Error de tiempo de espera. Reintentando...`
+      //     );
+      //     continue;
+      //   } else {
+      //     throw error;
+      //   }
+      // }
     }
     return { data: dataVideos, requests: numPeticiones };
   } catch (error) {
@@ -156,53 +182,71 @@ const getVideosByGame = async (id, first) => {
 
 //Funcion para extraer clips por usuario
 const getClipsByUser = async (id, first) => {
-  try {
-    let cursor = null;
-    let dataClips = [];
-    const token = store.get("token");
-    let numPeticiones = 0;
+  //try {
+  let cursor = null;
+  let dataClips = [];
+  const token = store.get("token");
+  let numPeticiones = 0;
 
-    //CONSULTA
-    client.setLink(
-      new RestLink({
-        uri: "https://api.twitch.tv/helix/",
-        headers: {
-          Authorization: "Bearer " + token,
-          "Client-Id": process.env.CLIENTID,
-        },
-      })
-    );
-
-    while (first > 0) {
-      const response = await client.query({
-        query: queryClipsByUser,
-        variables: {
-          id,
-          limitNivel3: first > 50 ? 50 : first,
-          cursor: cursor === null ? "" : `&after=${cursor}`,
-        },
-      });
-      numPeticiones++;
-      const dataClipsByUser = response.data.clipsUser;
+  //CONSULTA
+  client.setLink(
+    new RestLink({
+      uri: "https://api.twitch.tv/helix/",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Client-Id": process.env.CLIENTID,
+      },
+    })
+  );
+  const maxRetries = 3;
+  let retries = 0;
+  while (first > 0) {
+    //try {
+    const response = await client.query({
+      query: queryClipsByUser,
+      variables: {
+        id,
+        limitNivel3: first > 50 ? 50 : first,
+        cursor: cursor === null ? "" : `&after=${cursor}`,
+      },
+    });
+    numPeticiones++;
+    const dataClipsByUser = response.data.clipsUser;
+    if (dataClipsByUser.data.length > 0) {
+      first = first - dataClipsByUser.data.length;
+      dataClips = [...dataClips, ...dataClipsByUser.data];
       if (
-        dataClipsByUser?.data?.length > 0 ||
-        dataClipsByUser?.pagination?.length > 0
+        dataClipsByUser.pagination.length > 0 ||
+        dataClipsByUser.pagination.cursor !== undefined
       ) {
-        first = first - dataClipsByUser.data.length;
-        dataClips = [...dataClips, ...dataClipsByUser.data];
-        if (dataClipsByUser.pagination.cursor !== undefined) {
-          cursor = dataClipsByUser.pagination.cursor;
-          break;
-        }
+        cursor = dataClipsByUser.pagination.cursor;
+        console.log(cursor);
       } else {
         break;
       }
+    } else {
+      break;
     }
-
-    return { data: dataClips, requests: numPeticiones };
-  } catch (error) {
-    console.log(error);
+    if (first === 0) {
+      break; // Se han obtenido todos los datos requeridos, salir del bucle
+    }
+    // } catch (error) {
+    //   if (error.code === "ECONNRESET" || error.code === "ETIMEDOUT") {
+    //     retries++;
+    //     console.log(
+    //       `Intento ${retries} de ${maxRetries} - Error de tiempo de espera. Reintentando...`
+    //     );
+    //     continue;
+    //   } else {
+    //     throw error;
+    //   }
+    // }
   }
+
+  return { data: dataClips, requests: numPeticiones };
+  // } catch (error) {
+  //   console.log(error);
+  // }
 };
 
 //Funcion para extraer Informacion del canal
@@ -211,31 +255,57 @@ const getInformationChannel = async (id) => {
     const token = store.get("token");
     let dataChannel = [];
     let numPeticiones = 0;
-
+    let first = 1;
     //CONSULTA
     client.setLink(
       new RestLink({
         uri: "https://api.twitch.tv/helix/",
-        //customFetch: fetch,
         headers: {
           Authorization: "Bearer " + token,
           "Client-Id": process.env.CLIENTID,
         },
       })
     );
-    const response = await client.query({
-      query: queryChannelInfo,
-      variables: {
-        id,
-      },
-    });
-    numPeticiones++;
+    // const maxRetries = 3;
+    // let retries = 0;
+    // let isMaxRetriesReached = false; // Bandera para controlar si se alcanzó el número máximo de intentos
 
-    const dataInformationChannel = response.data.channelInfo;
+    // while (!isMaxRetriesReached) {
+    //   try {
+    while (first > 0) {
+      const response = await client.query({
+        query: queryChannelInfo,
+        variables: {
+          id,
+        },
+      });
+      numPeticiones++;
 
-    //first = first - dataInformationChannel.data.length;
-    dataChannel = [...dataChannel, ...dataInformationChannel.data];
-    // cursor = dataInformationChannel.pagination.cursor;
+      const dataInformationChannel = response.data.channelInfo;
+      first = first - dataInformationChannel.data.length;
+      dataChannel = [...dataChannel, ...dataInformationChannel.data];
+
+      if (first === 0) {
+        break; // Se han obtenido todos los datos requeridos, salir del bucle
+      }
+    }
+    // Verificar si no hay más datos disponibles para obtener
+    //   if (
+    //     dataInformationChannel.data.length === 0) {
+    //     break; // Salir del bucle si no hay más datos disponibles
+    //   }
+    // } catch (error) {
+    //   if (error.code === "ECONNRESET" || error.code === "ETIMEDOUT") {
+    //     retries++;
+    //     console.log(
+    //       `Intento ${retries} de ${maxRetries} - Error de tiempo de espera. Reintentando...`
+    //     );
+    //     continue;
+    //   } else {
+    //     throw error;
+    //   }
+    // }
+    //}
 
     return { data: dataChannel, requests: numPeticiones };
   } catch (error) {
@@ -247,7 +317,6 @@ const getInformationChannel = async (id) => {
 const getInformationGame = async (id) => {
   try {
     const token = store.get("token");
-    // let cursor = null;
     let dataGames = [];
     let numPeticiones = 0;
 
@@ -255,14 +324,16 @@ const getInformationGame = async (id) => {
     client.setLink(
       new RestLink({
         uri: "https://api.twitch.tv/helix/",
-        //customFetch: fetch,
         headers: {
           Authorization: "Bearer " + token,
           "Client-Id": process.env.CLIENTID,
         },
       })
     );
-    //while (first > 0) {
+    // const maxRetries = 3;
+    // let retries = 0;
+    // while (retries < maxRetries) {
+    //   try {
     const response = await client.query({
       query: queryGameInfo,
       variables: {
@@ -272,9 +343,18 @@ const getInformationGame = async (id) => {
     numPeticiones++;
     const dataInformationGame = response.data.gameInfo;
 
-    //first = first - dataInformationGame.data.length;
     dataGames = [...dataGames, ...dataInformationGame.data];
-    // cursor = dataInformationGame.pagination.cursor;
+    // } catch (error) {
+    //   if (error.code === "ECONNRESET" || error.code === "ETIMEDOUT") {
+    //     retries++;
+    //     console.log(
+    //       `Intento ${retries} de ${maxRetries} - Error de tiempo de espera. Reintentando...`
+    //     );
+    //     continue;
+    //   } else {
+    //     throw error;
+    //   }
+    // }
     //}
 
     return { data: dataGames, requests: numPeticiones };

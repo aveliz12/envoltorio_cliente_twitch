@@ -83,13 +83,18 @@ const getVideosByGameCache = async (id, first) => {
       numPeticiones++;
       const dataVideosByGame = response.data.videosByGame;
 
-      if (
-        dataVideosByGame?.data?.length > 0 ||
-        dataVideosByGame?.pagination?.length > 0
-      ) {
+      if (dataVideosByGame.data.length > 0) {
         first = first - dataVideosByGame.data.length;
         dataVideos = [...dataVideos, ...dataVideosByGame.data];
-        cursor = dataVideosByGame.pagination.cursor;
+        if (
+          dataVideosByGame.pagination.length > 0 ||
+          dataVideosByGame.pagination.cursor !== undefined
+        ) {
+          cursor = dataVideosByGame.pagination.cursor;
+          console.log(cursor);
+        } else {
+          break;
+        }
       } else {
         break;
       }
@@ -128,14 +133,16 @@ const getClipsByUserCache = async (id, first) => {
       });
       numPeticiones++;
       const dataClipsByUser = response.data.clipsUser;
-      if (
-        dataClipsByUser?.data?.length > 0 ||
-        dataClipsByUser?.pagination?.length > 0
-      ) {
+      if (dataClipsByUser.data.length > 0) {
         first = first - dataClipsByUser.data.length;
         dataClips = [...dataClips, ...dataClipsByUser.data];
-        if (dataClipsByUser.pagination.cursor !== undefined) {
+        if (
+          dataClipsByUser.pagination.length > 0 ||
+          dataClipsByUser.pagination.cursor !== undefined
+        ) {
           cursor = dataClipsByUser.pagination.cursor;
+          console.log(cursor);
+        } else {
           break;
         }
       } else {
@@ -206,7 +213,7 @@ const getGameInformationCache = async (id) => {
     const dataInformationGame = response.data.gameInfo;
 
     dataGames = [...dataGames, ...dataInformationGame.data];
-    
+
     return { dataGames: dataGames, requestsGames: numPeticiones };
   } catch (error) {
     console.log(error);

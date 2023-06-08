@@ -103,7 +103,6 @@ export const casoPruebaGraphQL = async () => {
                 resp.limiteNivel1,
                 resp.limiteNivel2,
                 resp.limiteNivel3,
-                //resp.limiteNivel4
               );
               imprimirDatos(time);
             });
@@ -122,8 +121,6 @@ export const casoPruebaGraphQL = async () => {
                 resp.limiteNivel1,
                 resp.limiteNivel2,
                 resp.limiteNivel3,
-                // resp.limiteNivel4,
-                // resp.limiteNivel5
               );
 
               imprimirDatos(time);

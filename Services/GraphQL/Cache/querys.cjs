@@ -12,7 +12,7 @@ const GET_TOKEN = gql`
 
 const DATA_CASOPRUEBA1 = gql`
   query getDataCasoPrueba1($limitNivel1: Int) {
-    getCasosPruebasLiveStreams(first: $limitNivel1) {
+    getCasosPruebasLiveStreams(limitNivel1: $limitNivel1) {
       id
       user_id
       user_login
@@ -34,7 +34,7 @@ const DATA_CASOPRUEBA1 = gql`
 
 const DATA_CASOPRUEBA2 = gql`
   query getDataCasoPrueba2($limitNivel1: Int, $limitNivel2: Int) {
-    getCasosPruebasLiveStreams(first: $limitNivel1) {
+    getCasosPruebasLiveStreams(limitNivel1: $limitNivel1) {
       id
       user_id
       user_login
@@ -50,7 +50,7 @@ const DATA_CASOPRUEBA2 = gql`
       tag_ids
       tags
       is_mature
-      videosByGame(first: $limitNivel2) {
+      videosByGame(limitNivel2: $limitNivel2) {
         id
         stream_id
         user_id
@@ -79,7 +79,7 @@ const DATA_CASOPRUEBA3 = gql`
     $limitNivel2: Int
     $limitNivel3: Int
   ) {
-    getCasosPruebasLiveStreams(first: $limitNivel1) {
+    getCasosPruebasLiveStreams(limitNivel1: $limitNivel1) {
       id
       user_id
       user_login
@@ -95,7 +95,7 @@ const DATA_CASOPRUEBA3 = gql`
       tag_ids
       tags
       is_mature
-      videosByGame(first: $limitNivel2) {
+      videosByGame(limitNivel2: $limitNivel2) {
         id
         stream_id
         user_id
@@ -113,7 +113,7 @@ const DATA_CASOPRUEBA3 = gql`
         type
         duration
         muted_segments
-        clipsByUser(first: $limitNivel3) {
+        clipsByUser(limitNivel3: $limitNivel3) {
           id
           url
           embed_url
@@ -142,7 +142,7 @@ const DATA_CASOPRUEBA4 = gql`
     $limitNivel2: Int
     $limitNivel3: Int
   ) {
-    getCasosPruebasLiveStreams(first: $limitNivel1) {
+    getCasosPruebasLiveStreams(limitNivel1: $limitNivel1) {
       id
       user_id
       user_login
@@ -158,7 +158,7 @@ const DATA_CASOPRUEBA4 = gql`
       tag_ids
       tags
       is_mature
-      videosByGame(first: $limitNivel2) {
+      videosByGame(limitNivel2: $limitNivel2) {
         id
         stream_id
         user_id
@@ -176,7 +176,7 @@ const DATA_CASOPRUEBA4 = gql`
         type
         duration
         muted_segments
-        clipsByUser(first: $limitNivel3) {
+        clipsByUser(limitNivel3: $limitNivel3) {
           id
           url
           embed_url
@@ -216,7 +216,7 @@ const DATA_CASOPRUEBA5 = gql`
     $limitNivel2: Int
     $limitNivel3: Int
   ) {
-    getCasosPruebasLiveStreams(first: $limitNivel1) {
+    getCasosPruebasLiveStreams(limitNivel1: $limitNivel1) {
       id
       user_id
       user_login
@@ -232,7 +232,7 @@ const DATA_CASOPRUEBA5 = gql`
       tag_ids
       tags
       is_mature
-      videosByGame(first: $limitNivel2) {
+      videosByGame(limitNivel2: $limitNivel2) {
         id
         stream_id
         user_id
@@ -250,7 +250,7 @@ const DATA_CASOPRUEBA5 = gql`
         type
         duration
         muted_segments
-        clipsByUser(first: $limitNivel3) {
+        clipsByUser(limitNivel3: $limitNivel3) {
           id
           url
           embed_url
