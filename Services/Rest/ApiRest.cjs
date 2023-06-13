@@ -129,10 +129,7 @@ const getVideosByGame = async (id, first) => {
         },
       })
     );
-    const maxRetries = 3;
-    let retries = 0;
     while (first > 0) {
-      //try {
       const response = await client.query({
         query: queryVideosByGame,
         variables: {
@@ -151,7 +148,6 @@ const getVideosByGame = async (id, first) => {
           dataVideosByGame.pagination.cursor !== undefined
         ) {
           cursor = dataVideosByGame.pagination.cursor;
-          console.log(cursor);
         } else {
           break;
         }
@@ -162,17 +158,6 @@ const getVideosByGame = async (id, first) => {
       if (first === 0) {
         break; // Se han obtenido todos los datos requeridos, salir del bucle
       }
-      // } catch (error) {
-      //   if (error.code === "ECONNRESET" || error.code === "ETIMEDOUT") {
-      //     retries++;
-      //     console.log(
-      //       `Intento ${retries} de ${maxRetries} - Error de tiempo de espera. Reintentando...`
-      //     );
-      //     continue;
-      //   } else {
-      //     throw error;
-      //   }
-      // }
     }
     return { data: dataVideos, requests: numPeticiones };
   } catch (error) {
@@ -220,7 +205,6 @@ const getClipsByUser = async (id, first) => {
         dataClipsByUser.pagination.cursor !== undefined
       ) {
         cursor = dataClipsByUser.pagination.cursor;
-        console.log(cursor);
       } else {
         break;
       }
