@@ -91,7 +91,6 @@ const getVideosByGameCache = async (id, first) => {
           dataVideosByGame.pagination.cursor !== undefined
         ) {
           cursor = dataVideosByGame.pagination.cursor;
-          console.log(cursor);
         } else {
           break;
         }
@@ -141,7 +140,6 @@ const getClipsByUserCache = async (id, first) => {
           dataClipsByUser.pagination.cursor !== undefined
         ) {
           cursor = dataClipsByUser.pagination.cursor;
-          console.log(cursor);
         } else {
           break;
         }

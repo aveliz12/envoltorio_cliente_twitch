@@ -275,10 +275,54 @@ const distribucionDatosCaso5 = async () => {
   } while (opt !== "0");
 };
 
+/*----------------------------------PARA GRAPHQL-------------------------------*/
+const distribucionDatosCaso2GraphQL = async () => {
+  const data = {
+    limiteNivel1: 0,
+    limiteNivel2: 0,
+  };
+  let opt = "";
+
+  do {
+    opt = await inquirerMenu();
+
+    switch (opt) {
+      case "1":
+        data.limiteNivel1 = 1;
+        data.limiteNivel2 = 1;
+        return data;
+      case "2":
+        data.limiteNivel1 = 6;
+        data.limiteNivel2 = 6;
+        return data;
+      case "3":
+        data.limiteNivel1 = 16;
+        data.limiteNivel2 = 16;
+        return data;
+      case "4":
+        data.limiteNivel1 = 56;
+        data.limiteNivel2 = 56;
+        return data;
+      case "5":
+        data.limiteNivel1 = 150;
+        data.limiteNivel2 = 150;
+        return data;
+      case "6":
+        data.limiteNivel1 = 200;
+        data.limiteNivel2 = 200;
+        return data;
+      default:
+        break;
+    }
+  } while (opt !== "0");
+};
+
+
 module.exports = {
   distribucionDatosCaso1,
   distribucionDatosCaso2,
   distribucionDatosCaso3,
   distribucionDatosCaso4,
   distribucionDatosCaso5,
+  distribucionDatosCaso2GraphQL
 };

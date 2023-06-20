@@ -8,6 +8,7 @@ const {
   distribucionDatosCaso3,
   distribucionDatosCaso4,
   distribucionDatosCaso5,
+  distribucionDatosCaso2GraphQL
 } = pkgDistribucion;
 const { inquirerMenu } = pkg;
 const {

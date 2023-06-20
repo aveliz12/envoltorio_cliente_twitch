@@ -1,6 +1,4 @@
 const fetch = require("node-fetch");
-// import * as dotenv from "dotenv";
-// dotenv.config();
 require("dotenv").config();
 const Storage = require("node-storage");
 const {
@@ -95,12 +93,7 @@ const getLiveStreams = async (first) => {
       });
 
       numPeticiones++;
-      console.log(
-        "DATA LIVE: ",
-        numPeticiones,
-        " CON: ",
-        response.data.liveStreams.data.length
-      );
+
       first -= response.data.liveStreams.data.length;
       dataStreams = [...dataStreams, ...response.data.liveStreams.data];
       cursor = response.data.liveStreams.pagination.cursor;
@@ -122,7 +115,6 @@ const getVideosByGame = async (id, first) => {
     client.setLink(
       new RestLink({
         uri: "https://api.twitch.tv/helix/",
-        //customFetch: fetch,
         headers: {
           Authorization: "Bearer " + token,
           "Client-Id": process.env.CLIENTID,
@@ -183,8 +175,6 @@ const getClipsByUser = async (id, first) => {
       },
     })
   );
-  const maxRetries = 3;
-  let retries = 0;
   while (first > 0) {
     //try {
     const response = await client.query({
@@ -214,23 +204,9 @@ const getClipsByUser = async (id, first) => {
     if (first === 0) {
       break; // Se han obtenido todos los datos requeridos, salir del bucle
     }
-    // } catch (error) {
-    //   if (error.code === "ECONNRESET" || error.code === "ETIMEDOUT") {
-    //     retries++;
-    //     console.log(
-    //       `Intento ${retries} de ${maxRetries} - Error de tiempo de espera. Reintentando...`
-    //     );
-    //     continue;
-    //   } else {
-    //     throw error;
-    //   }
-    // }
   }
 
   return { data: dataClips, requests: numPeticiones };
-  // } catch (error) {
-  //   console.log(error);
-  // }
 };
 
 //Funcion para extraer Informacion del canal
@@ -250,12 +226,7 @@ const getInformationChannel = async (id) => {
         },
       })
     );
-    // const maxRetries = 3;
-    // let retries = 0;
-    // let isMaxRetriesReached = false; // Bandera para controlar si se alcanzó el número máximo de intentos
 
-    // while (!isMaxRetriesReached) {
-    //   try {
     while (first > 0) {
       const response = await client.query({
         query: queryChannelInfo,
@@ -273,23 +244,6 @@ const getInformationChannel = async (id) => {
         break; // Se han obtenido todos los datos requeridos, salir del bucle
       }
     }
-    // Verificar si no hay más datos disponibles para obtener
-    //   if (
-    //     dataInformationChannel.data.length === 0) {
-    //     break; // Salir del bucle si no hay más datos disponibles
-    //   }
-    // } catch (error) {
-    //   if (error.code === "ECONNRESET" || error.code === "ETIMEDOUT") {
-    //     retries++;
-    //     console.log(
-    //       `Intento ${retries} de ${maxRetries} - Error de tiempo de espera. Reintentando...`
-    //     );
-    //     continue;
-    //   } else {
-    //     throw error;
-    //   }
-    // }
-    //}
 
     return { data: dataChannel, requests: numPeticiones };
   } catch (error) {
@@ -314,10 +268,6 @@ const getInformationGame = async (id) => {
         },
       })
     );
-    // const maxRetries = 3;
-    // let retries = 0;
-    // while (retries < maxRetries) {
-    //   try {
     const response = await client.query({
       query: queryGameInfo,
       variables: {
@@ -328,18 +278,6 @@ const getInformationGame = async (id) => {
     const dataInformationGame = response.data.gameInfo;
 
     dataGames = [...dataGames, ...dataInformationGame.data];
-    // } catch (error) {
-    //   if (error.code === "ECONNRESET" || error.code === "ETIMEDOUT") {
-    //     retries++;
-    //     console.log(
-    //       `Intento ${retries} de ${maxRetries} - Error de tiempo de espera. Reintentando...`
-    //     );
-    //     continue;
-    //   } else {
-    //     throw error;
-    //   }
-    // }
-    //}
 
     return { data: dataGames, requests: numPeticiones };
   } catch (error) {

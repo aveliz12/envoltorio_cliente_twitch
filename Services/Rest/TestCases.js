@@ -27,6 +27,7 @@ const getTime = (t1, t2) => {
 //CASO DE PRUEBA 1: LIVE STREAMS
 export const casoPrueba1 = async (first) => {
   let t1 = performance.now();
+  console.log("INICIO CASO DE PRUEBA 1".red);
   const { data, requests } = await getLiveStreams(first);
   let t2 = performance.now();
   const tiempo = getTime(t1, t2);
@@ -53,28 +54,31 @@ export const casoPrueba2 = async (first, first2) => {
     requestsCaso1 = caso1.requests;
     const idGame = datCaso1.map((resp) => resp.game_id);
 
+    console.log("INICIO CASO DE PRUEBA 2".red);
     for (const iDs of idGame) {
       if (iDs.trim() === "") {
         console.log("ID vacío encontrado. Saltando consulta de videos...");
         continue;
       }
-      console.log("CONSULTA DE VIDEOS CON EL ID: ", iDs);
       const { data, requests } = await getVideosByGame(iDs, first2);
       if (data.length >= first2) {
         idCount++;
       }
       numPeticiones += requests;
       dataForCaso2.push(...data);
-      console.log(`Cantidad de juegos con mas de ${first2} videos: ${idCount}`);
       if (idCount >= first) {
         break;
       }
     }
-    const eficiencia = (idCount * 100) / first2;
+    console.log(`Cantidad de juegos con mas de ${first2} videos: ${idCount}`);
+
+    const eficiencia = ((idCount * 100) / first2).toFixed(2);
     console.log("LA EFICIENCIA ES: ", eficiencia, "%");
+
     const totalPeticiones = requestsCaso1 + numPeticiones;
     let t2 = performance.now();
     const tiempo = getTime(t1, t2);
+
     return {
       data2: dataForCaso2.slice(0, first),
       time2: tiempo,
@@ -84,70 +88,6 @@ export const casoPrueba2 = async (first, first2) => {
     console.log(error);
   }
 };
-// export const casoPrueba2 = async (first, first2) => {
-//   try {
-//     let dataForCaso2 = [];
-//     let numPeticiones = 0;
-//     let totalDataVideos = 0;
-//     let datCaso1, requestsCaso1;
-//     let t1 = performance.now();
-
-//     do {
-//       const caso1 = await casoPrueba1(first);
-//       datCaso1 = caso1.data;
-//       requestsCaso1 = caso1.requests;
-//       const idGame = datCaso1.map((resp) => resp.game_id);
-//       let idFound = false;
-
-//       for (const iDs of idGame) {
-//         if (iDs.trim() === "") {
-//           console.log("ID vacío encontrado. Saltando consulta de videos...");
-//           continue;
-//         }
-//         console.log("CONSULTA DE VIDEOS CON EL ID: ", iDs);
-//         const { data, requests } = await getVideosByGame(iDs, first2);
-//         if (data.length >= first2 && data.length > 0) {
-//           dataForCaso2.push(...data);
-//           totalDataVideos++;
-//           numPeticiones += requests;
-//           idFound = true;
-//         }
-//         console.log(totalDataVideos);
-//         console.log(
-//           "DATOS OBTENIDOS VIDEOS:",
-//           dataForCaso2.length,
-//           " de ",
-//           datCaso1.length,
-//           " IDFOUND ",
-//           idFound
-//         );
-//         if (totalDataVideos >= first) {
-//           break;
-//         }
-//       }
-//       if (!idFound) {
-//         console.log(
-//           "No se encontraron suficientes datos con los IDs actuales. Consultando con nuevos IDs..."
-//         );
-//       }
-//     } while (totalDataVideos < first);
-//     if (totalDataVideos > first) {
-//se utiliza el método slice para reducir la longitud del arreglo dataVideosForCaso2 a first elementos
-//       dataForCaso2 = dataForCaso2.slice(0, first);
-//       totalDataVideos = first;
-//     }
-//     const totalPeticiones = requestsCaso1 + numPeticiones;
-//     let t2 = performance.now();
-//     const tiempo = getTime(t1, t2);
-//     return {
-//       data2: dataForCaso2,
-//       time2: tiempo,
-//       requests2: totalPeticiones,
-//     };
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
 
 //CASO DE PRUEBA 3: CLIPS BY USER
 export const casoPrueba3 = async (first, first2, first3) => {
@@ -163,9 +103,8 @@ export const casoPrueba3 = async (first, first2, first3) => {
   requestCaso2 = result.requests2;
   const idUserVideos = dataCaso2.map((resp) => resp.user_id);
 
+  console.log("INICIO CASO DE PRUEBA 3".red);
   for (const iDs of idUserVideos) {
-    console.log("CONSULTA DE CLIPS CON EL ID: ", iDs);
-
     const { data, requests } = await getClipsByUser(iDs, first3);
     if (data.length >= first3) {
       idCount++;
@@ -173,82 +112,25 @@ export const casoPrueba3 = async (first, first2, first3) => {
     dataForCaso3.push(...data);
     numPeticiones += requests;
 
-    console.log(
-      `Cantidad de ids de usuarios con mas de ${first3} datos: ${idCount}.`
-    );
     if (idCount >= dataCaso2.length) {
       break;
     }
   }
-  const eficiencia = (idCount * 100) / dataCaso2.length;
-  console.log("LA EFICIENCIA ES: ", eficiencia, "%");
-  const totalPeticiones = requestCaso2 + numPeticiones;
+  console.log(`Cantidad de usuarios con mas de ${first3} clips: ${idCount}.`);
 
+  const eficiencia = ((idCount * 100) / dataCaso2.length).toFixed(2);
+  console.log("LA EFICIENCIA ES: ", eficiencia, "%");
+
+  const totalPeticiones = requestCaso2 + numPeticiones;
   let t2 = performance.now();
   const tiempo = getTime(t1, t2);
+
   return {
     data3: dataForCaso3,
     time3: tiempo,
     requests3: totalPeticiones,
   };
 };
-
-// export const casoPrueba3 = async (first, first2, first3) => {
-//   let dataForCaso3 = [];
-//   let totalDataClips = 0;
-//   let numPeticiones = 0;
-//   let dataCaso2, requestCaso2;
-//   let t1 = performance.now();
-//   do {
-//     const result = await casoPrueba2(first, first2);
-//     dataCaso2 = result.data2;
-//     requestCaso2 = result.requests2;
-//     let idFound = false;
-
-//     const idUserVideos = dataCaso2.map((resp) => resp.user_id);
-//     for (const iDs of idUserVideos) {
-//       console.log("CONSULTA DE CLIPS CON EL ID: ", iDs);
-
-//       const { data, requests } = await getClipsByUser(iDs, first3);
-//       if (data.length >= first3 && data.length > 0) {
-//         dataForCaso3.push(...data);
-//         totalDataClips++;
-//         numPeticiones += requests;
-//         idFound = true;
-//       }
-//       console.log(totalDataClips);
-
-//       console.log(
-//         "CONSULTANDO... CLIPS ",
-//         totalDataClips,
-//         " de ",
-//         dataCaso2.length,
-//         " IDFOUND ",
-//         idFound
-//       );
-//       if (totalDataClips >= dataCaso2.length) {
-//         break;
-//       }
-//     }
-//     if (!idFound) {
-//       console.log(
-//         "No se encontraron suficientes datos con los IDs actuales. Consultando con nuevos IDs..."
-//       );
-//     }
-//   } while (totalDataClips < dataCaso2.length);
-//   if (totalDataClips > dataCaso2.length) {
-//     dataForCaso3 = dataForCaso3.slice(0, dataCaso2.length);
-//     totalDataClips = dataCaso2.length;
-//   }
-//   const totalPeticiones = requestCaso2 + numPeticiones;
-//   let t2 = performance.now();
-//   const tiempo = getTime(t1, t2);
-//   return {
-//     data3: dataForCaso3,
-//     time3: tiempo,
-//     requests3: totalPeticiones,
-//   };
-// };
 
 //CASO DE PRUEBA 4: INFORMATION CHANNEL
 export const casoPrueba4 = async (first, first2, first3) => {
@@ -263,18 +145,18 @@ export const casoPrueba4 = async (first, first2, first3) => {
     broadcaster_id.push(id.broadcaster_id);
   });
 
-  console.log("INICIO CASO 4");
+  console.log("INICIO CASO DE PRUEBA 4".red);
   for (const _id of broadcaster_id) {
     const { data, requests } = await getInformationChannel(_id);
     allData = [...allData, ...data];
     numPeticiones += requests;
     idCount++;
-    console.log(
-      `Cantidad de ids de usuarios para informacion de canal con mas de ${data3.length} datos: ${idCount}.`
-    );
   }
+  console.log(
+    `Cantidad informacion de canal de un usuario con mas de ${data3.length} datos: ${idCount}.`
+  );
 
-  const eficiencia = (idCount * 100) / data3.length;
+  const eficiencia = ((idCount * 100) / data3.length).toFixed(2);
   console.log("LA EFICIENCIA ES: ", eficiencia, "%");
 
   const totalPeticiones = requests3 + numPeticiones;
@@ -303,17 +185,17 @@ export const casoPrueba5 = async (first, first2, first3) => {
     dataGame.push(id.game_id);
   });
 
-  console.log("INICIO CASO 5");
+  console.log("INICIO CASO DE PRUEBA 5".red);
   for (const _id of dataGame) {
     const { data, requests } = await getInformationGame(_id);
     allData = [...allData, ...data];
     numPeticiones += requests;
     idCount++;
-    console.log(
-      `Cantidad de ids de juego para la informacion con mas de ${data4.length} datos: ${idCount}.`
-    );
   }
-  const eficiencia = (idCount * 100) / data4.length;
+  console.log(
+    `Cantidad de informacion de un juego con mas de ${data4.length} datos: ${idCount}.`
+  );
+  const eficiencia = ((idCount * 100) / data4.length).toFixed(2);
   console.log("LA EFICIENCIA ES: ", eficiencia, "%");
   const totalPeticiones = requests4 + numPeticiones;
   let t2 = performance.now();

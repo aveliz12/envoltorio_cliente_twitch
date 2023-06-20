@@ -37,7 +37,6 @@ const casoPruebaCacheRest = async () => {
     console.log("Generar un token por favor.");
     return;
   } else {
-    //console.log(`Su token generado es: ${token}`.bold);
     let opt = "";
     try {
       do {

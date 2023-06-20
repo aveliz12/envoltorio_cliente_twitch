@@ -51,7 +51,6 @@ const getCasoPrueba2RestCache = async (first, first2) => {
     const gameId = datCaso1.map((resp) => resp.game_id);
     for (const game_id of gameId) {
       if (game_id.trim() === "") {
-        console.log("ID vacío encontrado. Saltando consulta de videos...");
         continue;
       }
       const { data, requests } = await getVideosByGameCache(game_id, first2);
