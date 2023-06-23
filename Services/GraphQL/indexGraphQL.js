@@ -8,7 +8,8 @@ const {
   distribucionDatosCaso3,
   distribucionDatosCaso4,
   distribucionDatosCaso5,
-  distribucionDatosCaso2GraphQL
+  distribucionDatosCaso2GraphQL,
+  distribucionDatosCaso3GraphQL
 } = pkgDistribucion;
 const { inquirerMenu } = pkg;
 const {
@@ -63,7 +64,7 @@ export const casoPruebaGraphQL = async () => {
             console.log(
               "<=================NIVEL 2 GRAPHQL=================>".red.bold
             );
-            await distribucionDatosCaso2().then(async (resp) => {
+            await distribucionDatosCaso2GraphQL().then(async (resp) => {
               console.log(
                 "Cantidad de datos requeridos (Distribución) | Nivel 2: ",
                 resp
@@ -77,7 +78,7 @@ export const casoPruebaGraphQL = async () => {
             console.log(
               "<=================NIVEL 3 GRAPHQL=================>".red.bold
             );
-            await distribucionDatosCaso3().then(async (resp) => {
+            await distribucionDatosCaso3GraphQL().then(async (resp) => {
               console.log(
                 "Cantidad de datos requeridos (Distribución) | Nivel 3: ",
                 resp

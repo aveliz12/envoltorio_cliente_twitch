@@ -14,6 +14,8 @@ const {
   distribucionDatosCaso3,
   distribucionDatosCaso4,
   distribucionDatosCaso5,
+  distribucionDatosCaso2GraphQL,
+  distribucionDatosCaso3GraphQL,
 } = pkgDistribucion;
 const { inquirerMenu } = pkg;
 const store = new Storage("./store");
@@ -52,7 +54,7 @@ export const casoPruebaGraphQLCache = async () => {
                 "Cantidad de datos requeridos (Distribución) | Nivel 1: ",
                 resp
               );
-              const {time} = await casoPrueba1Cache(resp);
+              const { time } = await casoPrueba1Cache(resp);
               imprimirDatos(time);
             });
 
@@ -62,12 +64,15 @@ export const casoPruebaGraphQLCache = async () => {
               "<=================NIVEL 2 GRAPHQL-CACHE=================>".red
                 .bold
             );
-            await distribucionDatosCaso2().then(async (resp) => {
+            await distribucionDatosCaso2GraphQL().then(async (resp) => {
               console.log(
                 "Cantidad de datos requeridos (Distribución) | Nivel 2: ",
                 resp
               );
-              const time = await casoPrueba2Cache(resp.limiteNivel1, resp.limiteNivel2);
+              const time = await casoPrueba2Cache(
+                resp.limiteNivel1,
+                resp.limiteNivel2
+              );
               imprimirDatos(time);
             });
 
@@ -77,7 +82,7 @@ export const casoPruebaGraphQLCache = async () => {
               "<=================NIVEL 3 GRAPHQL-CACHE=================>".red
                 .bold
             );
-            await distribucionDatosCaso3().then(async (resp) => {
+            await distribucionDatosCaso3GraphQL().then(async (resp) => {
               console.log(
                 "Cantidad de datos requeridos (Distribución) | Nivel 3: ",
                 resp
