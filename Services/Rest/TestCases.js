@@ -80,7 +80,7 @@ export const casoPrueba2 = async (first, first2) => {
     const tiempo = getTime(t1, t2);
 
     return {
-      data2: dataForCaso2.slice(0, first),
+      data2: dataForCaso2,
       time2: tiempo,
       requests2: totalPeticiones,
     };
