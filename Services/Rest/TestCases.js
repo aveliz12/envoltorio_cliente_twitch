@@ -116,7 +116,9 @@ export const casoPrueba3 = async (first, first2, first3) => {
       break;
     }
   }
-  console.log(`Cantidad de usuarios con mas de ${first3} clips: ${idCount}.`);
+  console.log(
+    `Cantidad de usuarios con mas de ${first3} clips: ${idCount}. De un total de ${dataCaso2.length} datos.`
+  );
 
   const eficiencia = ((idCount * 100) / dataCaso2.length).toFixed(2);
   console.log("LA EFICIENCIA ES: ", eficiencia, "%");
