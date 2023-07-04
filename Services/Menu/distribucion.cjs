@@ -373,6 +373,131 @@ const distribucionDatosCaso3GraphQL = async () => {
   } while (opt !== "0");
 };
 
+const distribucionDatosCaso4GraphQL = async () => {
+  const data = {
+    limiteNivel1: 0,
+    limiteNivel2: 0,
+    limiteNivel3: 0,
+    limiteNivel4: 0,
+  };
+  let opt = "";
+
+  do {
+    opt = await inquirerMenu();
+
+    switch (opt) {
+      case "1":
+        data.limiteNivel1 = 1;
+        data.limiteNivel2 = 1;
+        data.limiteNivel3 = 1;
+        data.limiteNivel4 = 1;
+        return data;
+      case "2":
+        data.limiteNivel1 = 3;
+        data.limiteNivel2 = 3;
+        data.limiteNivel3 = 3;
+        data.limiteNivel4 = 1;
+        return data;
+      case "3":
+        data.limiteNivel1 = 6;
+        data.limiteNivel2 = 6;
+        data.limiteNivel3 = 6;
+        data.limiteNivel4 = 1;
+        return data;
+      case "4":
+        data.limiteNivel1 = 15;
+        data.limiteNivel2 = 15;
+        data.limiteNivel3 = 15;
+        data.limiteNivel4 = 1;
+        return data;
+      case "5":
+        data.limiteNivel1 = 32;
+        data.limiteNivel2 = 32;
+        data.limiteNivel3 = 32;
+        data.limiteNivel4 = 1;
+        return data;
+      case "6":
+        // data.limiteNivel1 = 46;
+        // data.limiteNivel2 = 46;
+        // data.limiteNivel3 = 46;
+        // data.limiteNivel4 = 1;
+
+        // return data;
+        console.log(
+          "No es posible ingresar esta distribución. Error: Full requests."
+            .bgRed.bold
+        );
+      default:
+        break;
+    }
+  } while (opt !== "0");
+};
+const distribucionDatosCaso5GraphQL = async () => {
+  const data = {
+    limiteNivel1: 0,
+    limiteNivel2: 0,
+    limiteNivel3: 0,
+    limiteNivel4: 0,
+    limiteNivel5: 0,
+  };
+  let opt = "";
+
+  do {
+    opt = await inquirerMenu();
+
+    switch (opt) {
+      case "1":
+        data.limiteNivel1 = 1;
+        data.limiteNivel2 = 1;
+        data.limiteNivel3 = 1;
+        data.limiteNivel4 = 1;
+        data.limiteNivel5 = 1;
+        return data;
+      case "2":
+        data.limiteNivel1 = 3;
+        data.limiteNivel2 = 3;
+        data.limiteNivel3 = 3;
+        data.limiteNivel4 = 1;
+        data.limiteNivel5 = 1;
+        return data;
+      case "3":
+        data.limiteNivel1 = 6;
+        data.limiteNivel2 = 6;
+        data.limiteNivel3 = 6;
+        data.limiteNivel4 = 1;
+        data.limiteNivel5 = 1;
+        return data;
+      case "4":
+        data.limiteNivel1 = 15;
+        data.limiteNivel2 = 15;
+        data.limiteNivel3 = 15;
+        data.limiteNivel4 = 1;
+        data.limiteNivel5 = 1;
+        return data;
+      case "5":
+        data.limiteNivel1 = 32;
+        data.limiteNivel2 = 32;
+        data.limiteNivel3 = 32;
+        data.limiteNivel4 = 1;
+        data.limiteNivel5 = 1;
+        return data;
+      case "6":
+        // data.limiteNivel1 = 46;
+        // data.limiteNivel2 = 46;
+        // data.limiteNivel3 = 46;
+        // data.limiteNivel4 = 1;
+        // data.limiteNivel5 = 1;
+        // return data;
+        console.log(
+          "No es posible ingresar esta distribución. Error: Full requests."
+            .bgRed.bold
+        );
+      default:
+        break;
+    }
+  } while (opt !== "0");
+};
+
 module.exports = {
   distribucionDatosCaso1,
   distribucionDatosCaso2,
@@ -381,4 +506,6 @@ module.exports = {
   distribucionDatosCaso5,
   distribucionDatosCaso2GraphQL,
   distribucionDatosCaso3GraphQL,
+  distribucionDatosCaso4GraphQL,
+  distribucionDatosCaso5GraphQL,
 };

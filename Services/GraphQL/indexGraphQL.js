@@ -4,12 +4,10 @@ import Storage from "node-storage";
 import pkgDistribucion from "../Menu/distribucion.cjs";
 const {
   distribucionDatosCaso1,
-  distribucionDatosCaso2,
-  distribucionDatosCaso3,
-  distribucionDatosCaso4,
-  distribucionDatosCaso5,
   distribucionDatosCaso2GraphQL,
-  distribucionDatosCaso3GraphQL
+  distribucionDatosCaso3GraphQL,
+  distribucionDatosCaso4GraphQL,
+  distribucionDatosCaso5GraphQL
 } = pkgDistribucion;
 const { inquirerMenu } = pkg;
 const {
@@ -96,7 +94,7 @@ export const casoPruebaGraphQL = async () => {
             console.log(
               "<=================NIVEL 4 GRAPHQL=================>".red
             );
-            await distribucionDatosCaso4().then(async (resp) => {
+            await distribucionDatosCaso4GraphQL().then(async (resp) => {
               console.log(
                 "Cantidad de datos requeridos (Distribución) | Nivel 4: ",
                 resp
@@ -114,7 +112,7 @@ export const casoPruebaGraphQL = async () => {
             console.log(
               "<=================NIVEL 5 GRAPHQL=================>".red.bold
             );
-            await distribucionDatosCaso5().then(async (resp) => {
+            await distribucionDatosCaso5GraphQL().then(async (resp) => {
               console.log(
                 "Cantidad de datos requeridos (Distribución) | Nivel 5: ",
                 resp
