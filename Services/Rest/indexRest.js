@@ -56,7 +56,7 @@ export const casoPrueba = async () => {
                 "Cantidad de datos requeridos (Distribución) | Nivel 1: ",
                 resp
               );
-              const { data, time, requests } = await casoPrueba1(resp);
+              const { data, time, requests } = await casoPrueba1(resp, true);
               imprimirDatos(data, time, requests);
             });
 
@@ -72,7 +72,8 @@ export const casoPrueba = async () => {
               );
               const { data2, time2, requests2 } = await casoPrueba2(
                 resp.limiteNivel1,
-                resp.limiteNivel2
+                resp.limiteNivel2,
+                true
               );
               imprimirDatos(data2, time2, requests2);
             });
@@ -90,7 +91,8 @@ export const casoPrueba = async () => {
               const { data3, time3, requests3 } = await casoPrueba3(
                 resp.limiteNivel1,
                 resp.limiteNivel2,
-                resp.limiteNivel3
+                resp.limiteNivel3,
+                true
               );
               imprimirDatos(data3, time3, requests3);
             });
@@ -109,7 +111,8 @@ export const casoPrueba = async () => {
               const { data4, time4, requests4 } = await casoPrueba4(
                 resp.limiteNivel1,
                 resp.limiteNivel2,
-                resp.limiteNivel3
+                resp.limiteNivel3,
+                true
               );
               imprimirDatos(data4, time4, requests4);
             });
@@ -127,7 +130,8 @@ export const casoPrueba = async () => {
               const { data5, time5, requests5 } = await casoPrueba5(
                 resp.limiteNivel1,
                 resp.limiteNivel2,
-                resp.limiteNivel3
+                resp.limiteNivel3,
+                true
               );
               imprimirDatos(data5, time5, requests5);
             });

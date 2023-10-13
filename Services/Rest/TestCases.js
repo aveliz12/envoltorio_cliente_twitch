@@ -1,5 +1,6 @@
 import pkg from "./ApiRest.cjs";
-
+import helpersPkg from "../helpers/globalHelpers.cjs";
+import { performance } from "perf_hooks";
 const {
   getLiveStreams,
   getVideosByGame,
@@ -7,7 +8,7 @@ const {
   getClipsByUser,
   getInformationGame,
 } = pkg;
-import { performance } from "perf_hooks";
+const { saveFileCasoPrueba } = helpersPkg;
 
 /*____________________REST SIN CACHE______________________________*/
 
@@ -25,13 +26,17 @@ const getTime = (t1, t2) => {
 };
 
 //CASO DE PRUEBA 1: LIVE STREAMS
-export const casoPrueba1 = async (first) => {
+export const casoPrueba1 = async (first, save) => {
   let t1 = performance.now();
   console.log("INICIO CASO DE PRUEBA 1".red);
   const { data, requests } = await getLiveStreams(first);
   let t2 = performance.now();
   const tiempo = getTime(t1, t2);
   const numPeticiones = requests;
+
+  if (save) {
+    saveFileCasoPrueba(`Caso_1_Rest_Limit_${first}`, data, "Data REST");
+  }
 
   return {
     data: data,
@@ -41,35 +46,38 @@ export const casoPrueba1 = async (first) => {
 };
 
 //CASO DE PRUEBA 2: VIDEOS BY GAME
-export const casoPrueba2 = async (first, first2) => {
+export const casoPrueba2 = async (first, first2, save) => {
   try {
-    let dataForCaso2 = [];
-    let numPeticiones = 0;
-    let datCaso1, requestsCaso1;
-    let idCount = 0;
+    let dataForCaso2 = [],
+      numPeticiones = 0,
+      idCount = 0;
     let t1 = performance.now();
 
-    const caso1 = await casoPrueba1(first);
-    datCaso1 = caso1.data;
-    requestsCaso1 = caso1.requests;
-    const idGame = datCaso1.map((resp) => resp.game_id);
-
+    const { data: datCaso1, requests: requestsCaso1 } = await casoPrueba1(
+      first
+    );
     console.log("INICIO CASO DE PRUEBA 2".red);
-    for (const iDs of idGame) {
-      if (iDs.trim() === "") {
+
+    const dataPromise = datCaso1.map(async (liveStream) => {
+      if (liveStream.game_id.trim() === "") {
         console.log("ID vacío encontrado. Saltando consulta de videos...");
-        continue;
+        return null;
       }
-      const { data, requests } = await getVideosByGame(iDs, first2);
+      const { data, requests } = await getVideosByGame(
+        liveStream.game_id,
+        first2
+      );
+      numPeticiones += requests;
       if (data.length >= first2) {
         idCount++;
+        dataForCaso2.push(...data);
       }
-      numPeticiones += requests;
-      dataForCaso2.push(...data);
-      if (idCount >= first) {
-        break;
-      }
-    }
+
+      return data;
+    });
+
+    await Promise.all(dataPromise);
+
     console.log(`Cantidad de juegos con mas de ${first2} videos: ${idCount}`);
 
     const eficiencia = ((idCount * 100) / first2).toFixed(2);
@@ -78,6 +86,14 @@ export const casoPrueba2 = async (first, first2) => {
     const totalPeticiones = requestsCaso1 + numPeticiones;
     let t2 = performance.now();
     const tiempo = getTime(t1, t2);
+
+    if (save) {
+      saveFileCasoPrueba(
+        `Caso_2_Rest_Limit_${first}_${first2}`,
+        dataForCaso2,
+        "Data REST"
+      );
+    }
 
     return {
       data2: dataForCaso2,
@@ -90,32 +106,29 @@ export const casoPrueba2 = async (first, first2) => {
 };
 
 //CASO DE PRUEBA 3: CLIPS BY USER
-export const casoPrueba3 = async (first, first2, first3) => {
-  let dataForCaso3 = [];
-  let numPeticiones = 0;
-  let dataCaso2, requestCaso2;
-  let idCount = 0;
-
+export const casoPrueba3 = async (first, first2, first3, save) => {
+  let dataForCaso3 = [],
+    numPeticiones = 0,
+    idCount = 0;
   let t1 = performance.now();
 
-  const result = await casoPrueba2(first, first2);
-  dataCaso2 = result.data2;
-  requestCaso2 = result.requests2;
-  const idUserVideos = dataCaso2.map((resp) => resp.user_id);
-
+  const { data2: dataCaso2, requests2: requestCaso2 } = await casoPrueba2(
+    first,
+    first2
+  );
   console.log("INICIO CASO DE PRUEBA 3".red);
-  for (const iDs of idUserVideos) {
-    const { data, requests } = await getClipsByUser(iDs, first3);
+
+  const dataPromiseClipsByUser = dataCaso2.map(async (clips) => {
+    const { data, requests } = await getClipsByUser(clips.user_id, first3);
+    numPeticiones += requests;
     if (data.length >= first3) {
       idCount++;
+      dataForCaso3.push(...data);
     }
-    dataForCaso3.push(...data);
-    numPeticiones += requests;
+  });
 
-    if (idCount >= dataCaso2.length) {
-      break;
-    }
-  }
+  await Promise.all(dataPromiseClipsByUser);
+
   console.log(
     `Cantidad de usuarios con mas de ${first3} clips: ${idCount}. De un total de ${dataCaso2.length} datos.`
   );
@@ -126,7 +139,13 @@ export const casoPrueba3 = async (first, first2, first3) => {
   const totalPeticiones = requestCaso2 + numPeticiones;
   let t2 = performance.now();
   const tiempo = getTime(t1, t2);
-
+  if (save) {
+    saveFileCasoPrueba(
+      `Caso_3_Rest_Limit_${first}_${first2}_${first3}`,
+      dataForCaso3,
+      "Data REST"
+    );
+  }
   return {
     data3: dataForCaso3,
     time3: tiempo,
@@ -135,25 +154,26 @@ export const casoPrueba3 = async (first, first2, first3) => {
 };
 
 //CASO DE PRUEBA 4: INFORMATION CHANNEL
-export const casoPrueba4 = async (first, first2, first3) => {
+export const casoPrueba4 = async (first, first2, first3, save) => {
   let t1 = performance.now();
-  let numPeticiones = 0;
-  let allData = [];
-  let idCount = 0;
+  let numPeticiones = 0,
+    allData = [],
+    idCount = 0;
 
   const { data3, requests3 } = await casoPrueba3(first, first2, first3);
-  const broadcaster_id = [];
-  data3.forEach((id) => {
-    broadcaster_id.push(id.broadcaster_id);
-  });
 
   console.log("INICIO CASO DE PRUEBA 4".red);
-  for (const _id of broadcaster_id) {
-    const { data, requests } = await getInformationChannel(_id);
+  const dataPromiseChannel = data3.map(async (channel) => {
+    const { data, requests } = await getInformationChannel(
+      channel.broadcaster_id
+    );
     allData = [...allData, ...data];
     numPeticiones += requests;
     idCount++;
-  }
+  });
+
+  await Promise.all(dataPromiseChannel);
+
   console.log(
     `Cantidad informacion de canal de un usuario con mas de ${data3.length} datos: ${idCount}.`
   );
@@ -164,7 +184,13 @@ export const casoPrueba4 = async (first, first2, first3) => {
   const totalPeticiones = requests3 + numPeticiones;
   let t2 = performance.now();
   const tiempo = getTime(t1, t2);
-
+  if (save) {
+    saveFileCasoPrueba(
+      `Caso_4_Rest_Limit_${allData.length}`,
+      allData,
+      "Data REST"
+    );
+  }
   return {
     data4: allData,
     time4: tiempo,
@@ -173,27 +199,24 @@ export const casoPrueba4 = async (first, first2, first3) => {
 };
 
 //CASO DE PRUEBA 5: INFORMATION GAME
-export const casoPrueba5 = async (first, first2, first3) => {
+export const casoPrueba5 = async (first, first2, first3, save) => {
   let t1 = performance.now();
-  let numPeticiones = 0;
-  let allData = [];
-  let idCount = 0;
+  let numPeticiones = 0,
+    allData = [],
+    idCount = 0;
   const { data4, requests4 } = await casoPrueba4(first, first2, first3);
-  const dataInformationChannel = data4;
-
-  const dataGame = [];
-
-  dataInformationChannel.forEach((id) => {
-    dataGame.push(id.game_id);
-  });
 
   console.log("INICIO CASO DE PRUEBA 5".red);
-  for (const _id of dataGame) {
-    const { data, requests } = await getInformationGame(_id);
+
+  const dataPromise = data4.map(async (game) => {
+    const { data, requests } = await getInformationGame(game.game_id);
     allData = [...allData, ...data];
     numPeticiones += requests;
     idCount++;
-  }
+  });
+
+  await Promise.all(dataPromise);
+
   console.log(
     `Cantidad de informacion de un juego con mas de ${data4.length} datos: ${idCount}.`
   );
@@ -202,7 +225,13 @@ export const casoPrueba5 = async (first, first2, first3) => {
   const totalPeticiones = requests4 + numPeticiones;
   let t2 = performance.now();
   const tiempo = getTime(t1, t2);
-
+  if (save) {
+    saveFileCasoPrueba(
+      `Caso_5_Rest_Limit_${allData.length}`,
+      allData,
+      "Data REST"
+    );
+  }
   return {
     data5: allData,
     time5: tiempo,
