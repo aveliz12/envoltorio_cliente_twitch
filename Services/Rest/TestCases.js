@@ -186,7 +186,7 @@ export const casoPrueba4 = async (first, first2, first3, save) => {
   const tiempo = getTime(t1, t2);
   if (save) {
     saveFileCasoPrueba(
-      `Caso_4_Rest_Limit_${allData.length}`,
+      `Caso_4_Rest_Limit_${first}_${first2}_${first3}_1`,
       allData,
       "Data REST"
     );
@@ -227,7 +227,7 @@ export const casoPrueba5 = async (first, first2, first3, save) => {
   const tiempo = getTime(t1, t2);
   if (save) {
     saveFileCasoPrueba(
-      `Caso_5_Rest_Limit_${allData.length}`,
+      `Caso_5_Rest_Limit_${first}_${first2}_${first3}_1_1`,
       allData,
       "Data REST"
     );

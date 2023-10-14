@@ -50,7 +50,8 @@ const casoPruebaCacheRest = async () => {
             await distribucionDatosCaso1().then(async (resp) => {
               console.log("Cantidad de datos por nivel: ", resp);
               const { data, time, requests1 } = await getCasoPrueba1RestCache(
-                resp
+                resp,
+                true
               );
               imprimirDatos(data, time, requests1);
             });
@@ -64,7 +65,8 @@ const casoPruebaCacheRest = async () => {
               console.log("Cantidad de datos por nivel: ", resp);
               const { data2, time2, requests2 } = await getCasoPrueba2RestCache(
                 resp.limiteNivel1,
-                resp.limiteNivel2
+                resp.limiteNivel2,
+                true
               );
               imprimirDatos(data2, time2, requests2);
             });
@@ -79,7 +81,8 @@ const casoPruebaCacheRest = async () => {
               const { data3, time3, requests3 } = await getCasoPrueba3RestCache(
                 resp.limiteNivel1,
                 resp.limiteNivel2,
-                resp.limiteNivel3
+                resp.limiteNivel3,
+                true
               );
               imprimirDatos(data3, time3, requests3);
             });
@@ -94,7 +97,8 @@ const casoPruebaCacheRest = async () => {
               const { data4, time4, requests4 } = await getCasoPrueba4RestCache(
                 resp.limiteNivel1,
                 resp.limiteNivel2,
-                resp.limiteNivel3
+                resp.limiteNivel3,
+                true
               );
               imprimirDatos(data4, time4, requests4);
             });
@@ -109,7 +113,8 @@ const casoPruebaCacheRest = async () => {
               const { data5, time5, requests5 } = await getCasoPrueba5RestCache(
                 resp.limiteNivel1,
                 resp.limiteNivel2,
-                resp.limiteNivel3
+                resp.limiteNivel3,
+                true
               );
               imprimirDatos(data5, time5, requests5);
             });
