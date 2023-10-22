@@ -48,8 +48,7 @@ export const casoPrueba1 = async (first, save) => {
 //CASO DE PRUEBA 2: VIDEOS BY GAME
 export const casoPrueba2 = async (first, first2, save) => {
   try {
-    let dataForCaso2 = [],
-      numPeticiones = 0,
+    let numPeticiones = 0,
       idCount = 0;
     let t1 = performance.now();
 
@@ -70,21 +69,20 @@ export const casoPrueba2 = async (first, first2, save) => {
       numPeticiones += requests;
       if (data.length >= first2) {
         idCount++;
-        dataForCaso2.push(...data);
       }
 
-      return data;
+      return { ...liveStream, videosByGame: data };
     });
 
-    await Promise.all(dataPromise);
+    const dataForCaso2 = await Promise.all(dataPromise);
 
-    console.log(`Cantidad de juegos con mas de ${first2} videos: ${idCount}`);
+    let t2 = performance.now();
+    // console.log(`Cantidad de juegos con mas de ${first2} videos: ${idCount}`);
 
-    const eficiencia = ((idCount * 100) / first2).toFixed(2);
-    console.log("LA EFICIENCIA ES: ", eficiencia, "%");
+    // const eficiencia = ((idCount * 100) / first2).toFixed(2);
+    // console.log("LA EFICIENCIA ES: ", eficiencia, "%");
 
     const totalPeticiones = requestsCaso1 + numPeticiones;
-    let t2 = performance.now();
     const tiempo = getTime(t1, t2);
 
     if (save) {
@@ -96,7 +94,7 @@ export const casoPrueba2 = async (first, first2, save) => {
     }
 
     return {
-      data2: dataForCaso2,
+      data2: dataForCaso2.flat(),
       time2: tiempo,
       requests2: totalPeticiones,
     };
@@ -107,9 +105,8 @@ export const casoPrueba2 = async (first, first2, save) => {
 
 //CASO DE PRUEBA 3: CLIPS BY USER
 export const casoPrueba3 = async (first, first2, first3, save) => {
-  let dataForCaso3 = [],
-    numPeticiones = 0,
-    idCount = 0;
+  let numPeticiones = 0;
+  //idCount = 0;
   let t1 = performance.now();
 
   const { data2: dataCaso2, requests2: requestCaso2 } = await casoPrueba2(
@@ -118,36 +115,43 @@ export const casoPrueba3 = async (first, first2, first3, save) => {
   );
   console.log("INICIO CASO DE PRUEBA 3".red);
 
-  const dataPromiseClipsByUser = dataCaso2.map(async (clips) => {
-    const { data, requests } = await getClipsByUser(clips.user_id, first3);
-    numPeticiones += requests;
-    if (data.length >= first3) {
-      idCount++;
-      dataForCaso3.push(...data);
-    }
+  const dataPromiseClipsByUser = dataCaso2.map(async (videos) => {
+    const dataVideosAndLiveStreams = videos.videosByGame.map(async (clips) => {
+      const { data, requests } = await getClipsByUser(clips.user_id, first3);
+      numPeticiones += requests;
+      // if (data.length >= first3) {
+      //   idCount++;
+      // }
+      return { ...clips, clipsByUser: data };
+    });
+
+    const responseDataVideosAndStreams = await Promise.all(
+      dataVideosAndLiveStreams
+    );
+    return { ...videos, videosByGame: responseDataVideosAndStreams };
   });
 
-  await Promise.all(dataPromiseClipsByUser);
+  const dataForCaso3 = await Promise.all(dataPromiseClipsByUser);
+  let t2 = performance.now();
 
-  console.log(
-    `Cantidad de usuarios con mas de ${first3} clips: ${idCount}. De un total de ${dataCaso2.length} datos.`
-  );
+  // console.log(
+  //   `Cantidad de usuarios con mas de ${first3} clips: ${idCount}. De un total de ${dataCaso2.length} datos.`
+  // );
 
-  const eficiencia = ((idCount * 100) / dataCaso2.length).toFixed(2);
-  console.log("LA EFICIENCIA ES: ", eficiencia, "%");
+  // const eficiencia = ((idCount * 100) / dataCaso2.length).toFixed(2);
+  // console.log("LA EFICIENCIA ES: ", eficiencia, "%");
 
   const totalPeticiones = requestCaso2 + numPeticiones;
-  let t2 = performance.now();
   const tiempo = getTime(t1, t2);
   if (save) {
     saveFileCasoPrueba(
       `Caso_3_Rest_Limit_${first}_${first2}_${first3}`,
-      dataForCaso3,
+      dataForCaso3.flat(),
       "Data REST"
     );
   }
   return {
-    data3: dataForCaso3,
+    data3: dataForCaso3.flat(),
     time3: tiempo,
     requests3: totalPeticiones,
   };
@@ -156,33 +160,52 @@ export const casoPrueba3 = async (first, first2, first3, save) => {
 //CASO DE PRUEBA 4: INFORMATION CHANNEL
 export const casoPrueba4 = async (first, first2, first3, save) => {
   let t1 = performance.now();
-  let numPeticiones = 0,
-    allData = [],
-    idCount = 0;
+  let numPeticiones = 0;
+  //idCount = 0;
 
   const { data3, requests3 } = await casoPrueba3(first, first2, first3);
 
   console.log("INICIO CASO DE PRUEBA 4".red);
-  const dataPromiseChannel = data3.map(async (channel) => {
-    const { data, requests } = await getInformationChannel(
-      channel.broadcaster_id
-    );
-    allData = [...allData, ...data];
-    numPeticiones += requests;
-    idCount++;
+  const dataPromiseChannel = data3.map(async (videos) => {
+    const dataVideosWithStreams = videos.videosByGame.map(async (clips) => {
+      const dataClipsWithVideos = clips.clipsByUser.map(async (channel) => {
+        const { data, requests } = await getInformationChannel(
+          channel.broadcaster_id
+        );
+        numPeticiones += requests;
+        //idCount++;
+
+        return {
+          ...channel,
+          channelInformation: data,
+        };
+      });
+
+      const allDataChannel = await Promise.all(dataClipsWithVideos);
+      return {
+        ...clips,
+        clipsByUser: allDataChannel,
+      };
+    });
+
+    const allDataVideosStreams = await Promise.all(dataVideosWithStreams);
+    return {
+      ...videos,
+      videosByGame: allDataVideosStreams,
+    };
   });
 
-  await Promise.all(dataPromiseChannel);
+  const allData = await Promise.all(dataPromiseChannel);
 
-  console.log(
-    `Cantidad informacion de canal de un usuario con mas de ${data3.length} datos: ${idCount}.`
-  );
+  let t2 = performance.now();
+  // console.log(
+  //   `Cantidad informacion de canal de un usuario con mas de ${data3.length} datos: ${idCount}.`
+  // );
 
-  const eficiencia = ((idCount * 100) / data3.length).toFixed(2);
-  console.log("LA EFICIENCIA ES: ", eficiencia, "%");
+  // const eficiencia = ((idCount * 100) / data3.length).toFixed(2);
+  // console.log("LA EFICIENCIA ES: ", eficiencia, "%");
 
   const totalPeticiones = requests3 + numPeticiones;
-  let t2 = performance.now();
   const tiempo = getTime(t1, t2);
   if (save) {
     saveFileCasoPrueba(
@@ -201,29 +224,54 @@ export const casoPrueba4 = async (first, first2, first3, save) => {
 //CASO DE PRUEBA 5: INFORMATION GAME
 export const casoPrueba5 = async (first, first2, first3, save) => {
   let t1 = performance.now();
-  let numPeticiones = 0,
-    allData = [],
-    idCount = 0;
+  let numPeticiones = 0;
+  //idCount = 0;
   const { data4, requests4 } = await casoPrueba4(first, first2, first3);
 
   console.log("INICIO CASO DE PRUEBA 5".red);
+  const dataPromiseGame = data4.map(async (videos) => {
+    const dataVideosWithStreams = videos.videosByGame.map(async (clips) => {
+      const dataClipsWithVideos = clips.clipsByUser.map(async (channel) => {
+        const dataChanelInfo = channel.channelInformation.map(async (game) => {
+          const { data, requests } = await getInformationGame(game.game_id);
+          numPeticiones += requests;
+          //idCount++;
 
-  const dataPromise = data4.map(async (game) => {
-    const { data, requests } = await getInformationGame(game.game_id);
-    allData = [...allData, ...data];
-    numPeticiones += requests;
-    idCount++;
+          return {
+            ...game,
+            gameInformation: data,
+          };
+        });
+        const allDataGame = await Promise.all(dataChanelInfo);
+        return {
+          ...channel,
+          channelInformation: allDataGame,
+        };
+      });
+
+      const allDataChannel = await Promise.all(dataClipsWithVideos);
+      return {
+        ...clips,
+        clipsByUser: allDataChannel,
+      };
+    });
+
+    const allDataVideosStreams = await Promise.all(dataVideosWithStreams);
+    return {
+      ...videos,
+      videosByGame: allDataVideosStreams,
+    };
   });
 
-  await Promise.all(dataPromise);
-
-  console.log(
-    `Cantidad de informacion de un juego con mas de ${data4.length} datos: ${idCount}.`
-  );
-  const eficiencia = ((idCount * 100) / data4.length).toFixed(2);
-  console.log("LA EFICIENCIA ES: ", eficiencia, "%");
-  const totalPeticiones = requests4 + numPeticiones;
+  const allData = await Promise.all(dataPromiseGame);
   let t2 = performance.now();
+
+  // console.log(
+  //   `Cantidad de informacion de un juego con mas de ${data4.length} datos: ${idCount}.`
+  // );
+  // const eficiencia = ((idCount * 100) / data4.length).toFixed(2);
+  // console.log("LA EFICIENCIA ES: ", eficiencia, "%");
+  const totalPeticiones = requests4 + numPeticiones;
   const tiempo = getTime(t1, t2);
   if (save) {
     saveFileCasoPrueba(

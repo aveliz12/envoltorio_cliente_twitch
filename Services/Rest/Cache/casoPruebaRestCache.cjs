@@ -46,47 +46,34 @@ const getCasoPrueba1RestCache = async (first, save) => {
 
 //CASO DE PRUEBA 2 CACHE: VIDEOS BY GAME
 const getCasoPrueba2RestCache = async (first, first2, save) => {
-  const t1 = performance.now();
   let numPeticiones = 0,
-    objetos = [],
-    totalDataVideos = 0,
-    requestsCaso1;
-  do {
-    const { data: datCaso1, requests1 } = await getCasoPrueba1RestCache(first);
-    requestsCaso1 = requests1;
-    let idFound = false;
+    totalDataVideos = 0;
+  const t1 = performance.now();
+  const { data: datCaso1, requests1: requestsCaso1 } =
+    await getCasoPrueba1RestCache(first);
 
-    const dataPromise = datCaso1.map(async (liveStream) => {
-      if (liveStream.game_id.trim() === "") {
-        console.log("ID vacío encontrado. Saltando consulta de videos...");
-        return null;
-      }
-      const { data, requests } = await getVideosByGameCache(
-        liveStream.game_id,
-        first2
-      );
-      numPeticiones += requests;
-      if (data.length >= first2 && data.length > 0) {
-        objetos.push(...data);
-        totalDataVideos++;
-        idFound = true;
-      }
-
-      return data;
-    });
-
-    await Promise.all(dataPromise);
-
-    if (!idFound) {
-      console.log(
-        "No se encontraron suficientes datos con los IDs actuales. Consultando con nuevos IDs..."
-      );
+  const dataPromise = datCaso1.map(async (liveStream) => {
+    if (liveStream.game_id.trim() === "") {
+      console.log("ID vacío encontrado. Saltando consulta de videos...");
+      return null;
     }
-  } while (totalDataVideos < first);
+    const { data, requests } = await getVideosByGameCache(
+      liveStream.game_id,
+      first2
+    );
+    numPeticiones += requests;
+    if (data.length >= first2) {
+      totalDataVideos++;
+    }
+
+    return { ...liveStream, videosByGame: data };
+  });
+
+  const objetos = await Promise.all(dataPromise);
 
   //TIEMPO
-  const totalPeticiones = requestsCaso1 + numPeticiones;
   let t2 = performance.now();
+  const totalPeticiones = requestsCaso1 + numPeticiones;
   const tiempo = getTime(t1, t2);
 
   if (save) {
@@ -102,46 +89,39 @@ const getCasoPrueba2RestCache = async (first, first2, save) => {
 
 const getCasoPrueba3RestCache = async (first, first2, first3, save) => {
   const t1 = performance.now();
-  let allData = [],
-    totalDataClips = 0,
-    numPeticiones = 0,
-    dataCaso2,
-    requestCaso2;
+  let totalDataClips = 0,
+    numPeticiones = 0;
 
-  do {
-    const result = await getCasoPrueba2RestCache(first, first2);
-    dataCaso2 = result.data2;
-    requestCaso2 = result.requests2;
-    let idFound = false;
+  const { data2: dataCaso2, requests2: requestCaso2 } =
+    await getCasoPrueba2RestCache(first, first2);
 
-    // const userId = dataCaso2.map((dataVideo) => dataVideo.user_id);
-
-    const dataPromiseCaso3 = dataCaso2.map(async (clips) => {
+  const dataPromiseCaso3 = dataCaso2.map(async (videos) => {
+    const dataVideosAndLiveStreams = videos.videosByGame.map(async (clips) => {
       const { data, requests } = await getClipsByUserCache(
         clips.user_id,
         first3
       );
       numPeticiones += requests;
       if (data.length >= first3) {
-        allData.push(...data);
         totalDataClips++;
-        idFound = true;
       }
+      return {
+        ...clips,
+        clipsByUser: data,
+      };
     });
+    const responseDataVideosAndStreams = await Promise.all(
+      dataVideosAndLiveStreams
+    );
+    return { ...videos, videosByGame: responseDataVideosAndStreams };
+  });
 
-    await Promise.all(dataPromiseCaso3);
-
-    if (!idFound) {
-      console.log(
-        "No se encontraron suficientes datos con los IDs actuales. Consultando con nuevos IDs..."
-      );
-    }
-  } while (totalDataClips < dataCaso2.length);
+  const allData = await Promise.all(dataPromiseCaso3);
 
   //TIEMPO
+  let t2 = performance.now();
   const totalPeticiones = requestCaso2 + numPeticiones;
 
-  let t2 = performance.now();
   const tiempo = getTime(t1, t2);
   if (save) {
     saveFileCasoPrueba(
@@ -156,22 +136,40 @@ const getCasoPrueba3RestCache = async (first, first2, first3, save) => {
 const getCasoPrueba4RestCache = async (first, first2, first3, save) => {
   const t1 = performance.now();
   let numPeticiones = 0;
-  let allData = [];
   const { data3, requests3 } = await getCasoPrueba3RestCache(
     first,
     first2,
     first3
   );
+  const dataPromiseChannel = data3.map(async (videos) => {
+    const dataVideosWithStreams = videos.videosByGame.map(async (clips) => {
+      const dataClipsWithVideos = clips.clipsByUser.map(async (channel) => {
+        const { data, requests } = await getChannelInformationCache(
+          channel.broadcaster_id
+        );
+        numPeticiones += requests;
 
-  const dataPromiseCaso4 = data3.map(async (channel) => {
-    const { data, requests } = await getChannelInformationCache(
-      channel.broadcaster_id
-    );
-    allData = [...allData, ...data];
-    numPeticiones += requests;
+        return {
+          ...channel,
+          channelInformation: data,
+        };
+      });
+
+      const allDataChannel = await Promise.all(dataClipsWithVideos);
+      return {
+        ...clips,
+        clipsByUser: allDataChannel,
+      };
+    });
+
+    const allDataVideosStreams = await Promise.all(dataVideosWithStreams);
+    return {
+      ...videos,
+      videosByGame: allDataVideosStreams,
+    };
   });
 
-  await Promise.all(dataPromiseCaso4);
+  const allData = await Promise.all(dataPromiseChannel);
 
   //TIEMPO
   const totalPeticiones = requests3 + numPeticiones;
@@ -190,25 +188,50 @@ const getCasoPrueba4RestCache = async (first, first2, first3, save) => {
   return { data4: allData, time4: tiempo, requests4: totalPeticiones };
 };
 
-const getCasoPrueba5RestCache = async (first, first2, first3,save) => {
+const getCasoPrueba5RestCache = async (first, first2, first3, save) => {
   const t1 = performance.now();
   let numPeticiones = 0;
-  let allData = [];
   const { data4, requests4 } = await getCasoPrueba4RestCache(
     first,
     first2,
     first3
   );
 
-  const dataPromiseCaso5 = data4.map(async (game) => {
-    const { dataGames, requestsGames } = await getGameInformationCache(
-      game.game_id
-    );
-    allData = [...allData, ...dataGames];
-    numPeticiones += requestsGames;
+  const dataPromiseGame = data4.map(async (videos) => {
+    const dataVideosWithStreams = videos.videosByGame.map(async (clips) => {
+      const dataClipsWithVideos = clips.clipsByUser.map(async (channel) => {
+        const dataChanelInfo = channel.channelInformation.map(async (game) => {
+          const { dataGames, requestsGames } = await getGameInformationCache(
+            game.game_id
+          );
+          numPeticiones += requestsGames;
+          return {
+            ...game,
+            gameInformation: dataGames,
+          };
+        });
+        const allDataGame = await Promise.all(dataChanelInfo);
+        return {
+          ...channel,
+          channelInformation: allDataGame,
+        };
+      });
+
+      const allDataChannel = await Promise.all(dataClipsWithVideos);
+      return {
+        ...clips,
+        clipsByUser: allDataChannel,
+      };
+    });
+
+    const allDataVideosStreams = await Promise.all(dataVideosWithStreams);
+    return {
+      ...videos,
+      videosByGame: allDataVideosStreams,
+    };
   });
 
-  await Promise.all(dataPromiseCaso5);
+  const allData = await Promise.all(dataPromiseGame);
   //TIEMPO
   const totalPeticiones = requests4 + numPeticiones;
 

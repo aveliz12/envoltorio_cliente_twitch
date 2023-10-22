@@ -15,6 +15,8 @@ const { performance } = require("perf_hooks");
 const axios = require("axios");
 const { buildAxiosFetch } = require("@lifeomic/axios-fetch");
 
+const { saveFileCasoPrueba } = require("../helpers/globalHelpers.cjs");
+
 /* Configuración del tiempo de espera en apollo client */
 const instanceAxios = axios.create({
   timeout: 7200000,
@@ -65,7 +67,7 @@ const casoPrueba1GraphQL = async (limitNivel1) => {
     },
   });
   let t2 = performance.now();
-
+  saveFileCasoPrueba(`caso_1_grapqhl_${limitNivel1}`, response, "Data GraphQL");
   const tiempo = getTime(t1, t2);
 
   console.log(
@@ -89,6 +91,11 @@ const casoPrueba2GraphQL = async (limitNivel1, limitNivel2) => {
   });
 
   const t2 = performance.now();
+  saveFileCasoPrueba(
+    `caso_2_grapqhl_${limitNivel1}_${limitNivel2}`,
+    response,
+    "Data GraphQL"
+  );
   const tiempo = getTime(t1, t2);
   console.log(
     `Datos del nivel 2 GraphQL: ${response.data.getCasosPruebasLiveStreams.length}.`
@@ -110,8 +117,14 @@ const casoPrueba3GraphQL = async (limitNivel1, limitNivel2, limitNivel3) => {
       limitNivel3,
     },
   });
-  
+
   const t2 = performance.now();
+  saveFileCasoPrueba(
+    `caso_3_grapqhl_${limitNivel1}_${limitNivel2}_${limitNivel3}`,
+    response,
+    "Data GraphQL"
+  );
+
   const tiempo = getTime(t1, t2);
 
   console.log(
@@ -136,6 +149,12 @@ const casoPrueba4GraphQL = async (limitNivel1, limitNivel2, limitNivel3) => {
   });
 
   const t2 = performance.now();
+  saveFileCasoPrueba(
+    `caso_4_grapqhl_${limitNivel1}_${limitNivel2}_${limitNivel3}_1`,
+    response,
+    "Data GraphQL"
+  );
+
   const tiempo = getTime(t1, t2);
   console.log(
     `Datos del nivel 4 GraphQL: ${response.data.getCasosPruebasLiveStreams.length}.`
@@ -159,6 +178,12 @@ const casoPrueba5GraphQL = async (limitNivel1, limitNivel2, limitNivel3) => {
   });
 
   const t2 = performance.now();
+  saveFileCasoPrueba(
+    `caso_5_grapqhl_${limitNivel1}_${limitNivel2}_${limitNivel3}_1_1`,
+    response,
+    "Data GraphQL"
+  );
+
   const tiempo = getTime(t1, t2);
   console.log(
     `Datos del nivel 5 GraphQL: ${response.data.getCasosPruebasLiveStreams.length}.`

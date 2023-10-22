@@ -11,6 +11,9 @@ const {
   DATA_CASOPRUEBA5,
 } = pkgDataCasos;
 import { performance } from "perf_hooks";
+import helpersPkg from "../../helpers/globalHelpers.cjs";
+
+const { saveFileCasoPrueba } = helpersPkg;
 
 /*____________________GRAPHQL CON CACHE______________________________*/
 
@@ -47,14 +50,17 @@ export const casoPrueba1Cache = async (limitNivel1) => {
   });
   const dataLiveStreams = response.data.getCasosPruebasLiveStreams;
   const t2 = performance.now();
-
+  saveFileCasoPrueba(
+    `caso_1_grapqhl_cache_${limitNivel1}`,
+    dataLiveStreams,
+    "Data GraphQL Caché"
+  );
   const tiempo = getTime(t1, t2);
   console.log(
     `Datos del nivel 1 GraphQL con Cache: ${dataLiveStreams.length}.`.underline
   );
   return { data: dataLiveStreams, time: tiempo };
 };
-
 
 //VIDEOS BY GAME
 export const casoPrueba2Cache = async (limitNivel1, limitNivel2) => {
@@ -69,6 +75,11 @@ export const casoPrueba2Cache = async (limitNivel1, limitNivel2) => {
     },
   });
   const t2 = performance.now();
+  saveFileCasoPrueba(
+    `caso_2_grapqhl_cache_${limitNivel1}_${limitNivel2}`,
+    response,
+    "Data GraphQL Caché"
+  );
   const tiempo = getTime(t1, t2);
   console.log(
     `Datos del nivel 2 GraphQL con Cache: ${response.data.getCasosPruebasLiveStreams.length}.`
@@ -96,6 +107,11 @@ export const casoPrueba3Cache = async (
     },
   });
   const t2 = performance.now();
+  saveFileCasoPrueba(
+    `caso_3_grapqhl_cache_${limitNivel1}_${limitNivel2}_${limitNivel3}`,
+    response,
+    "Data GraphQL Caché"
+  );
   const tiempo = getTime(t1, t2);
   console.log(
     `Datos del nivel 3 GraphQL con Cache: ${response.data.getCasosPruebasLiveStreams.length}.`
@@ -108,8 +124,7 @@ export const casoPrueba3Cache = async (
 export const casoPrueba4Cache = async (
   limitNivel1,
   limitNivel2,
-  limitNivel3,
-  
+  limitNivel3
 ) => {
   const t1 = performance.now();
 
@@ -118,10 +133,15 @@ export const casoPrueba4Cache = async (
     variables: {
       limitNivel1,
       limitNivel2,
-      limitNivel3
+      limitNivel3,
     },
   });
   const t2 = performance.now();
+  saveFileCasoPrueba(
+    `caso_4_grapqhl_cache_${limitNivel1}_${limitNivel2}_${limitNivel3}_1`,
+    response,
+    "Data GraphQL Caché"
+  );
   const tiempo = getTime(t1, t2);
   console.log(
     `Datos del nivel 4 GraphQL con Cache: ${response.data.getCasosPruebasLiveStreams.length}.`
@@ -142,10 +162,15 @@ export const casoPrueba5Cache = async (
     variables: {
       limitNivel1,
       limitNivel2,
-      limitNivel3
+      limitNivel3,
     },
   });
   const t2 = performance.now();
+  saveFileCasoPrueba(
+    `caso_5_grapqhl_cache_${limitNivel1}_${limitNivel2}_${limitNivel3}_1_1`,
+    response,
+    "Data GraphQL Caché"
+  );
   const tiempo = getTime(t1, t2);
   console.log(
     `Datos del nivel 5 GraphQL con Cache: ${response.data.getCasosPruebasLiveStreams.length}.`
